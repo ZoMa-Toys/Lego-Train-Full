@@ -23,7 +23,7 @@ const wss2 = new WebSocket.Server({ noServer: true });
 
 wss1.on('connection', function connection(ws) {
     ws.on('message', function incoming(data) {
-        console.log('Received Message: ' + data);
+        // console.log('Received Message: ' + data);
         wss1.clients.forEach(function each(client) {
             if (client !== ws && client.readyState === WebSocket.OPEN) {
             client.send(data);
@@ -53,7 +53,7 @@ var serialPort = new SerialPort(port, {
 
 function onReceive(msg)
 {
-  console.log("ws msg:" + msg);
+//   console.log("ws msg:" + msg);
   serialPort.write(msg);
 }
 
@@ -74,7 +74,7 @@ server.on('upgrade', function upgrade(request, socket, head) {
 });
 
 function mainTrain(data){
-    console.log(data);
+    // console.log(data);
     let message = {};
     if (data.action == "scan"){
         poweredUP.stop();
@@ -137,6 +137,18 @@ function mainTrain(data){
             "Status":"Stop scanning...",
             "Message":"..."
         };
+    }
+	else if (data.action == "getConfig"){
+        message = {
+            "Status":"SwitchConfig:",
+            "Message": switchConfig
+        };
+    }
+	else if (data.action == "setConfig"){
+        switchConfig = data.config;
+        message = {
+            "Status":"Updated"
+        };
     };
     console.log(message);
     return JSON.stringify(message);
@@ -144,10 +156,109 @@ function mainTrain(data){
   
 server.listen(8088);
 const poweredUP = new PoweredUP.PoweredUP();
+
+var switchConfig = [
+        {
+          type: "left",
+          pulse: { Straight: 240, Turn: 420 },
+          switched: "Straight",
+          printed: "Original",
+          img_style: {
+            backgroundColor: "#4CAF50",
+            transform: "rotate(0deg)",
+            maxWidth: "100%",
+            height: "auto",
+          },
+        },
+        {
+          type: "right",
+          pulse: { Straight: 420, Turn: 240 },
+          switched: "Straight",
+          printed: "Original",
+          img_style: {
+            backgroundColor: "#008CBA",
+            transform: "rotate(0deg)",
+            maxWidth: "100%",
+            height: "auto",
+          },
+        },
+        {
+          type: "left",
+          pulse: { Straight: 240, Turn: 420 },
+          switched: "Straight",
+          printed: "Original",
+          img_style: {
+            backgroundColor: "#f44336",
+            transform: "rotate(0deg)",
+            maxWidth: "100%",
+            height: "auto",
+          },
+        },
+        {
+          type: "right",
+          pulse: { Straight: 420, Turn: 240 },
+          switched: "Straight",
+          printed: "Original",
+          img_style: {
+            backgroundColor: "#e7e7e7",
+            transform: "rotate(0deg)",
+            maxWidth: "100%",
+            height: "auto",
+          },
+        },
+        {
+          type: "left",
+          pulse: { Straight: 280, Turn: 380 },
+          switched: "Straight",
+          printed: "Printed",
+          img_style: {
+            backgroundColor: "#FFBF00",
+            transform: "rotate(180deg)",
+            maxWidth: "100%",
+            height: "auto",
+          },
+        },
+        {
+          type: "right",
+          pulse: { Straight: 380, Turn: 280 },
+          switched: "Straight",
+          printed: "Printed",
+          img_style: {
+            backgroundColor: "#FFBF00",
+            transform: "rotate(180deg)",
+            maxWidth: "100%",
+            height: "auto",
+          },
+        },
+        {
+          type: "right",
+          pulse: { Straight: 380, Turn: 280 },
+          switched: "Straight",
+          printed: "Printed",
+          img_style: {
+            backgroundColor: "#FFBF00",
+            transform: "rotate(0deg)",
+            maxWidth: "100%",
+            height: "auto",
+          },
+        },
+        {
+          type: "left",
+          pulse: { Straight: 280, Turn: 380 },
+          switched: "Straight",
+          printed: "Printed",
+          img_style: {
+            backgroundColor: "#FFBF00",
+            transform: "rotate(0deg)",
+            maxWidth: "100%",
+            height: "auto",
+          },
+        },
+      ];
  
 poweredUP.on("discover", async (hub) => { // Wait to discover hubs
     await hub.connect(); // Connect to hub
-    console.log(`Connected to ${hub.name}!`);
+    // console.log(`Connected to ${hub.name}!`);
 });
 
 function sleep(millis) {
@@ -190,4 +301,4 @@ const Color ={
 };
 
 poweredUP.scan(); // Start scanning for Hubs
-console.log("Scanning for Hubs...");
+// console.log("Scanning for Hubs...");
