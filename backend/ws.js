@@ -23,7 +23,7 @@ const wss2 = new WebSocket.Server({ noServer: true });
 
 wss1.on('connection', function connection(ws) {
     ws.on('message', function incoming(data) {
-        // console.log('Received Message: ' + data);
+        console.log('Received Message: ' + data);
         wss1.clients.forEach(function each(client) {
             if (client !== ws && client.readyState === WebSocket.OPEN) {
             client.send(data);
@@ -144,6 +144,12 @@ function mainTrain(data){
             "Message": switchConfig
         };
     }
+	else if (data.action == "getConfigESP"){
+        message = {
+            "Status":"SwitchConfigESP:",
+            "Message": conf4ESP()
+        };
+    }
 	else if (data.action == "setConfig"){
         switchConfig = data.config;
         message = {
@@ -156,6 +162,20 @@ function mainTrain(data){
   
 server.listen(8088);
 const poweredUP = new PoweredUP.PoweredUP();
+
+function conf4ESP(){
+    var ESPswitchConfig = [];
+    switchConfig.forEach(sw => {
+        var swmin = {
+            pulse: sw.pulse,
+            switched: sw.switched,
+            printed: sw.printed,
+        };
+        ESPswitchConfig.push(swmin)
+    });
+    return ESPswitchConfig;
+}
+
 
 var switchConfig = [
         {

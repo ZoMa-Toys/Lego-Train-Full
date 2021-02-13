@@ -112,13 +112,13 @@
 function getKeyByValue(object, value) {
   return Object.keys(object).find(key => object[key] === value);
 }
-function setWs(apihost,dataModFunction){
+function setWs(apihost,dataModFunction,getConfig){
   // console.log("Starting connection to WebSocket Server")
   const connection = new WebSocket(apihost);
 
   connection.onmessage = ({data}) => {
     dataModFunction(JSON.parse(data));
-    console.log(data);
+    console.log("input: " + data);
     // var j_data = JSON.parse(data);
     // switches[j_data.motor].switched = getKeyByValue(switches[j_data.motor].pulse,j_data.pulse);
   }
@@ -126,7 +126,10 @@ function setWs(apihost,dataModFunction){
   
   connection.onopen = function() {
     // console.log(event)
-    console.log("Successfully connected to the echo websocket server...")
+    console.log("Successfully connected to the echo websocket server...");
+    if(getConfig){
+      getConfig('getConfig');
+    }
   }
   return connection
 }
@@ -311,13 +314,13 @@ export default {
     },
   },
   created: function() {
-    this.connection=setWs(this.apihost,this.updateSwitch);
-    this.connection2=setWs(this.apihost2,this.updateTrain);
+    this.connection=setWs(this.apihost,this.updateSwitch,null);
+    this.connection2=setWs(this.apihost2,this.updateTrain,this.sendAction);
   },
   methods: {
     connectWs(){    
-      this.connection=setWs(this.apihost,this.updateSwitch);
-      this.connection2=setWs(this.apihost2,this.updateTrain);
+      this.connection=setWs(this.apihost,this.updateSwitch,null);
+      this.connection2=setWs(this.apihost2,this.updateTrain,null);
     },
     updateSwitch(data) {
       var j_data = data;
@@ -355,8 +358,14 @@ export default {
       this.switches.splice(_index, 1);
     },
     sendToBE(s) {
-      const pulse = this.switches[s].pulse[this.switches[s].switched];
-      const printed = this.printed_list[this.switches[s].printed];
+      let sw = {...this.switches[s]};
+      if (sw.switched == "Straight") {
+        sw.switched = "Turn";
+      } else {
+        sw.switched = "Straight";
+      }
+      const pulse = sw.pulse[sw.switched];
+      const printed = this.printed_list[sw.printed];
       const payload = JSON.stringify({ motor: parseInt(s), pulse: pulse, printed });
       this.connection.send(payload);
     },
@@ -376,11 +385,11 @@ export default {
       this.switchid++;
     },
     SwitchTrack(s) {
-      if (this.switches[s].switched == "Straight") {
-        this.switches[s].switched = "Turn";
-      } else {
-        this.switches[s].switched = "Straight";
-      }
+      // if (this.switches[s].switched == "Straight") {
+      //   this.switches[s].switched = "Turn";
+      // } else {
+      //   this.switches[s].switched = "Straight";
+      // }
       this.sendToBE(s);
     },
     sendAction(s) {
@@ -395,7 +404,7 @@ export default {
       // console.log(JSON.stringify(this.trains, null, 2));
       // console.log(JSON.stringify(this.hubs, null, 2));
       const payload = JSON.stringify({ "action":"getHubs" });
-      console.log(payload);
+      // console.log(payload);
       this.connection2.send(payload);
     },
     setPower(h) {
