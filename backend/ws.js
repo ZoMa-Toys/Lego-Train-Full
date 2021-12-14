@@ -4,7 +4,7 @@ const http = require('http');
 const WebSocket = require('ws');
 const url = require('url');
 
-function getPort(Folder){
+/* function getPort(Folder){
     const fs = require('fs');
     var p = "";
     fs.readdirSync(Folder).forEach(file => {
@@ -15,7 +15,7 @@ function getPort(Folder){
     return Folder + "/" + p;
 };
 
-const port = getPort('/dev');
+const port = getPort('/dev'); */
 
 const server = http.createServer();
 const wss1 = new WebSocket.Server({ noServer: true });
@@ -29,7 +29,7 @@ wss1.on('connection', function connection(ws) {
             client.send(data);
             };
         });
-        onReceive(data);
+/*         onReceive(data); */
     });
 });
 
@@ -45,17 +45,17 @@ wss2.on('connection', function connection(ws) {
 });
 
 // Serial port
-var SerialPort = require("serialport");
+/* var SerialPort = require("serialport");
 
 var serialPort = new SerialPort(port, {
     baudRate: 9600
-});
-
+}); */
+/* 
 function onReceive(msg)
 {
 //   console.log("ws msg:" + msg);
   serialPort.write(msg);
-}
+} */
 
 server.on('upgrade', function upgrade(request, socket, head) {
     const pathname = url.parse(request.url).pathname;
