@@ -131,14 +131,15 @@ function mainTrain(data){
 	else if (data.action == "setConfig"){
         switchConfig = data.config;
         message = {
-            "Status":"Updated"
+            "Status":"Updated",
+            "Message": conf4ESP()
         };
     };
     console.log(message);
     return JSON.stringify(message);
 }
   
-server.listen(80);
+server.listen(8080);
 const poweredUP = new PoweredUP.PoweredUP();
 
 function conf4ESP(){

@@ -28,12 +28,12 @@
             login() {
                 if (process.env.VUE_APP_AUTO_LOGIN === 'True'){
                     this.$emit("authenticated", true);
-                    this.$router.replace({ name: "Train" });
+                    this.$router.replace({ name: "swtichControl" });
                 }
                 else if((this.input.username != "" && this.input.password != "")) {
                     if (this.input.username === "Familymember" & this.input.password === "WE4RTsdf!"){
                         this.$emit("authenticated", true);
-                        this.$router.replace({ name: "Train" });
+                        this.$router.replace({ name: "swtichControl" });
                     } else {
                         this.message = "The username and / or password is incorrect";
                         console.log("The username and / or password is incorrect");
