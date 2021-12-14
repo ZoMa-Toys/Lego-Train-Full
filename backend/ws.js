@@ -138,7 +138,7 @@ function mainTrain(data){
     return JSON.stringify(message);
 }
   
-server.listen(8888);
+server.listen(80);
 const poweredUP = new PoweredUP.PoweredUP();
 
 function conf4ESP(){
