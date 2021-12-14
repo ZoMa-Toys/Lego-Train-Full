@@ -1,23 +1,15 @@
 #!/usr/bin/env node
 const PoweredUP = require("node-poweredup");
+var static = require('node-static');
 const http = require('http');
 const WebSocket = require('ws');
 const url = require('url');
 
-function getPort(Folder){
-    const fs = require('fs');
-    var p = "";
-    fs.readdirSync(Folder).forEach(file => {
-        if (file.includes("ttyUSB")){
-            p = file;
-        }
-    });
-    return Folder + "/" + p;
-};
+var file = new(static.Server)("./static");
 
-const port = getPort('/dev');
-
-const server = http.createServer();
+const server = http.createServer(function (req, res) {
+    file.serve(req, res);
+  })
 const wss1 = new WebSocket.Server({ noServer: true });
 const wss2 = new WebSocket.Server({ noServer: true });
 
@@ -29,7 +21,6 @@ wss1.on('connection', function connection(ws) {
             client.send(data);
             };
         });
-        onReceive(data);
     });
 });
 
@@ -43,19 +34,6 @@ wss2.on('connection', function connection(ws) {
         });
     });
 });
-
-// Serial port
-var SerialPort = require("serialport");
-
-var serialPort = new SerialPort(port, {
-    baudRate: 9600
-});
-
-function onReceive(msg)
-{
-//   console.log("ws msg:" + msg);
-  serialPort.write(msg);
-}
 
 server.on('upgrade', function upgrade(request, socket, head) {
     const pathname = url.parse(request.url).pathname;
@@ -160,7 +138,7 @@ function mainTrain(data){
     return JSON.stringify(message);
 }
   
-server.listen(8088);
+server.listen(8888);
 const poweredUP = new PoweredUP.PoweredUP();
 
 function conf4ESP(){
