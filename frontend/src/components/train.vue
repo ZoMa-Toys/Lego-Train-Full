@@ -265,8 +265,8 @@ function getInitialData() {
     ],
     switches_str: "",
     switchid: 8,
-    apihost: process.env.VUE_APP_APIHOST,
-    apihost2: process.env.VUE_APP_APIHOST2,
+    apihost: "ws://" + location.host + process.env.VUE_APP_APIHOST,
+    apihost2: "ws://" + location.host + process.env.VUE_APP_APIHOST2,
     trains: [
     ],
     hubs: {
