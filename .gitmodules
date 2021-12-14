@@ -1,0 +1,3 @@
+[submodule "ESP32"]
+	path = ESP32
+	url = https://github.com/GuBee33/LTS_ard.git
