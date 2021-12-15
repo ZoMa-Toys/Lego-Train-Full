@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+
+process.chdir(__dirname);
 const PoweredUP = require("node-poweredup");
 var static = require('node-static');
 const http = require('http');
@@ -139,7 +141,7 @@ function mainTrain(data){
     return JSON.stringify(message);
 }
   
-server.listen(80);
+server.listen(process.env.API_PORT);
 const poweredUP = new PoweredUP.PoweredUP();
 
 function conf4ESP(){

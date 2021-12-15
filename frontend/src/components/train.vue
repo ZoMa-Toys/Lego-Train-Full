@@ -36,7 +36,7 @@
 
 <script>
 // import axios from "axios";
-function setWs(apihost,dataModFunction,getConfig){
+function setWs(apihost,dataModFunction){
   // console.log("Starting connection to WebSocket Server")
   const connection = new WebSocket(apihost);
 
