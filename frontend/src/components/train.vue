@@ -51,16 +51,12 @@ function setWs(apihost,dataModFunction,getConfig){
   connection.onopen = function() {
     // console.log(event)
     console.log("Successfully connected to the echo websocket server...");
-    if(getConfig){
-      getConfig('getConfig');
-    }
   }
   return connection
 }
 function getInitialData() {
   return {
     connection2: null,
-    apihost: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/switch",
     apihost2: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/train",
     trains: [
     ],
@@ -78,22 +74,9 @@ export default {
   components: {
     controller,
   },
-  mounted: function () {
-    this.switches_str = JSON.stringify(this.switches, null, 2);
-  },
   watch: {
-    switches_str: function (val) {
-      this.switches = JSON.parse(val);
-    },
-    switches: function (val) {
-      this.switches_str = JSON.stringify(val, null, 2);
-    },
-    changePulse: function () {
-      this.switches_str = JSON.stringify(this.switches, null, 2);
-    },
   },
   created: function() {
-    this.connection=setWs(this.apihost,this.updateSwitch,null);
     this.connection2=setWs(this.apihost2,this.updateTrain,this.sendAction);
   },
   methods: {

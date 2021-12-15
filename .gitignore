@@ -2,7 +2,7 @@
 frontend/node_modules/
 backend/node_modules/
 backend/static/
-package-lock.json
+frontend/package-lock.json
 backend/ßpackage-lock.json
 
 
@@ -25,3 +25,4 @@ pnpm-debug.log*
 *.sln
 *.sw?
 backend/package-lock.json
+frontend/package-lock.json
