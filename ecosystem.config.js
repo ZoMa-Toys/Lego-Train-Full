@@ -28,7 +28,7 @@ module.exports = {
       "repo": "git@github.com:GuBee33/legoTrain.git",
       "path": "/var/www/prod",
       "pre-deploy": "rm -rf /var/www/prod/source/*",
-      "post-deploy": "cd /var/www/prod/source/frontend && npm install && npm run build && cd ../backend && npm install && cd /var/www/prod/source && sudo pm2 reload --env production  && sudo pm2 save"
+      "post-deploy": "cd /var/www/prod/source/frontend && npm install && npm run build && cd ../backend && npm install && cd /var/www/prod/source"
     }
   }
 }	
