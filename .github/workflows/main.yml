@@ -23,6 +23,6 @@ jobs:
         run: npm install -g pm2
 
       - name: Deploy
-        run: pm2 deploy production
+        run: pm2 deploy production --env production
         # Or alternately, put this deploy script in your package.json's scripts and run it using yarn/npm:
         # run: yarn deploy
