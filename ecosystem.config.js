@@ -3,6 +3,10 @@ module.exports = {
       {
         name: "WebSocket",
         script: "ws.js",
+        time: true,
+        instances: 1,
+        autorestart: true,
+        max_restarts: 50,
         watch: true,
         env: {
             API_PORT: 8080,
@@ -18,12 +22,12 @@ module.exports = {
     production: {
       "user": "tguber",
       "key": "/home/tguber/.ssh/id_rsa",
-      "host": ["127.0.0.1"],
+      "host": ["guberkray.myftp.org"],
       "ref": "origin/master",
       "repo": "git@github.com:GuBee33/legoTrain.git",
       "path": "/var/www/prod",
       "pre-deploy": "rm -rf /var/www/prod/source/*",
-      "post-deploy": "cd /var/www/prod/source/frontend && npm install && npm run build && cd ../backend && npm install"
+      "post-deploy": "cd /var/www/prod/source/frontend && npm install && npm run build && cd ../backend && npm install && cd /var/www/prod/source && pm2 deploy production --env production && pm2 save"
     }
   }
 }	
