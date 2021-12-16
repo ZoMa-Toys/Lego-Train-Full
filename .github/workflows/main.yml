@@ -20,7 +20,7 @@ jobs:
           SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
 
       - name: Install PM2
-        run: npm i pm2
+        run: npm install -g pm2
 
       - name: Deploy
         run: pm2 deploy production
