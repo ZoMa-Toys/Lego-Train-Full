@@ -21,6 +21,7 @@ module.exports = {
   deploy: {
     production: {
       "user": "tguber",
+      "ssh_options": "StrictHostKeyChecking=no",
       "key": "/home/tguber/.ssh/id_rsa",
       "host": ["guberkray.myftp.org"],
       "ref": "origin/master",
