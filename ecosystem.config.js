@@ -22,7 +22,7 @@ module.exports = {
     production: {
       "user": "tguber",
       "ssh_options": "StrictHostKeyChecking=no",
-      "key": "/home/tguber/.ssh/id_rsa",
+      "key": "~/.ssh/id_rsa",
       "host": ["guberkray.myftp.org"],
       "ref": "origin/master",
       "repo": "git@github.com:GuBee33/legoTrain.git",
