@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 process.chdir(__dirname);
-const PoweredUP = require("node-poweredup");
 var static = require('node-static');
 const http = require('http');
 const WebSocket = require('ws');
@@ -56,69 +55,7 @@ server.on('upgrade', function upgrade(request, socket, head) {
 function mainTrain(data){
     // console.log(data);
     let message = {};
-    if (data.action == "scan"){
-        poweredUP.stop();
-        poweredUP.scan(); // Start scanning for Hubs
-        // console.log("Scanning for Hubs...");
-        message = {
-            "Status":"Scanning for Hubs...",
-            "Message":"..."
-        };
-	}
-    else if (data.action == "getHubs"){
-        message = getHubs();
-	}
-	else if (data.action == "setPower"){
-        const hub = poweredUP.getHubsByName(data.train)[0]; // Get an array of all connected hubs
-        // console.log(`hub: ${hub.name}`)
-        const motor = hub.getDeviceAtPort(data.MotorPort);
-        motor.setPower(data.speed); // Run a motor attached to port A for 2 seconds at maximum speed (100) then stop
-        message = {
-            "Status":"Setting Speed...",
-            "Message":data
-        };
-        if (data.distance){
-            hub.on("distance", (device, { distance }) => {
-                // console.log(distance)
-                if (distance < data.distance){
-                    motor.brake();
-                }
-            });
-        }
-        if (data.color){
-            hub.on("color", (device, { color }) => {
-                if (color == Color[data.color]){
-                    motor.brake();
-                }
-            });
-        }
-        sleep(data.duration).then(() => {
-            motor.brake();
-        });
-    }
-	else if (data.action == "disconnectHub"){
-        poweredUP.stop();
-        poweredUP.getHubsByName(data.train)[0].disconnect(); // Get an array of all connected hubs
-        message = {
-            "Status":"Disconnecting Hub...",
-            "Message":data.train
-        };
-    }
-	else if (data.action == "disconnectHubs"){
-        poweredUP.stop();
-        const hubs = poweredUP.getHubs();
-        hubs.forEach(async (hub) => {
-            hub.disconnect();
-        });
-    }
-	else if (data.action == "stop"){
-        poweredUP.stop();
-        message = {
-            "Status":"Stop scanning...",
-            "Message":"..."
-        };
-    }
-	else if (data.action == "getConfig"){
+    if (data.action == "getConfig"){
         message = {
             "Status":"SwitchConfig:",
             "Message": switchConfig
@@ -136,13 +73,15 @@ function mainTrain(data){
             "Status":"Updated",
             "Message": conf4ESP()
         };
+    }
+    else {
+        message = data;
     };
     console.log(message);
     return JSON.stringify(message);
 }
   
 server.listen(process.env.API_PORT);
-const poweredUP = new PoweredUP.PoweredUP();
 
 function conf4ESP(){
     var ESPswitchConfig = [];
@@ -257,49 +196,3 @@ var switchConfig = [
         },
       ];
  
-poweredUP.on("discover", async (hub) => { // Wait to discover hubs
-    await hub.connect(); // Connect to hub
-    // console.log(`Connected to ${hub.name}!`);
-});
-
-function sleep(millis) {
-    return new Promise(resolve => setTimeout(resolve, millis));
-};
-
-function getHubs(){
-    const hubs = poweredUP.getHubs();
-    var hubs_names =[];
-    hubs.forEach(async (hub) => {
-        // var hubname = {};
-        var d = {};
-        d["NAME"]=hub.name;
-        hub.getDevices().forEach(async (device) => {
-                d[device.typeName]=device.portName;
-        });
-        // hubname[hub.name] = d;
-        hubs_names.push(d);
-    });
-    const message = {
-        "Status":"Connected Hubs:",
-        "Message":hubs_names
-    };
-    return message;
-};
-
-const Color ={
-    BLACK: 0,
-    PINK: 1,
-    PURPLE: 2,
-    BLUE: 3,
-    LIGHT_BLUE: 4,
-    CYAN: 5,
-    GREEN: 6,
-    YELLOW: 7,
-    ORANGE: 8,
-    RED: 9,
-    WHITE: 10,
-    NONE: 255
-};
-
-poweredUP.scan(); // Start scanning for Hubs
-// console.log("Scanning for Hubs...");

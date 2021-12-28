@@ -2,7 +2,8 @@ module.exports = {
   apps : [
       {
         name: "WebSocket",
-        script: "ws.js",
+        cwd: "/var/www/prod/source",
+        script: "./backend/ws.js",
         time: true,
         instances: 1,
         autorestart: true,
@@ -28,7 +29,7 @@ module.exports = {
       "repo": "git@github.com:GuBee33/legoTrain.git",
       "path": "/var/www/prod",
       "pre-deploy": "rm -rf /var/www/prod/source/*",
-      "post-deploy": "cd /var/www/prod/source/frontend && npm install && npm run build && cd ../backend && npm install && cd /var/www/prod/source"
+      "post-deploy": "cd /var/www/prod/source/frontend && npm install && npm run build && cd ../backend && npm install && cd /var/www/prod/source && sudo pm2 resurrect"
     }
   }
-}	
+}
