@@ -24,7 +24,8 @@
               :train="train"
               :hubs="hubs"
               :Colors="Colors"
-              :setPower="setPower">
+              :setPower="setPower"
+              :changeSpeed="changeSpeed">
             </controller>
           </tr>
         </td>
@@ -58,16 +59,24 @@ function getInitialData() {
   return {
     connection2: null,
     apihost2: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/train",
-    trains: [
+    trains: [{NAME:"a",TRAIN_MOTOR:0,COLOR_DISTANCE_SENSOR:1},
     ],
     hubs: {
+      "a":{
+            speed: 0,
+            train: "a",
+            MotorPort: 0,
+            duration:10000,
+            distance:0,
+            color: 255
+        },
     },
     Colors: {
       BLACK: 0,
       PINK: 1,
       PURPLE: 2,
       BLUE: 3,
-      LIGHT_BLUE: 4,
+      LIGHTBLUE: 4,
       CYAN: 5,
       GREEN: 6,
       YELLOW: 7,
@@ -79,7 +88,7 @@ function getInitialData() {
   };
 }
 
-import controller from './controller.vue'
+import controller from './controller.vue';
 export default {
   name: "Train",
   data: function () {
@@ -130,6 +139,7 @@ export default {
     },
     setPower(h) {
       const payload =this.hubs[h];
+      payload.color=this.Colors[payload.color];
       payload["action"]="setPower";
       // console.log(payload);
       this.connection2.send(JSON.stringify(payload));
@@ -151,6 +161,16 @@ export default {
     },
     goto(page){
       this.$router.replace({ name: page });
+    },
+    changeSpeed(TrainName,ChangeValue){
+      if (ChangeValue===0){
+        this.hubs[TrainName].speed = 0;
+      }
+      else{
+        const newValue = Math.max(Math.min(this.hubs[TrainName].speed + ChangeValue,100),-100);
+        this.hubs[TrainName].speed=newValue;
+      }
+      this.setPower(TrainName);
     }
   },
   
