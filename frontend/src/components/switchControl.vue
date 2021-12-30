@@ -296,15 +296,7 @@ export default {
       this.switches[j_data.motor].switched = getKeyByValue(this.switches[j_data.motor].pulse,j_data.pulse);
     },
     updateTrain(data) {
-      if (data.Status === 'Connected Hubs:'){
-        this.trains = data.Message;
-        this.fillHubs();
-      }
-      else if (data.Status === 'Setting Speed...'){
-        const t = data.Message;
-        this.hubs[t.train]=t;
-      }
-      else if (data.Status === 'SwitchConfig:'){
+      if (data.Status === 'SwitchConfig:'){
         this.switches = data.Message;
       }
     },
