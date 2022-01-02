@@ -16,8 +16,10 @@
     "vue-router": "^3.5.1",
     "vue-speedometer": "^1.8.0"
   },
-  "devDependencies": {
-    "@vue/cli-service": "^3.12.1",
+  "devDependencies": {    
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
     "@vue/devtools": "^5.3.4",
     "babel-eslint": "^10.1.0",
     "eslint": "^8.5.0",
