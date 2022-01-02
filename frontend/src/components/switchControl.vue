@@ -74,6 +74,7 @@
           </tr>
           <tr>
             <td colspan="4">
+              <b-button @click="sendAction('SetThresHolds')" variant="outline-primary">ReconfigureSensors</b-button>   
               <b-button @click="sendAction('setConfig')" variant="outline-primary">SendConfig</b-button>      
               <b-button @click="sendAction('getConfig')" variant="outline-primary">GetConfig</b-button>
             </td>
