@@ -11,6 +11,20 @@
           <tr>
             <td colspan="4">
               <div class="row">
+                Number of Hubs:
+                <number-input
+                  :min="0"
+                  :max="8-NumberOfRemotes"
+                  controls
+                  v-model="NumberOfHubs"
+                ></number-input>
+                Number of Remotes:
+                <number-input
+                  :min="0"
+                  :max="8-NumberOfHubs"
+                  controls
+                  v-model="NumberOfRemotes"
+                ></number-input>
                 <b-button @click="sendAction('scan')" variant="outline-primary">startScan</b-button>
                 <b-button @click="sendAction('stop')" variant="danger">stopScan</b-button>
                 <b-button @click="getHubs" variant="primary">getHubs</b-button>
@@ -71,6 +85,8 @@ function getInitialData() {
             color: 255
         },
     },
+    NumberOfHubs: 1,
+    NumberOfRemotes: 1,
     Colors: {
       BLACK: 0,
       PINK: 1,
@@ -125,6 +141,10 @@ export default {
       const payload = { "action":s };
       if (s.includes("Config")){
         payload.config=this.switches;
+      }
+      if (s.includes("scan")){
+        payload.NumberOfHubs=this.NumberOfHubs;
+        payload.NumberOfRemotes=this.NumberOfRemotes;
       }
       console.log(payload);
       this.connectWs();
