@@ -107,7 +107,7 @@ var trackConfig = {
         "0,5": {
             "img": {
                 "data": "curve",
-                "src": "http://10.143.178.117:8081/curve.png",
+                "src": "curve.png",
                 "transform": "rotate(90deg)",
                 "width": 50,
                 "id": "curve - address:0,5"
@@ -117,7 +117,7 @@ var trackConfig = {
         "0,0": {
             "img": {
                 "data": "curve",
-                "src": "http://10.143.178.117:8081/curve.png",
+                "src": "curve.png",
                 "transform": "rotate(0deg)",
                 "width": 50,
                 "id": "curve - address:0,0"
@@ -127,7 +127,7 @@ var trackConfig = {
         "0,1": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(180deg)",
                 "width": 50,
                 "id": "Straight - address:0,1"
@@ -137,7 +137,7 @@ var trackConfig = {
         "0,2": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(180deg)",
                 "width": 50,
                 "id": "Straight - address:0,2"
@@ -147,7 +147,7 @@ var trackConfig = {
         "0,3": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(180deg)",
                 "width": 50,
                 "id": "Straight - address:0,3"
@@ -157,7 +157,7 @@ var trackConfig = {
         "0,4": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(180deg)",
                 "width": 50,
                 "id": "Straight - address:0,4"
@@ -167,7 +167,7 @@ var trackConfig = {
         "1,0": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(270deg)",
                 "width": 50,
                 "id": "Straight - address:1,0"
@@ -177,7 +177,7 @@ var trackConfig = {
         "1,5": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(270deg)",
                 "width": 50,
                 "id": "Straight - address:1,5"
@@ -187,7 +187,7 @@ var trackConfig = {
         "2,5": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(270deg)",
                 "width": 50,
                 "id": "Straight - address:2,5"
@@ -197,7 +197,7 @@ var trackConfig = {
         "2,0": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(270deg)",
                 "width": 50,
                 "id": "Straight - address:2,0"
@@ -207,7 +207,7 @@ var trackConfig = {
         "3,0": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(270deg)",
                 "width": 50,
                 "id": "Straight - address:3,0"
@@ -217,7 +217,7 @@ var trackConfig = {
         "3,5": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(270deg)",
                 "width": 50,
                 "id": "Straight - address:3,5"
@@ -227,7 +227,7 @@ var trackConfig = {
         "4,5": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(270deg)",
                 "width": 50,
                 "id": "Straight - address:4,5"
@@ -237,7 +237,7 @@ var trackConfig = {
         "4,0": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(270deg)",
                 "width": 50,
                 "id": "Straight - address:4,0"
@@ -247,7 +247,7 @@ var trackConfig = {
         "1,1": {
             "img": {
                 "data": "curve",
-                "src": "http://10.143.178.117:8081/curve.png",
+                "src": "curve.png",
                 "transform": "rotate(0deg)",
                 "width": 50,
                 "id": "curve - address:1,1"
@@ -257,7 +257,7 @@ var trackConfig = {
         "2,1": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(270deg)",
                 "width": 50,
                 "id": "Straight - address:2,1"
@@ -267,7 +267,7 @@ var trackConfig = {
         "2,4": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(270deg)",
                 "width": 50,
                 "id": "Straight - address:2,4"
@@ -277,7 +277,7 @@ var trackConfig = {
         "1,4": {
             "img": {
                 "data": "curve",
-                "src": "http://10.143.178.117:8081/curve.png",
+                "src": "curve.png",
                 "transform": "rotate(90deg)",
                 "width": 50,
                 "id": "curve - address:1,4"
@@ -287,7 +287,7 @@ var trackConfig = {
         "1,2": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(0deg)",
                 "width": 50,
                 "id": "Straight - address:1,2"
@@ -297,7 +297,7 @@ var trackConfig = {
         "1,3": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(0deg)",
                 "width": 50,
                 "id": "Straight - address:1,3"
@@ -307,7 +307,7 @@ var trackConfig = {
         "2,3": {
             "img": {
                 "data": "curve",
-                "src": "http://10.143.178.117:8081/curve.png",
+                "src": "curve.png",
                 "transform": "rotate(90deg)",
                 "width": 50,
                 "id": "curve - address:2,3"
@@ -317,7 +317,7 @@ var trackConfig = {
         "2,2": {
             "img": {
                 "data": "curve",
-                "src": "http://10.143.178.117:8081/curve.png",
+                "src": "curve.png",
                 "transform": "rotate(0deg)",
                 "width": 50,
                 "id": "curve - address:2,2"
@@ -327,7 +327,7 @@ var trackConfig = {
         "3,1": {
             "img": {
                 "data": "rightSwitchStraight",
-                "src": "http://10.143.178.117:8081/rightSwitchStraight.png",
+                "src": "rightSwitchStraight.png",
                 "transform": "rotate(90deg)",
                 "width": 100,
                 "id": "rightSwitchStraight - address:3,1"
@@ -347,7 +347,7 @@ var trackConfig = {
         "3,3": {
             "img": {
                 "data": "leftSwitchStraight",
-                "src": "http://10.143.178.117:8081/leftSwitchStraight.png",
+                "src": "leftSwitchStraight.png",
                 "transform": "rotate(270deg)",
                 "width": 100,
                 "id": "leftSwitchStraight - address:3,3"
@@ -367,7 +367,7 @@ var trackConfig = {
         "5,0": {
             "img": {
                 "data": "rightSwitchStraight",
-                "src": "http://10.143.178.117:8081/rightSwitchStraight.png",
+                "src": "rightSwitchStraight.png",
                 "transform": "rotate(90deg)",
                 "width": 100,
                 "id": "rightSwitchStraight - address:5,0"
@@ -387,7 +387,7 @@ var trackConfig = {
         "5,4": {
             "img": {
                 "data": "leftSwitchStraight",
-                "src": "http://10.143.178.117:8081/leftSwitchStraight.png",
+                "src": "leftSwitchStraight.png",
                 "transform": "rotate(270deg)",
                 "width": 100,
                 "id": "leftSwitchStraight - address:5,4"
@@ -407,7 +407,7 @@ var trackConfig = {
         "7,0": {
             "img": {
                 "data": "curve",
-                "src": "http://10.143.178.117:8081/curve.png",
+                "src": "curve.png",
                 "transform": "rotate(270deg)",
                 "width": 50,
                 "id": "curve - address:7,0"
@@ -417,7 +417,7 @@ var trackConfig = {
         "7,1": {
             "img": {
                 "data": "curve",
-                "src": "http://10.143.178.117:8081/curve.png",
+                "src": "curve.png",
                 "transform": "rotate(90deg)",
                 "width": 50,
                 "id": "curve - address:7,1"
@@ -427,7 +427,7 @@ var trackConfig = {
         "7,5": {
             "img": {
                 "data": "curve",
-                "src": "http://10.143.178.117:8081/curve.png",
+                "src": "curve.png",
                 "transform": "rotate(180deg)",
                 "width": 50,
                 "id": "curve - address:7,5"
@@ -437,7 +437,7 @@ var trackConfig = {
         "7,4": {
             "img": {
                 "data": "curve",
-                "src": "http://10.143.178.117:8081/curve.png",
+                "src": "curve.png",
                 "transform": "rotate(0deg)",
                 "width": 50,
                 "id": "curve - address:7,4"
@@ -447,7 +447,7 @@ var trackConfig = {
         "8,1": {
             "img": {
                 "data": "leftSwitchStraight",
-                "src": "http://10.143.178.117:8081/leftSwitchStraight.png",
+                "src": "leftSwitchStraight.png",
                 "transform": "rotate(90deg)",
                 "width": 100,
                 "id": "leftSwitchStraight - address:8,1"
@@ -467,7 +467,7 @@ var trackConfig = {
         "8,3": {
             "img": {
                 "data": "rightSwitchStraight",
-                "src": "http://10.143.178.117:8081/rightSwitchStraight.png",
+                "src": "rightSwitchStraight.png",
                 "transform": "rotate(270deg)",
                 "width": 100,
                 "id": "rightSwitchStraight - address:8,3"
@@ -487,7 +487,7 @@ var trackConfig = {
         "10,1": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(90deg)",
                 "width": 50,
                 "id": "Straight - address:10,1"
@@ -497,7 +497,7 @@ var trackConfig = {
         "10,4": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(90deg)",
                 "width": 50,
                 "id": "Straight - address:10,4"
@@ -507,7 +507,7 @@ var trackConfig = {
         "10,2": {
             "img": {
                 "data": "cross",
-                "src": "http://10.143.178.117:8081/cross.png",
+                "src": "cross.png",
                 "transform": "",
                 "width": 50,
                 "id": "cross - address:10,2"
@@ -517,7 +517,7 @@ var trackConfig = {
         "10,3": {
             "img": {
                 "data": "cross",
-                "src": "http://10.143.178.117:8081/cross.png",
+                "src": "cross.png",
                 "transform": "rotate(180deg)",
                 "width": 50,
                 "id": "cross - address:10,3"
@@ -527,7 +527,7 @@ var trackConfig = {
         "11,3": {
             "img": {
                 "data": "leftSwitchStraight",
-                "src": "http://10.143.178.117:8081/leftSwitchStraight.png",
+                "src": "leftSwitchStraight.png",
                 "transform": "rotate(270deg)",
                 "width": 100,
                 "id": "leftSwitchStraight - address:11,3"
@@ -547,7 +547,7 @@ var trackConfig = {
         "11,1": {
             "img": {
                 "data": "rightSwitchStraight",
-                "src": "http://10.143.178.117:8081/rightSwitchStraight.png",
+                "src": "rightSwitchStraight.png",
                 "transform": "rotate(90deg)",
                 "width": 100,
                 "id": "rightSwitchStraight - address:11,1"
@@ -567,7 +567,7 @@ var trackConfig = {
         "13,4": {
             "img": {
                 "data": "curve",
-                "src": "http://10.143.178.117:8081/curve.png",
+                "src": "curve.png",
                 "transform": "rotate(180deg)",
                 "width": 50,
                 "id": "curve - address:13,4"
@@ -577,7 +577,7 @@ var trackConfig = {
         "13,1": {
             "img": {
                 "data": "curve",
-                "src": "http://10.143.178.117:8081/curve.png",
+                "src": "curve.png",
                 "transform": "rotate(270deg)",
                 "width": 50,
                 "id": "curve - address:13,1"
@@ -587,7 +587,7 @@ var trackConfig = {
         "13,2": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(180deg)",
                 "width": 50,
                 "id": "Straight - address:13,2"
@@ -597,7 +597,7 @@ var trackConfig = {
         "13,3": {
             "img": {
                 "data": "Straight",
-                "src": "http://10.143.178.117:8081/Straight.png",
+                "src": "Straight.png",
                 "transform": "rotate(180deg)",
                 "width": 50,
                 "id": "Straight - address:13,3"
