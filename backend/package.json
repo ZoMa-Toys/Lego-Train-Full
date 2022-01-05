@@ -1,11 +1,17 @@
 {
+  "name": "ws",
+  "version": "1.0.0",
+  "description": "This is the websocket backend for ZoMa Lego Train",
+  "main": "ws.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "GuberTamas@gmail.com",
+  "license": "ISC",
   "dependencies": {
-    "dotenv": "^8.6.0",
-    "node-poweredup": "^6.9.1",
+    "http": "^0.0.1-security",
     "node-static": "^0.7.11",
-    "nx": "^13.3.1",
-    "pm2": "^5.1.2",
-    "serialport": "^9.0.6",
-    "ws": "^7.4.3"
+    "url": "^0.11.0",
+    "ws": "^8.4.0"
   }
 }

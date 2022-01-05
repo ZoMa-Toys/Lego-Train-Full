@@ -1,4 +1,4 @@
-# frontend
+# zomalegotrain
 
 ## Project setup
 ```
