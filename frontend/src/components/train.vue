@@ -27,7 +27,7 @@
                 ></number-input>
                 <b-button @click="sendAction('scan')" variant="outline-primary">startScan</b-button>
                 <b-button @click="sendAction('stop')" variant="danger">stopScan</b-button>
-                <b-button @click="getHubs" variant="primary">getHubs</b-button>
+                <b-button @click="sendAction('getHubs')" variant="primary">getHubs</b-button>
                 <b-button @click="sendAction('disconnectHubs')" variant="danger">disconnectAllHub</b-button>
                 <b-button @click="goto('swtichControl')" variant="outline-primary">SwitchControl</b-button>
               </div>
@@ -50,29 +50,26 @@
 </template>
 
 <script>
-// import axios from "axios";
+
 function setWs(apihost,dataModFunction){
   // console.log("Starting connection to WebSocket Server")
   const connection = new WebSocket(apihost);
 
   connection.onmessage = ({data}) => {
     dataModFunction(JSON.parse(data));
-    console.log("input: " + data);
-    // var j_data = JSON.parse(data);
-    // switches[j_data.motor].switched = getKeyByValue(switches[j_data.motor].pulse,j_data.pulse);
+    //console.log("input: " + data);
   }
 
   
   connection.onopen = function() {
-    // console.log(event)
     console.log("Successfully connected to the echo websocket server...");
   }
   return connection
 }
 function getInitialData() {
   return {
-    connection2: null,
-    apihost2: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/train",
+    connection: null,
+    apihost: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/ws",
     trains: [{NAME:"a",TRAIN_MOTOR:0,COLOR_DISTANCE_SENSOR:1},
     ],
     hubs: {
@@ -80,7 +77,6 @@ function getInitialData() {
             speed: 0,
             train: "a",
             MotorPort: 0,
-            duration:10000,
             distance:0,
             color: 255
         },
@@ -116,12 +112,12 @@ export default {
   watch: {
   },
   created: function() {
-    this.connection2=setWs(this.apihost2,this.updateTrain,this.sendAction);
+    this.connection=setWs(this.apihost,this.updateTrain,null);
   },
   methods: {
     connectWs(){ 
-      if (this.connection2.readyState != this.connection2.OPEN ){
-        this.connection2=setWs(this.apihost2,this.updateTrain,null);
+      if (this.connection.readyState != this.connection.OPEN ){
+        this.connection=setWs(this.apihost,this.updateTrain,null);
       }
     },
     updateTrain(data) {
@@ -142,38 +138,33 @@ export default {
       if (s.includes("Config")){
         payload.config=this.switches;
       }
-      if (s.includes("scan")){
+      else if (s.includes("scan")){
         payload.NumberOfHubs=this.NumberOfHubs;
         payload.NumberOfRemotes=this.NumberOfRemotes;
       }
-      console.log(payload);
+      //console.log(payload);
       this.connectWs();
-      this.connection2.send(JSON.stringify(payload));
+      this.connection.send(JSON.stringify(payload));
     },
     getHubs() {
-      // console.log(JSON.stringify(this.trains, null, 2));
-      // console.log(JSON.stringify(this.hubs, null, 2));
-      const payload = JSON.stringify({ "action":"getHubs" });
-      // console.log(payload);
-      this.connection2.send(payload);
+      this.connection.send(JSON.stringify({ "action":"getHubs" }));
     },
     setPower(h) {
       const payload =this.hubs[h];
-      payload.color=this.Colors[payload.color];
+//      payload.color=this.Colors[payload.color];
       payload["action"]="setPower";
       // console.log(payload);
-      this.connection2.send(JSON.stringify(payload));
+      this.connection.send(JSON.stringify(payload));
     },
     fillHubs() { 
       this.trains.forEach(train => {
         if ("TRAIN_MOTOR" in train){
-          this.$set(this.hubs ,train.NAME , {
+          this.hubs[train.NAME]= {
             speed: 0,
             train: train.NAME,
             MotorPort: train.TRAIN_MOTOR,
-            duration:10000,
             distance:0,
-            color: 255});
+            color: 255};
         }
       });
        // eslint-disable-next-line
@@ -190,6 +181,7 @@ export default {
         const newValue = Math.max(Math.min(this.hubs[TrainName].speed + ChangeValue,100),-100);
         this.hubs[TrainName].speed=newValue;
       }
+      //console.log(this.hubs)
       this.setPower(TrainName);
     }
   },

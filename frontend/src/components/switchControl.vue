@@ -21,7 +21,8 @@
       <b-button @click="createTable" variant="primary">SetTable</b-button>
       <b-button @click="sendAction('SetThresHolds')" variant="outline-primary">ReconfigureSensors</b-button>   
       <b-button @click="sendAction('setConfig')" variant="outline-primary">SendConfig</b-button>      
-      <b-button @click="sendAction('getConfig')" variant="outline-primary">GetConfig</b-button>
+      <b-button @click="sendAction('getConfig')" variant="outline-primary">GetConfig</b-button> 
+      <b-button @click="sendAction('getDefaultConfig')" variant="outline-primary">GetDefaultConfig</b-button>
       <b-button @click="transpose" variant="outline-primary">Transpose</b-button>
       <b-button @click="goto('Train')" variant="outline-primary">TrainControl</b-button>
     </div>
@@ -55,7 +56,7 @@
 function getKeyByValue(object, value) {
   return Object.keys(object).find(key => object[key] === value);
 }
-function setWs(apihost,dataModFunction,getConfig){
+function setWs(apihost,dataModFunction,sendAction){
   const connection = new WebSocket(apihost);
 
   connection.onmessage = ({data}) => {
@@ -65,8 +66,8 @@ function setWs(apihost,dataModFunction,getConfig){
   
   connection.onopen = function() {
     console.log("Successfully connected to the echo websocket server...");
-    if(getConfig){
-      getConfig('getConfig');
+    if(sendAction){
+      sendAction('getConfig');
     }
   }
   return connection
@@ -97,26 +98,26 @@ export default {
           Printed: { Straight: 380, Turn: 280 },
         },
       },
-      apihost: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/switch",
-      apihost2: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/train",
+      //apihost: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/switch",
+      apihost: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/ws",
 /*       apihost: "ws://89.132.204.38/switch",
-      apihost2: "ws://89.132.204.38/train", */
+      apihost: "ws://89.132.204.38/train", */
     };
   },
   created: function() {
-    this.connection=setWs(this.apihost,this.updateSwitch,null);
-    this.connection2=setWs(this.apihost2,this.updateConfWS,this.sendAction);
+   //this.connection=setWs(this.apihost,this.updateSwitch,null);
+    this.connection=setWs(this.apihost,this.onMessage,this.sendAction);
   },
   mounted() {
     this.createTable();
   },
   methods:{
     connectWs(){ 
-      if (this.connection.readyState != this.connection.OPEN ){
+/*       if (this.connection.readyState != this.connection.OPEN ){
         this.connection=setWs(this.apihost,this.updateSwitch,null);
-      }
-      if (this.connection2.readyState != this.connection2.OPEN ){
-        this.connection2=setWs(this.apihost2,this.updateConfWS,null);
+      } */
+      if (this.connection.readyState != this.connection.OPEN ){
+        this.connection=setWs(this.apihost,this.onMessage,null);
       }
     },
     updateConf() {
@@ -150,13 +151,24 @@ export default {
         }
       }
     },
-    updateConfWS(data) {
-      if (data.Status === 'TrackConfig:'){
-        this.rows = data.Message.rows;
-        this.columns = data.Message.columns;
-        this.createTable();
-        this.conf = data.Message.conf;
-        this.updateConf();
+    onMessage(data) {
+      if ("Status" in data){
+        if (data.Status === 'TrackConfig:'){
+          this.rows = data.Message.rows;
+          this.columns = data.Message.columns;
+          this.createTable();
+          this.conf = data.Message.conf;
+          this.updateConf();
+        }
+        else if (data.Status === 'swtiched'){
+          let swid= this.motor_witch[data.Message.motor]
+          if(swid !== undefined){
+            this.conf[swid].switch.switched = getKeyByValue(this.conf[swid].switch.pulse,data.Message.pulse);
+            let img = document.getElementById(swid).firstElementChild 
+            img.src=this.changeDirection(img.src)
+            this.conf[swid].img.src=this.changeDirection(this.conf[swid].img.src)
+          }
+        }
       }
     },
     sendAction(s) {
@@ -165,17 +177,7 @@ export default {
         payload.config={"conf":this.conf,"rows":this.rows,"columns":this.columns};
       }
       this.connectWs();
-      this.connection2.send(JSON.stringify(payload));
-    },
-    updateSwitch(data) {
-      var j_data = data;
-      let swid= this.motor_witch[j_data.motor]
-      if(swid !== undefined){
-        this.conf[swid].switch.switched = getKeyByValue(this.conf[swid].switch.pulse,j_data.pulse);
-        let img = document.getElementById(swid).firstElementChild 
-        img.src=this.changeDirection(img.src)
-        this.conf[swid].img.src=this.changeDirection(this.conf[swid].img.src)
-      }
+      this.connection.send(JSON.stringify(payload));
     },
     changeDirection(str){
       if (str.includes("Turn")){
@@ -295,7 +297,7 @@ export default {
       }
       const pulse = sw.pulse[sw.switched];
       const printed = this.printed_list[sw.printed];
-      const payload = JSON.stringify({ motor: sw.index, pulse: pulse, printed });
+      const payload = JSON.stringify({"action":"swtichMotor","message":{ motor: sw.index, pulse: pulse, printed }});
       this.connectWs();
       this.connection.send(payload);
     },

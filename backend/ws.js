@@ -11,26 +11,23 @@ var file = new(static.Server)("./static");
 const server = http.createServer(function (req, res) {
     file.serve(req, res);
   })
-const wss1 = new WebSocket.Server({ noServer: true });
-const wss2 = new WebSocket.Server({ noServer: true });
+/* const wss1 = new WebSocket.Server({ noServer: true }); */
+const WSserver = new WebSocket.Server({ noServer: true });
 
-wss1.on('connection', function connection(ws) {
-    ws.on('message', function incoming(incomingdata) {
-        console.log('Received Message: ' + incomingdata);
-        wss1.clients.forEach(function each(client) {
-            if (client !== ws && client.readyState === WebSocket.OPEN) {
-                client.send(incomingdata.toString());
-            };
-        });
-    });
-});
 
-wss2.on('connection', function connection(ws) {
+WSserver.on('connection', function connection(ws) {
     ws.on('message', function incoming(data) {
         console.log('Received Message: ' + data);
-        wss2.clients.forEach(function each(client) {
+        WSserver.clients.forEach(function each(client) {
             if (client.readyState === WebSocket.OPEN) {
-            client.send(mainTrain(JSON.parse(data)));
+                try {
+                    client.send(mainTrain(JSON.parse(data)));
+                } catch (e) {
+                    let message = {
+                        "UnknownMessage": data.toString()
+                    };
+                        client.send(JSON.stringify(message));
+                    }
             };
         });
     });
@@ -39,13 +36,9 @@ wss2.on('connection', function connection(ws) {
 server.on('upgrade', function upgrade(request, socket, head) {
     const pathname = url.parse(request.url).pathname;
   
-    if (pathname === '/switch') {
-        wss1.handleUpgrade(request, socket, head, function done(ws) {
-            wss1.emit('connection', ws, request);
-        });
-    } else if (pathname === '/train') {
-        wss2.handleUpgrade(request, socket, head, function done(ws) {
-            wss2.emit('connection', ws, request);
+    if (pathname === '/ws') {
+        WSserver.handleUpgrade(request, socket, head, function done(ws) {
+            WSserver.emit('connection', ws, request);
         });
     } else {
         socket.destroy();
@@ -55,28 +48,50 @@ server.on('upgrade', function upgrade(request, socket, head) {
 function mainTrain(data){
     // console.log(data);
     let message = {};
-    if (data.action == "getConfig"){
-        message = {
-            "Status":"TrackConfig:",
-            "Message": trackConfig
+    if(data.hasOwnProperty("action")){
+        if (data.action == "getConfig"){
+            message = {
+                "Status":"TrackConfig:",
+                "Message": trackConfig
+            };
+        }
+        else if (data.action == "getDefaultConfig"){
+            message = {
+                "Status":"TrackConfig:",
+                "Message": trackConfigDefault
+            };
+        }
+        else if (data.action == "getConfigESP"){
+            message = {
+                "Status":"SwitchConfigESP:",
+                "Message": conf4ESP()
+            };
+        }
+        else if (data.action == "setConfig"){
+            trackConfig = data.config;
+            message = {
+                "Status":"Updated",
+                "Message": conf4ESP()
+            };
+        }
+        else if (data.action == "swtichMotor"){
+            message = data.message;
+        }
+        else {
+            message = data;
         };
     }
-	else if (data.action == "getConfigESP"){
+    else if(data.hasOwnProperty("motor")){
         message = {
-            "Status":"SwitchConfigESP:",
-            "Message": conf4ESP()
+            "Status":"swtiched",
+            "Message": data
         };
     }
-	else if (data.action == "setConfig"){
-        trackConfig = data.config;
+    else{
         message = {
-            "Status":"Updated",
-            "Message": conf4ESP()
+            "UnknownMessage":data
         };
     }
-    else {
-        message = data;
-    };
     console.log(message);
     return JSON.stringify(message);
 }
@@ -101,7 +116,7 @@ function conf4ESP(){
 }
 
 
-var trackConfig = {
+var trackConfigDefault = {
     "rows":14,
     "columns":6,
 	"conf": {
@@ -607,4 +622,5 @@ var trackConfig = {
         }
     }
 };
+var trackConfig = trackConfigDefault;
  

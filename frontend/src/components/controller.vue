@@ -23,12 +23,6 @@
                     {{ ckey }}
                     </option>
                 </b-form-select><br>
-                <!-- <label>Runtime:</label><b-form-input type="range" @change="setPower(train.NAME)"
-                    min="0"
-                    max="300000"
-                    step="1000"
-                    v-model="hubs[train.NAME].duration">
-                </b-form-input><p>{{ hubs[train.NAME].duration/1000 }} sec</p> -->
             </div>
         </b-row>
     </td>
