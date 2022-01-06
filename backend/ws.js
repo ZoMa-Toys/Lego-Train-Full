@@ -85,9 +85,10 @@ server.listen(process.env.API_PORT);
 
 function conf4ESP(){
     var ESPswitchConfig = [];
-    for (var id in trackConfig){
-        if ("switch" in trackConfig[id]){
-            sw = trackConfig[id].switch;
+    for (var id in trackConfig.conf){
+        console.log(id,trackConfig.conf[id])
+        if ("switch" in trackConfig.conf[id]){
+            sw = trackConfig.conf[id].switch;
             var swmin = {
                 pulse: sw.pulse,
                 switched: sw.switched,
