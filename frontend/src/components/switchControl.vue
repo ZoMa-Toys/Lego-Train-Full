@@ -167,6 +167,7 @@ export default {
             let img = document.getElementById(swid).firstElementChild 
             img.src=this.changeDirection(img.src)
             this.conf[swid].img.src=this.changeDirection(this.conf[swid].img.src)
+
           }
         }
       }
