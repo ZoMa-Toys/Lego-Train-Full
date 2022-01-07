@@ -77,6 +77,8 @@ function getInitialData() {
             speed: 0,
             train: "a",
             MotorPort: 0,
+            distanceSlow:0,
+            colorSlow: 255,
             distance:0,
             color: 255
         },
@@ -163,6 +165,8 @@ export default {
             speed: 0,
             train: train.NAME,
             MotorPort: train.TRAIN_MOTOR,
+            distanceSlow:0,
+            colorSlow: 255,
             distance:0,
             color: 255};
         }

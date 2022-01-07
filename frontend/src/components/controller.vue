@@ -9,6 +9,20 @@
                 <b-icon icon="stop-circle" variant="danger" style="width: 120px; height: 120px;" @click="changeSpeed(train.NAME,0)"></b-icon>
                 <b-icon icon="plus-circle" style="width: 120px; height: 120px;" @click="changeSpeed(train.NAME,10)"></b-icon>
                 <br>
+                <label v-if="'COLOR_DISTANCE_SENSOR' in train">Slow down if distance is less then:</label>
+                <b-form-input type="range" @change="setPower(train.NAME)"
+                    v-if="'COLOR_DISTANCE_SENSOR' in train"
+                    :min="hubs[train.NAME].distance"
+                    max="260"
+                    step="10"
+                    v-model="hubs[train.NAME].distanceSlow">
+                </b-form-input><p v-if="'COLOR_DISTANCE_SENSOR' in train">{{ hubs[train.NAME].distanceSlow }}</p>
+                <label v-if="'COLOR_DISTANCE_SENSOR' in train">Slow down if color is:</label> 
+                    <b-form-select @change="setPower(train.NAME)" :style="(hubs[train.NAME].colorSlow === 'NONE' ? '' : 'fontcolor:black; backgroundColor: '+ hubs[train.NAME].colorSlow)" v-model="hubs[train.NAME].colorSlow" v-if="'COLOR_DISTANCE_SENSOR' in train">
+                    <option v-for="(item, ckey) in Colors" :key="ckey" :value="ckey" > 
+                    {{ ckey }}
+                    </option>
+                </b-form-select><br>
                 <label v-if="'COLOR_DISTANCE_SENSOR' in train">Stop if distance is less then:</label>
                 <b-form-input type="range" @change="setPower(train.NAME)"
                     v-if="'COLOR_DISTANCE_SENSOR' in train"

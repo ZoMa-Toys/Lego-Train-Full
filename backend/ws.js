@@ -21,13 +21,16 @@ WSserver.on('connection', function connection(ws) {
         WSserver.clients.forEach(function each(client) {
             if (client.readyState === WebSocket.OPEN) {
                 try {
-                    client.send(mainTrain(JSON.parse(data)));
+                    JSON.parse(data);
                 } catch (e) {
                     let message = {
-                        "UnknownMessage": data.toString()
+                        "notJSON": data.toString()
                     };
-                        client.send(JSON.stringify(message));
-                    }
+                    client.send(JSON.stringify(message));
+                    return 0;
+                }
+                client.send(mainTrain(JSON.parse(data)));
+
             };
         });
     });
@@ -82,6 +85,7 @@ function mainTrain(data){
         };
     }
     else if(data.hasOwnProperty("motor")){
+        updateSwitchState(data);
         message = {
             "Status":"swtiched",
             "Message": data
@@ -113,6 +117,33 @@ function conf4ESP(){
         }
     }
     return ESPswitchConfig;
+}
+
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+}
+function changeDirection(str){
+    if (str.includes("Turn")){
+      return str.replace("Turn","Straight")
+    }
+    else{
+      return str.replace("Straight","Turn")
+    }
+}
+
+function updateSwitchState(data){
+    console.log(data)
+    for (id in trackConfig.conf){
+        if(trackConfig.conf[id].hasOwnProperty("switch")){
+            if (trackConfig.conf[id].switch.index==data.motor){
+                trackConfig.conf[id].switch.switched = getKeyByValue(trackConfig.conf[id].switch.pulse,data.pulse);
+                trackConfig.conf[id].img.src=changeDirection(trackConfig.conf[id].img.src);
+            }
+        }
+    }
+
+
+
 }
 
 

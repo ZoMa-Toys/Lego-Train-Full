@@ -29,8 +29,8 @@
     <div class="shadow p-3 mb-5 rounded" @drop="dontDrop" @dragover="dontDrop" >
       <table>
         <tr>
-        <td rowspan=2 :style="'border: 1px solid black;width:200px; background-color:'+color"><img draggable="true" @dragstart="drag" width="200" height="200" @click="rotateImage('leftSwitchStraight')" id="leftSwitchStraight" src="leftSwitchStraight.png"   ></td>
-        <td rowspan=2 :style="'border: 1px solid black;width:200px; background-color:'+color"><img draggable="true" @dragstart="drag" width="200" height="200" @click="rotateImage('rightSwitchStraight')" id="rightSwitchStraight" src="rightSwitchStraight.png"></td>
+        <td rowspan=2 :style="'border: 1px solid black;width:200px; height=200px; background-color:'+color"><img draggable="true" @dragstart="drag" width="200" height="200" @click="rotateImage('leftSwitchStraight')" id="leftSwitchStraight" src="leftSwitchStraight.png"   ></td>
+        <td rowspan=2 :style="'border: 1px solid black;width:200px; height=200px; background-color:'+color"><img draggable="true" @dragstart="drag" width="200" height="200" @click="rotateImage('rightSwitchStraight')" id="rightSwitchStraight" src="rightSwitchStraight.png"></td>
         <td colspan=3>
           <b-form-select v-model="printed">
             <option v-for="(item, key, index) in printed_list" :key="index">
@@ -40,9 +40,9 @@
           <b-form-input type="color"  v-model="color"></b-form-input>
         </td>
         </tr><tr>
-        <td :style="'border: 1px solid black; width:100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100" @click="rotateImage('curve')" id="curve" src="curve.png"></td>
-        <td :style="'border: 1px solid black; width:100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100" @click="rotateImage('Straight')" id="Straight" src="Straight.png"></td>
-        <td :style="'border: 1px solid black; width:100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100" @click="rotateImage('cross')" id="cross" src="cross.png"></td>
+        <td :style="'border: 1px solid black; width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100" @click="rotateImage('curve')" id="curve" src="curve.png"></td>
+        <td :style="'border: 1px solid black; width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100" @click="rotateImage('Straight')" id="Straight" src="Straight.png"></td>
+        <td :style="'border: 1px solid black; width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100" @click="rotateImage('cross')" id="cross" src="cross.png"></td>
         </tr>
       </table>
     </div>
@@ -167,6 +167,7 @@ export default {
             let img = document.getElementById(swid).firstElementChild 
             img.src=this.changeDirection(img.src)
             this.conf[swid].img.src=this.changeDirection(this.conf[swid].img.src)
+
           }
         }
       }
