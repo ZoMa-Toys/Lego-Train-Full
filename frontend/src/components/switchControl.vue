@@ -23,7 +23,8 @@
       <b-button @click="sendAction('setConfig')" variant="outline-primary">SendConfig</b-button>      
       <b-button @click="sendAction('getConfig')" variant="outline-primary">GetConfig</b-button> 
       <b-button @click="sendAction('getDefaultConfig')" variant="outline-primary">GetDefaultConfig</b-button>
-      <b-button @click="transpose" variant="outline-primary">Transpose</b-button>
+      <b-button @click="rotatetable" variant="outline-primary">RotateTable</b-button>
+      <!-- <b-button @click="getSwitchPairs" variant="outline-primary">getSwitchPairs</b-button> -->
       <b-button @click="goto('Train')" variant="outline-primary">TrainControl</b-button>
     </div>
     <div class="shadow p-3 mb-5 rounded" @drop="dontDrop" @dragover="dontDrop" >
@@ -48,6 +49,9 @@
     </div>
       <div class="shadow p-3 mb-5 rounded">
         <table style="margin-left: auto; margin-right: auto;" id="table"></table>
+      </div>
+      <div class="shadow p-3 mb-5 rounded">
+        <b-form-textarea id="tackConf" v-model="conf_str"></b-form-textarea>
       </div>
   </div>
 </template>
@@ -79,8 +83,11 @@ export default {
     return { 
       rows:14,
       columns:6,
+      switchPairs:{},
       conf:{},
+      conf_str:"",
       motor_witch:[],
+      idmap:{},
       color:"#d6ffec",
       switchid:0,
       printed_list: {
@@ -111,6 +118,14 @@ export default {
   mounted() {
     this.createTable();
   },
+   watch: {
+    conf_str: function (val) {
+      this.conf = JSON.parse(val);
+    },
+    conf: function (val) {
+      this.conf_str = JSON.stringify(val, null, 2);
+    },
+   },
   methods:{
     connectWs(){ 
 /*       if (this.connection.readyState != this.connection.OPEN ){
@@ -137,6 +152,8 @@ export default {
         img.src = item.img.src
         img.style.transform = item.img.transform
         img.width = item.img.width
+        img.height = item.img.height
+        this.idmap[key]=key
         if (item.img.data.includes("Switch")){
           this.motor_witch[item.switch.index]=key;
           const index=key.split(",");
@@ -147,8 +164,12 @@ export default {
           document.getElementById(r+","+(c+1)).remove();
           document.getElementById((r+1)+","+c).remove();
           document.getElementById((r+1)+","+(c+1)).remove();
+          this.idmap[r+","+(c+1)]=key
+          this.idmap[(r+1)+","+c]=key
+          this.idmap[(r+1)+","+(c+1)]=key
           td.addEventListener("click",this.switchImg);
         }
+        this.getSwitchPairs()
       }
     },
     onMessage(data) {
@@ -158,7 +179,9 @@ export default {
           this.columns = data.Message.columns;
           this.createTable();
           this.conf = data.Message.conf;
+          this.switchPairs = data.Message.switchPairs;
           this.updateConf();
+          //this.getSwitchPairs();
         }
         else if (data.Status === 'swtiched'){
           let swid= this.motor_witch[data.Message.motor]
@@ -175,7 +198,7 @@ export default {
     sendAction(s) {
       const payload = { "action":s,"config":{} };
       if (s.includes("Config")){
-        payload.config={"conf":this.conf,"rows":this.rows,"columns":this.columns};
+        payload.config={"conf":this.conf,"rows":this.rows,"columns":this.columns,"switchPairs":this.switchPairs};
       }
       this.connectWs();
       this.connection.send(JSON.stringify(payload));
@@ -216,14 +239,19 @@ export default {
         copyimg.id = data + " - address:" + ev.target.id;
         copyimg.style.transform = original.style.transform;
         copyimg.width = original.width/2;
+        copyimg.hight = original.hight/2;
         ev.target.style.backgroundColor=this.color;
         if (ev.target.childElementCount){
           ev.target.removeChild(ev.target.childNodes[0]);
         }
-        this.conf[ev.target.id]={"img":{data,"src":original.src,"transform":original.style.transform,"width":original.width,"id":data + " - address:" + ev.target.id},"bgcolor":this.color};
+        this.idmap[ev.target.id]=ev.target.id;
+        this.conf[ev.target.id]={"img":{data,"src":original.src,"transform":original.style.transform,"width":copyimg.width,"hight":copyimg.hight,"id":data + " - address:" + ev.target.id},"bgcolor":this.color,"neighbours":this.setNeighbours(ev.target.id,original.id,original.style.transform)};
         if (data.includes("Switch")){
           ev.target.rowSpan=2;
           ev.target.colSpan=2;
+          this.idmap[r+","+(c+1)]=ev.target.id;
+          this.idmap[(r+1)+","+c]=ev.target.id;
+          this.idmap[(r+1)+","+(c+1)]=ev.target.id;
           this.insertOne(data,ev.target.id);
           document.getElementById(r+","+(c+1)).remove();
           document.getElementById((r+1)+","+c).remove();
@@ -232,6 +260,7 @@ export default {
           //document.addEventListener("click",this.switchImg);
         } 
         ev.target.appendChild(copyimg);
+        this.getSwitchPairs()
       }
     },
     allowDrop(ev) {
@@ -267,7 +296,9 @@ export default {
       td.addEventListener('dragend',this.dragAway)
     },
     createTable(){
+      this.idmap={};
       this.conf={};
+      this.motor_witch=[];
       let tbl = document.getElementById('table');
       tbl.innerHTML="";
       for(let i=0;i<this.rows;i++){
@@ -321,8 +352,9 @@ export default {
     goto(page){
       this.$router.replace({ name: page });
     },
-    transpose(){
+    rotatetable(){
       let tmp = {}
+      this.idmap={}
       for(let key in this.conf){
         const index=key.split(",");
         const c = this.rows - parseInt(index[0])-1;
@@ -331,13 +363,20 @@ export default {
         let newID;
         if (this.conf[key].img.data.includes("Switch")){
           newID=r+","+(c-1);
+          this.idmap[newID]=newID;
+          this.idmap[r+","+(c)]=newID;
+          this.idmap[(r+1)+","+(c-1)]=newID;
+          this.idmap[(r+1)+","+(c)]=newID;
         }
         else{
           newID=r+","+c;
         }
-          tmp[newID]=this.conf[key];
-          tmp[newID].img.transform = "rotate(" + rotation + "deg)"
-          tmp[newID].img.id=tmp[newID].img.id.replace(key,newID)
+        this.idmap[newID]=newID;
+
+        tmp[newID]=this.conf[key];
+        tmp[newID].img.transform = "rotate(" + rotation + "deg)"
+        tmp[newID].img.id=tmp[newID].img.id.replace(key,newID)
+        tmp[newID].neighbours=this.setNeighbours(newID,tmp[newID].img.id.split(" ")[0],tmp[newID].img.transform)
       }
       let r = this.rows
       this.rows= this.columns
@@ -345,8 +384,64 @@ export default {
       this.createTable();
       this.conf = tmp;
       this.updateConf();
-      console.log(this.conf,this.motor_witch)
-    }
+    },
+    setNeighbours(id,type,transform){
+      let index = id.split(",")
+      let typeconf={
+        "leftSwitchStraight":[null,null,"t","s",null,null,"i",null],
+        "rightSwitchStraight":[null,null,null,"i",null,null,"s","t"],
+        "Straight":[null,"i",null,"o"],
+        "curve":[null,"i","o",null],
+        "cross":["r","i","l",null],
+      }
+      let swNeighboursMatrix=[[-1,0],[-1,1],[0,2],[1,2],[2,1],[2,0],[1,-1],[0,-1]]
+      let trNeighboursMatrix=[[-1,0],[0,1],[1,0],[0,-1]]
+      let matrix = []
+      let neighbours={}
+      if (type.includes("Switch")){
+        matrix=swNeighboursMatrix
+      }
+      else{
+        matrix=trNeighboursMatrix
+      }
+      for (let i = 0 ;i<parseInt(transform.replace("rotate(","").replace("deg)",""))/90*typeconf[type].length/4;i++){
+        typeconf[type].unshift(typeconf[type].pop());
+      }
+      for (let i =0 ;i<typeconf[type].length;i++){
+        if (typeconf[type][i]!=null){
+          neighbours[typeconf[type][i]]=(matrix[i][0]+parseInt(index[0]))+","+(matrix[i][1]+parseInt(index[1]))
+        }
+      }
+      return neighbours
+    },
+    getnextSwitch(id,prevID,origin,port){
+      if(Object.entries(this.conf,id) && id != undefined){
+        for (const item of Object.entries(this.conf[id].neighbours)) {
+          let mvalue =this.idmap[item[1]]
+          if(mvalue != prevID && mvalue != id && Object.prototype.hasOwnProperty.call(this.conf, mvalue)){
+            if(!this.motor_witch.includes(mvalue)){
+              this.getnextSwitch(mvalue,id,origin,port)
+            }
+            else{
+              this.switchPairs[origin][port]=[getKeyByValue(this.conf[mvalue].neighbours,id),mvalue]
+            }
+          }
+        }
+      }
+      else{
+        this.switchPairs[origin][port]=""
+      }
+    },
+    getSwitchPairs(){
+      this.switchPairs={}
+      this.motor_witch.forEach(id => {
+        this.switchPairs[id]={};
+        ["i","s","t"].forEach(i => {
+          this.switchPairs[id][i]="";
+          this.getnextSwitch(this.idmap[this.conf[id].neighbours[i]],id,id,i)
+        })
+      });
+    },
   }
 }
 
