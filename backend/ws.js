@@ -77,9 +77,9 @@ function mainTrain(data){
                 "Message": conf4ESP()
             };
         }
-        else if (data.action == "swtichMotor"){
+/*         else if (data.action == "swtichMotor"){
             message = data.message;
-        }
+        } */
         else {
             message = data;
         };
@@ -165,7 +165,7 @@ var trackConfigDefault = {
                 "s": "1,11"
             },
             "switch": {
-                "index": 9,
+                "index": 0,
                 "type": "left",
                 "pulse": {
                     "Straight": 280,
@@ -191,7 +191,7 @@ var trackConfigDefault = {
                 "i": "4,8"
             },
             "switch": {
-                "index": 10,
+                "index": 1,
                 "type": "left",
                 "pulse": {
                     "Straight": 280,
@@ -217,7 +217,7 @@ var trackConfigDefault = {
                 "i": "1,8"
             },
             "switch": {
-                "index": 11,
+                "index": 2,
                 "type": "right",
                 "pulse": {
                     "Straight": 380,
@@ -243,7 +243,7 @@ var trackConfigDefault = {
                 "t": "3,11"
             },
             "switch": {
-                "index": 12,
+                "index": 3,
                 "type": "right",
                 "pulse": {
                     "Straight": 380,
@@ -269,7 +269,7 @@ var trackConfigDefault = {
                 "s": "1,2"
             },
             "switch": {
-                "index": 13,
+                "index": 4,
                 "type": "left",
                 "pulse": {
                     "Straight": 240,
@@ -295,7 +295,7 @@ var trackConfigDefault = {
                 "s": "0,5"
             },
             "switch": {
-                "index": 14,
+                "index": 5,
                 "type": "left",
                 "pulse": {
                     "Straight": 240,
@@ -321,7 +321,7 @@ var trackConfigDefault = {
                 "t": "3,2"
             },
             "switch": {
-                "index": 15,
+                "index": 6,
                 "type": "right",
                 "pulse": {
                     "Straight": 420,
@@ -347,7 +347,7 @@ var trackConfigDefault = {
                 "t": "4,5"
             },
             "switch": {
-                "index": 16,
+                "index": 7,
                 "type": "right",
                 "pulse": {
                     "Straight": 420,

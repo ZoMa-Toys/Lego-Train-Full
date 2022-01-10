@@ -89,7 +89,6 @@ export default {
       motor_witch:[],
       idmap:{},
       color:"#d6ffec",
-      switchid:0,
       printed_list: {
         Original: false,
         Printed: true,
