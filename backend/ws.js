@@ -149,49 +149,81 @@ function updateSwitchState(data){
 
 var trackConfigDefault = {
     "conf": {
-        "1,12": {
-            "img": {
-                "data": "leftSwitchStraight",
-                "src": "leftSwitchStraight.png",
-                "transform": "rotate(180deg)",
-                "width": 100,
-                "height":100,
-                "id": "leftSwitchStraight - address:1,12"
-            },
-            "bgcolor": "#dae2db",
+        "1,1": {
+            "img": [
+                {
+                    "data": "leftSwitchStraight",
+                    "src": "leftSwitchStraight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 100,
+                    "height": 100,
+                    "bgcolor": "#f5001d",
+                    "id": "leftSwitchStraight - address:1,1"
+                }
+            ],
             "neighbours": {
-                "i": "1,14",
-                "t": "2,11",
-                "s": "1,11"
+                "i": "0,1",
+                "t": "3,2",
+                "s": "3,1"
             },
             "switch": {
                 "index": 0,
                 "type": "left",
                 "pulse": {
-                    "Straight": 280,
-                    "Turn": 380
+                    "Straight": 240,
+                    "Turn": 420
                 },
                 "switched": "Straight",
-                "printed": "Printed"
+                "printed": "Original"
             }
         },
-        "3,9": {
-            "img": {
-                "data": "leftSwitchStraight",
-                "src": "leftSwitchStraight.png",
-                "transform": "rotate(0deg)",
-                "width": 100,
-                "height":100,
-                "id": "leftSwitchStraight - address:3,9"
-            },
-            "bgcolor": "#dae2db",
+        "1,3": {
+            "img": [
+                {
+                    "data": "rightSwitchStraight",
+                    "src": "rightSwitchStraight.png",
+                    "transform": "rotate(270deg)",
+                    "width": 100,
+                    "height": 100,
+                    "bgcolor": "#1d29d3",
+                    "id": "rightSwitchStraight - address:1,3"
+                }
+            ],
             "neighbours": {
-                "t": "3,11",
-                "s": "4,11",
-                "i": "4,8"
+                "i": "0,4",
+                "s": "3,4",
+                "t": "3,3"
             },
             "switch": {
                 "index": 1,
+                "type": "right",
+                "pulse": {
+                    "Straight": 420,
+                    "Turn": 240
+                },
+                "switched": "Straight",
+                "printed": "Original"
+            }
+        },
+        "5,1": {
+            "img": [
+                {
+                    "data": "leftSwitchStraight",
+                    "src": "leftSwitchStraight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 100,
+                    "height": 100,
+                    "bgcolor": "#a1a2a5",
+                    "id": "leftSwitchStraight - address:5,1"
+                }
+            ],
+            "neighbours": {
+                "i": "4,1",
+                "t": "7,2",
+                "s": "7,1"
+            },
+            "switch": {
+                "index": 2,
                 "type": "left",
                 "pulse": {
                     "Straight": 280,
@@ -201,46 +233,22 @@ var trackConfigDefault = {
                 "printed": "Printed"
             }
         },
-        "1,9": {
-            "img": {
-                "data": "rightSwitchStraight",
-                "src": "rightSwitchStraight.png",
-                "transform": "rotate(180deg)",
-                "width": 100,
-                "height":100,
-                "id": "rightSwitchStraight - address:1,9"
-            },
-            "bgcolor": "#dae2db",
+        "5,3": {
+            "img": [
+                {
+                    "data": "rightSwitchStraight",
+                    "src": "rightSwitchStraight.png",
+                    "transform": "rotate(270deg)",
+                    "width": 100,
+                    "height": 100,
+                    "bgcolor": "#a1a2a5",
+                    "id": "rightSwitchStraight - address:5,3"
+                }
+            ],
             "neighbours": {
-                "s": "1,11",
-                "t": "2,11",
-                "i": "1,8"
-            },
-            "switch": {
-                "index": 2,
-                "type": "right",
-                "pulse": {
-                    "Straight": 380,
-                    "Turn": 280
-                },
-                "switched": "Straight",
-                "printed": "Printed"
-            }
-        },
-        "3,12": {
-            "img": {
-                "data": "rightSwitchStraight",
-                "src": "rightSwitchStraight.png",
-                "transform": "rotate(0deg)",
-                "width": 100,
-                "height":100,
-                "id": "rightSwitchStraight - address:3,12"
-            },
-            "bgcolor": "#dae2db",
-            "neighbours": {
-                "i": "4,14",
-                "s": "4,11",
-                "t": "3,11"
+                "i": "4,4",
+                "s": "7,4",
+                "t": "7,3"
             },
             "switch": {
                 "index": 3,
@@ -253,796 +261,1208 @@ var trackConfigDefault = {
                 "printed": "Printed"
             }
         },
-        "1,3": {
-            "img": {
-                "data": "leftSwitchStraight",
-                "src": "leftSwitchStraight.png",
-                "transform": "rotate(180deg)",
-                "width": 100,
-                "height":100,
-                "id": "leftSwitchStraight - address:1,3"
-            },
-            "bgcolor": "#2dd741",
+        "8,3": {
+            "img": [
+                {
+                    "data": "leftSwitchStraight",
+                    "src": "leftSwitchStraight.png",
+                    "transform": "rotate(270deg)",
+                    "width": 100,
+                    "height": 100,
+                    "bgcolor": "#a1a2a5",
+                    "id": "leftSwitchStraight - address:8,3"
+                }
+            ],
             "neighbours": {
-                "i": "1,5",
-                "t": "2,2",
-                "s": "1,2"
+                "t": "7,3",
+                "s": "7,4",
+                "i": "10,4"
             },
             "switch": {
                 "index": 4,
                 "type": "left",
                 "pulse": {
-                    "Straight": 240,
-                    "Turn": 420
+                    "Straight": 280,
+                    "Turn": 380
                 },
                 "switched": "Straight",
-                "printed": "Original"
+                "printed": "Printed"
             }
         },
-        "0,6": {
-            "img": {
-                "data": "leftSwitchStraight",
-                "src": "leftSwitchStraight.png",
-                "transform": "rotate(180deg)",
-                "width": 100,
-                "height":100,
-                "id": "leftSwitchStraight - address:0,6"
-            },
-            "bgcolor": "#a22525",
+        "8,1": {
+            "img": [
+                {
+                    "data": "rightSwitchStraight",
+                    "src": "rightSwitchStraight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 100,
+                    "height": 100,
+                    "bgcolor": "#a1a2a5",
+                    "id": "rightSwitchStraight - address:8,1"
+                }
+            ],
             "neighbours": {
-                "i": "0,8",
-                "t": "1,5",
-                "s": "0,5"
+                "s": "7,1",
+                "t": "7,2",
+                "i": "10,1"
             },
             "switch": {
                 "index": 5,
-                "type": "left",
+                "type": "right",
                 "pulse": {
-                    "Straight": 240,
-                    "Turn": 420
+                    "Straight": 380,
+                    "Turn": 280
                 },
                 "switched": "Straight",
-                "printed": "Original"
+                "printed": "Printed"
             }
         },
-        "3,3": {
-            "img": {
-                "data": "rightSwitchStraight",
-                "src": "rightSwitchStraight.png",
-                "transform": "rotate(0deg)",
-                "width": 100,
-                "height":100,
-                "id": "rightSwitchStraight - address:3,3"
-            },
-            "bgcolor": "#ff0000",
+        "12,3": {
+            "img": [
+                {
+                    "data": "leftSwitchStraight",
+                    "src": "leftSwitchStraight.png",
+                    "transform": "rotate(270deg)",
+                    "width": 100,
+                    "height": 100,
+                    "bgcolor": "#c91818",
+                    "id": "leftSwitchStraight - address:12,3"
+                }
+            ],
             "neighbours": {
-                "i": "4,5",
-                "s": "4,2",
-                "t": "3,2"
+                "t": "11,3",
+                "s": "11,4",
+                "i": "14,4"
             },
             "switch": {
                 "index": 6,
-                "type": "right",
+                "type": "left",
                 "pulse": {
-                    "Straight": 420,
-                    "Turn": 240
+                    "Straight": 280,
+                    "Turn": 380
                 },
                 "switched": "Straight",
-                "printed": "Original"
+                "printed": "Printed"
             }
         },
-        "4,6": {
-            "img": {
-                "data": "rightSwitchStraight",
-                "src": "rightSwitchStraight.png",
-                "transform": "rotate(0deg)",
-                "width": 100,
-                "height":100,
-                "id": "rightSwitchStraight - address:4,6"
-            },
-            "bgcolor": "#0011ff",
+        "12,1": {
+            "img": [
+                {
+                    "data": "rightSwitchStraight",
+                    "src": "rightSwitchStraight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 100,
+                    "height": 100,
+                    "bgcolor": "#18c964",
+                    "id": "rightSwitchStraight - address:12,1"
+                }
+            ],
             "neighbours": {
-                "i": "5,8",
-                "s": "5,5",
-                "t": "4,5"
+                "s": "11,1",
+                "t": "11,2",
+                "i": "14,1"
             },
             "switch": {
                 "index": 7,
                 "type": "right",
                 "pulse": {
-                    "Straight": 420,
-                    "Turn": 240
+                    "Straight": 380,
+                    "Turn": 280
                 },
                 "switched": "Straight",
-                "printed": "Original"
+                "printed": "Printed"
             }
         },
-        "2,11": {
-            "img": {
-                "data": "cross",
-                "src": "cross.png",
-                "transform": "rotate(90deg)",
-                "width": 50,
-                "height":50,
-                "id": "cross - address:2,11"
-            },
-            "bgcolor": "#bfbfbf",
+        "0,1": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(0deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#77e4a6",
+                    "id": "curve - address:0,1"
+                },
+                {
+                    "index": 0,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:curve - address:0,1",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
             "neighbours": {
-                "r": "2,12",
-                "i": "3,11",
-                "l": "2,10"
+                "i": "0,2",
+                "o": "1,1"
             }
         },
-        "3,11": {
-            "img": {
-                "data": "cross",
-                "src": "cross.png",
-                "transform": "rotate(270deg)",
-                "width": 50,
-                "height":50,
-                "id": "cross - address:3,11"
-            },
-            "bgcolor": "#bfbfbf",
+        "0,4": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#77e4a6",
+                    "id": "curve - address:0,4"
+                },
+                {
+                    "index": 1,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:curve - address:0,4",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
             "neighbours": {
-                "i": "2,11",
-                "l": "3,12",
-                "r": "3,10"
+                "i": "1,4",
+                "o": "0,3"
             }
         },
-        "4,11": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(0deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:4,11"
-            },
-            "bgcolor": "#bfbfbf",
+        "0,2": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#77e4a6",
+                    "id": "Straight - address:0,2"
+                }
+            ],
             "neighbours": {
-                "i": "4,12",
-                "o": "4,10"
+                "i": "0,3",
+                "o": "0,1"
             }
         },
-        "1,11": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(0deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:1,11"
-            },
-            "bgcolor": "#bfbfbf",
+        "0,3": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#77e4a6",
+                    "id": "Straight - address:0,3"
+                }
+            ],
             "neighbours": {
-                "i": "1,12",
-                "o": "1,10"
+                "i": "0,4",
+                "o": "0,2"
             }
         },
-        "5,5": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(0deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:5,5"
-            },
-            "bgcolor": "#9eefff",
+        "3,1": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(180deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#7792e4",
+                    "id": "curve - address:3,1"
+                },
+                {
+                    "index": 2,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:curve - address:3,1",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
             "neighbours": {
-                "i": "5,6",
-                "o": "5,4"
+                "o": "2,1",
+                "i": "3,0"
             }
         },
-        "4,5": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(0deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:4,5"
-            },
-            "bgcolor": "#9eefff",
+        "3,0": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(0deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#7792e4",
+                    "id": "curve - address:3,0"
+                }
+            ],
             "neighbours": {
-                "i": "4,6",
-                "o": "4,4"
-            }
-        },
-        "5,4": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(0deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:5,4"
-            },
-            "bgcolor": "#9eefff",
-            "neighbours": {
-                "i": "5,5",
-                "o": "5,3"
-            }
-        },
-        "5,3": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(0deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:5,3"
-            },
-            "bgcolor": "#9eefff",
-            "neighbours": {
-                "i": "5,4",
-                "o": "5,2"
-            }
-        },
-        "5,2": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(0deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:5,2"
-            },
-            "bgcolor": "#9eefff",
-            "neighbours": {
-                "i": "5,3",
-                "o": "5,1"
-            }
-        },
-        "5,1": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(0deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:5,1"
-            },
-            "bgcolor": "#9eefff",
-            "neighbours": {
-                "i": "5,2",
-                "o": "5,0"
-            }
-        },
-        "0,0": {
-            "img": {
-                "data": "curve",
-                "src": "curve.png",
-                "transform": "rotate(0deg)",
-                "width": 50,
-                "height":50,
-                "id": "curve - address:0,0"
-            },
-            "bgcolor": "#9eefff",
-            "neighbours": {
-                "i": "0,1",
-                "o": "1,0"
-            }
-        },
-        "5,0": {
-            "img": {
-                "data": "curve",
-                "src": "curve.png",
-                "transform": "rotate(270deg)",
-                "width": 50,
-                "height":50,
-                "id": "curve - address:5,0"
-            },
-            "bgcolor": "#9eefff",
-            "neighbours": {
-                "i": "4,0",
-                "o": "5,1"
+                "i": "3,1",
+                "o": "4,0"
             }
         },
         "4,0": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(90deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:4,0"
-            },
-            "bgcolor": "#9eefff",
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#7792e4",
+                    "id": "Straight - address:4,0"
+                }
+            ],
             "neighbours": {
                 "o": "3,0",
                 "i": "5,0"
             }
         },
-        "3,0": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(90deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:3,0"
-            },
-            "bgcolor": "#9eefff",
+        "5,0": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#7792e4",
+                    "id": "Straight - address:5,0"
+                }
+            ],
             "neighbours": {
-                "o": "2,0",
-                "i": "4,0"
+                "o": "4,0",
+                "i": "6,0"
             }
         },
-        "2,0": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(90deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:2,0"
-            },
-            "bgcolor": "#9eefff",
+        "6,0": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#7792e4",
+                    "id": "Straight - address:6,0"
+                }
+            ],
             "neighbours": {
-                "o": "1,0",
-                "i": "3,0"
+                "o": "5,0",
+                "i": "7,0"
             }
         },
-        "1,0": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(90deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:1,0"
-            },
-            "bgcolor": "#9eefff",
+        "7,0": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#7792e4",
+                    "id": "Straight - address:7,0"
+                }
+            ],
             "neighbours": {
-                "o": "0,0",
-                "i": "2,0"
+                "o": "6,0",
+                "i": "8,0"
             }
         },
-        "0,1": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(180deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:0,1"
-            },
-            "bgcolor": "#9eefff",
+        "8,0": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#7792e4",
+                    "id": "Straight - address:8,0"
+                }
+            ],
             "neighbours": {
-                "o": "0,2",
-                "i": "0,0"
+                "o": "7,0",
+                "i": "9,0"
             }
         },
-        "0,2": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(180deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:0,2"
-            },
-            "bgcolor": "#9eefff",
+        "9,0": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#7792e4",
+                    "id": "Straight - address:9,0"
+                }
+            ],
             "neighbours": {
-                "o": "0,3",
-                "i": "0,1"
+                "o": "8,0",
+                "i": "10,0"
             }
         },
-        "0,3": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(180deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:0,3"
-            },
-            "bgcolor": "#9eefff",
+        "10,0": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#7792e4",
+                    "id": "Straight - address:10,0"
+                }
+            ],
             "neighbours": {
-                "o": "0,4",
-                "i": "0,2"
+                "o": "9,0",
+                "i": "11,0"
             }
         },
-        "0,4": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(180deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:0,4"
-            },
-            "bgcolor": "#9eefff",
+        "11,1": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#7792e4",
+                    "id": "curve - address:11,1"
+                },
+                {
+                    "index": 10,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:curve - address:11,1",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
             "neighbours": {
-                "o": "0,5",
-                "i": "0,3"
+                "i": "12,1",
+                "o": "11,0"
             }
         },
-        "0,5": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(180deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:0,5"
-            },
-            "bgcolor": "#9eefff",
+        "11,0": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(270deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#7792e4",
+                    "id": "curve - address:11,0"
+                }
+            ],
             "neighbours": {
-                "o": "0,6",
-                "i": "0,4"
+                "i": "10,0",
+                "o": "11,1"
             }
         },
-        "1,5": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(180deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:1,5"
-            },
-            "bgcolor": "#9eefff",
+        "3,4": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(270deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#e477a2",
+                    "id": "curve - address:3,4"
+                },
+                {
+                    "index": 5,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:curve - address:3,4",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
             "neighbours": {
-                "o": "1,6",
-                "i": "1,4"
+                "i": "2,4",
+                "o": "3,5"
             }
         },
-        "4,2": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(180deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:4,2"
-            },
-            "bgcolor": "#ff8080",
+        "11,4": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(0deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#e477a2",
+                    "id": "curve - address:11,4"
+                },
+                {
+                    "index": 13,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:curve - address:11,4",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
             "neighbours": {
-                "o": "4,3",
-                "i": "4,1"
+                "i": "11,5",
+                "o": "12,4"
+            }
+        },
+        "3,5": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#e477a2",
+                    "id": "curve - address:3,5"
+                }
+            ],
+            "neighbours": {
+                "i": "4,5",
+                "o": "3,4"
+            }
+        },
+        "11,5": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(180deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#e477a2",
+                    "id": "curve - address:11,5"
+                }
+            ],
+            "neighbours": {
+                "o": "10,5",
+                "i": "11,4"
+            }
+        },
+        "4,5": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#e477a2",
+                    "id": "Straight - address:4,5"
+                }
+            ],
+            "neighbours": {
+                "o": "3,5",
+                "i": "5,5"
+            }
+        },
+        "5,5": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#e477a2",
+                    "id": "Straight - address:5,5"
+                }
+            ],
+            "neighbours": {
+                "o": "4,5",
+                "i": "6,5"
+            }
+        },
+        "6,5": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#e477a2",
+                    "id": "Straight - address:6,5"
+                }
+            ],
+            "neighbours": {
+                "o": "5,5",
+                "i": "7,5"
+            }
+        },
+        "7,5": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#e477a2",
+                    "id": "Straight - address:7,5"
+                }
+            ],
+            "neighbours": {
+                "o": "6,5",
+                "i": "8,5"
+            }
+        },
+        "8,5": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#e477a2",
+                    "id": "Straight - address:8,5"
+                }
+            ],
+            "neighbours": {
+                "o": "7,5",
+                "i": "9,5"
+            }
+        },
+        "9,5": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#e477a2",
+                    "id": "Straight - address:9,5"
+                }
+            ],
+            "neighbours": {
+                "o": "8,5",
+                "i": "10,5"
+            }
+        },
+        "10,5": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#e477a2",
+                    "id": "Straight - address:10,5"
+                }
+            ],
+            "neighbours": {
+                "o": "9,5",
+                "i": "11,5"
+            }
+        },
+        "7,2": {
+            "img": [
+                {
+                    "data": "cross",
+                    "src": "cross.png",
+                    "transform": "rotate(0deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#a1a2a5",
+                    "id": "cross - address:7,2"
+                }
+            ],
+            "neighbours": {
+                "l": "6,2",
+                "r": "8,2",
+                "i": "7,1"
+            }
+        },
+        "7,3": {
+            "img": [
+                {
+                    "data": "cross",
+                    "src": "cross.png",
+                    "transform": "rotate(180deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#a1a2a5",
+                    "id": "cross - address:7,3"
+                }
+            ],
+            "neighbours": {
+                "l": "6,3",
+                "r": "8,3",
+                "i": "7,2"
+            }
+        },
+        "7,1": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#a1a2a5",
+                    "id": "Straight - address:7,1"
+                }
+            ],
+            "neighbours": {
+                "o": "6,1",
+                "i": "8,1"
+            }
+        },
+        "7,4": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#a1a2a5",
+                    "id": "Straight - address:7,4"
+                }
+            ],
+            "neighbours": {
+                "o": "6,4",
+                "i": "8,4"
+            }
+        },
+        "14,4": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(180deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#905151",
+                    "id": "curve - address:14,4"
+                },
+                {
+                    "index": 15,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:curve - address:14,4",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
+            "neighbours": {
+                "o": "13,4",
+                "i": "14,3"
+            }
+        },
+        "14,3": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(180deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#905151",
+                    "id": "Straight - address:14,3"
+                }
+            ],
+            "neighbours": {
+                "o": "14,4",
+                "i": "14,2"
+            }
+        },
+        "14,2": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(180deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#905151",
+                    "id": "Straight - address:14,2"
+                }
+            ],
+            "neighbours": {
+                "o": "14,3",
+                "i": "14,1"
+            }
+        },
+        "14,1": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(270deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#905151",
+                    "id": "curve - address:14,1"
+                },
+                {
+                    "index": 14,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:curve - address:14,1",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
+            "neighbours": {
+                "i": "13,1",
+                "o": "14,2"
             }
         },
         "4,1": {
-            "img": {
-                "data": "curve",
-                "src": "curve.png",
-                "transform": "rotate(270deg)",
-                "width": 50,
-                "height":50,
-                "id": "curve - address:4,1"
-            },
-            "bgcolor": "#ff8080",
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(0deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#518890",
+                    "id": "curve - address:4,1"
+                },
+                {
+                    "index": 6,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:curve - address:4,1",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
             "neighbours": {
-                "i": "3,1",
-                "o": "4,2"
+                "i": "4,2",
+                "o": "5,1"
             }
         },
-        "1,1": {
-            "img": {
-                "data": "curve",
-                "src": "curve.png",
-                "transform": "rotate(0deg)",
-                "width": 50,
-                "height":50,
-                "id": "curve - address:1,1"
-            },
-            "bgcolor": "#ff8080",
+        "4,2": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(180deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#518890",
+                    "id": "curve - address:4,2"
+                }
+            ],
             "neighbours": {
-                "i": "1,2",
-                "o": "2,1"
-            }
-        },
-        "1,2": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(180deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:1,2"
-            },
-            "bgcolor": "#ff8080",
-            "neighbours": {
-                "o": "1,3",
-                "i": "1,1"
-            }
-        },
-        "2,1": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(270deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:2,1"
-            },
-            "bgcolor": "#ff8080",
-            "neighbours": {
-                "i": "1,1",
-                "o": "3,1"
-            }
-        },
-        "3,1": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(270deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:3,1"
-            },
-            "bgcolor": "#ff8080",
-            "neighbours": {
-                "i": "2,1",
-                "o": "4,1"
-            }
-        },
-        "2,2": {
-            "img": {
-                "data": "curve",
-                "src": "curve.png",
-                "transform": "rotate(0deg)",
-                "width": 50,
-                "height":50,
-                "id": "curve - address:2,2"
-            },
-            "bgcolor": "#e0e0e0",
-            "neighbours": {
-                "i": "2,3",
-                "o": "3,2"
+                "o": "3,2",
+                "i": "4,1"
             }
         },
         "3,2": {
-            "img": {
-                "data": "curve",
-                "src": "curve.png",
-                "transform": "rotate(270deg)",
-                "width": 50,
-                "height":50,
-                "id": "curve - address:3,2"
-            },
-            "bgcolor": "#e0e0e0",
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(270deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#518890",
+                    "id": "Straight - address:3,2"
+                },
+                {
+                    "index": 3,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:Straight - address:3,2",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
             "neighbours": {
                 "i": "2,2",
-                "o": "3,3"
+                "o": "4,2"
             }
         },
-        "0,8": {
-            "img": {
-                "data": "curve",
-                "src": "curve.png",
-                "transform": "rotate(90deg)",
-                "width": 50,
-                "height":50,
-                "id": "curve - address:0,8"
-            },
-            "bgcolor": "#d6ffd1",
+        "4,3": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(270deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#c0d671",
+                    "id": "curve - address:4,3"
+                }
+            ],
             "neighbours": {
-                "i": "1,8",
-                "o": "0,7"
+                "i": "3,3",
+                "o": "4,4"
             }
         },
-        "1,8": {
-            "img": {
-                "data": "curve",
-                "src": "curve.png",
-                "transform": "rotate(270deg)",
-                "width": 50,
-                "height":50,
-                "id": "curve - address:1,8"
-            },
-            "bgcolor": "#d6ffd1",
+        "4,4": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#c0d671",
+                    "id": "curve - address:4,4"
+                },
+                {
+                    "index": 7,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:curve - address:4,4",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
             "neighbours": {
-                "i": "0,8",
-                "o": "1,9"
+                "i": "5,4",
+                "o": "4,3"
             }
         },
-        "4,8": {
-            "img": {
-                "data": "curve",
-                "src": "curve.png",
-                "transform": "rotate(0deg)",
-                "width": 50,
-                "height":50,
-                "id": "curve - address:4,8"
-            },
-            "bgcolor": "#aeffa3",
+        "3,3": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(270deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#c0d671",
+                    "id": "Straight - address:3,3"
+                },
+                {
+                    "index": 4,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:Straight - address:3,3",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
             "neighbours": {
-                "i": "4,9",
-                "o": "5,8"
+                "i": "2,3",
+                "o": "4,3"
             }
         },
-        "5,8": {
-            "img": {
-                "data": "curve",
-                "src": "curve.png",
-                "transform": "rotate(180deg)",
-                "width": 50,
-                "height":50,
-                "id": "curve - address:5,8"
-            },
-            "bgcolor": "#aeffa3",
+        "11,2": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(270deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#71d6ca",
+                    "id": "Straight - address:11,2"
+                },
+                {
+                    "index": 11,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:Straight - address:11,2",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
             "neighbours": {
-                "o": "4,8",
-                "i": "5,7"
+                "i": "10,2",
+                "o": "12,2"
             }
         },
-        "4,14": {
-            "img": {
-                "data": "curve",
-                "src": "curve.png",
-                "transform": "rotate(180deg)",
-                "width": 50,
-                "height":50,
-                "id": "curve - address:4,14"
-            },
-            "bgcolor": "#fffcb3",
+        "10,2": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(90deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#71d6ca",
+                    "id": "curve - address:10,2"
+                }
+            ],
             "neighbours": {
-                "o": "3,14",
-                "i": "4,13"
+                "i": "11,2",
+                "o": "10,1"
             }
         },
-        "3,14": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(270deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:3,14"
-            },
-            "bgcolor": "#fffcb3",
+        "10,1": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(270deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#71d6ca",
+                    "id": "curve - address:10,1"
+                },
+                {
+                    "index": 8,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:curve - address:10,1",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
             "neighbours": {
-                "i": "2,14",
-                "o": "4,14"
+                "i": "9,1",
+                "o": "10,2"
             }
         },
-        "2,14": {
-            "img": {
-                "data": "Straight",
-                "src": "Straight.png",
-                "transform": "rotate(270deg)",
-                "width": 50,
-                "height":50,
-                "id": "Straight - address:2,14"
-            },
-            "bgcolor": "#fffcb3",
+        "11,3": {
+            "img": [
+                {
+                    "data": "Straight",
+                    "src": "Straight.png",
+                    "transform": "rotate(270deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#fd94ff",
+                    "id": "Straight - address:11,3"
+                },
+                {
+                    "index": 12,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:Straight - address:11,3",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
             "neighbours": {
-                "i": "1,14",
-                "o": "3,14"
+                "i": "10,3",
+                "o": "12,3"
             }
         },
-        "1,14": {
-            "img": {
-                "data": "curve",
-                "src": "curve.png",
-                "transform": "rotate(90deg)",
-                "width": 50,
-                "height":50,
-                "id": "curve - address:1,14"
-            },
-            "bgcolor": "#fffcb3",
+        "10,3": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(0deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#fd94ff",
+                    "id": "curve - address:10,3"
+                }
+            ],
             "neighbours": {
-                "i": "2,14",
-                "o": "1,13"
+                "i": "10,4",
+                "o": "11,3"
+            }
+        },
+        "10,4": {
+            "img": [
+                {
+                    "data": "curve",
+                    "src": "curve.png",
+                    "transform": "rotate(180deg)",
+                    "width": 50,
+                    "height": 50,
+                    "bgcolor": "#fd94ff",
+                    "id": "curve - address:10,4"
+                },
+                {
+                    "index": 9,
+                    "data": "card",
+                    "src": "card.png",
+                    "width": 25,
+                    "height": 25,
+                    "bgcolor": "#fd94ff",
+                    "id": "card - address:curve - address:10,4",
+                    "position": "absolute",
+                    "top": "0px",
+                    "right": "0px"
+                }
+            ],
+            "neighbours": {
+                "o": "9,4",
+                "i": "10,3"
             }
         }
     },
-    "rows": 6,
-    "columns": 15,
-    "switchPairs":{
-        "1,12": {
+    "rows": 15,
+    "columns": 6,
+    "switchPairs": {
+        "1,1": {
             "i": [
                 "i",
-                "3,12"
+                "1,3"
             ],
             "s": [
                 "s",
-                "1,9"
+                "12,1"
             ],
             "t": [
-                "t",
-                "1,9"
-            ]
-        },
-        "3,9": {
-            "i": [
                 "i",
-                "4,6"
-            ],
-            "s": [
-                "s",
-                "3,12"
-            ],
-            "t": [
-                "t",
-                "3,12"
-            ]
-        },
-        "1,9": {
-            "i": [
-                "i",
-                "0,6"
-            ],
-            "s": [
-                "s",
-                "1,12"
-            ],
-            "t": [
-                "t",
-                "3,9"
-            ]
-        },
-        "3,12": {
-            "i": [
-                "i",
-                "1,12"
-            ],
-            "s": [
-                "s",
-                "3,9"
-            ],
-            "t": [
-                "t",
-                "3,9"
+                "5,1"
             ]
         },
         "1,3": {
             "i": [
-                "t",
-                "0,6"
+                "i",
+                "1,1"
             ],
             "s": [
                 "s",
-                "3,3"
+                "12,3"
             ],
             "t": [
-                "t",
-                "3,3"
+                "i",
+                "5,3"
             ]
         },
-        "0,6": {
-            "i": [
-                "i",
-                "1,9"
-            ],
-            "s": [
-                "s",
-                "4,6"
-            ],
-            "t": [
-                "i",
-                "1,3"
-            ]
-        },
-        "3,3": {
+        "5,1": {
             "i": [
                 "t",
-                "4,6"
+                "1,1"
             ],
             "s": [
                 "s",
-                "1,3"
+                "8,1"
             ],
             "t": [
-                "t",
-                "1,3"
+                "s",
+                "8,1"
             ]
         },
-        "4,6": {
+        "5,3": {
             "i": [
-                "i",
-                "3,9"
+                "t",
+                "1,3"
             ],
             "s": [
                 "s",
-                "0,6"
+                "8,3"
+            ],
+            "t": [
+                "s",
+                "8,1"
+            ]
+        },
+        "8,3": {
+            "i": [
+                "t",
+                "12,3"
+            ],
+            "s": [
+                "s",
+                "5,3"
+            ],
+            "t": [
+                "s",
+                "8,1"
+            ]
+        },
+        "8,1": {
+            "i": [
+                "t",
+                "12,1"
+            ],
+            "s": [
+                "s",
+                "5,1"
+            ],
+            "t": [
+                "s",
+                "8,1"
+            ]
+        },
+        "12,3": {
+            "i": [
+                "i",
+                "12,1"
+            ],
+            "s": [
+                "s",
+                "1,3"
             ],
             "t": [
                 "i",
-                "3,3"
+                "8,3"
+            ]
+        },
+        "12,1": {
+            "i": [
+                "i",
+                "12,3"
+            ],
+            "s": [
+                "s",
+                "1,1"
+            ],
+            "t": [
+                "i",
+                "8,1"
             ]
         }
     }
