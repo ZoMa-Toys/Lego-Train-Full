@@ -129,10 +129,7 @@ export default {
       }
       else if (data.Status === 'Setting Speed...'){
         const t = data.Message;
-        this.hubs[t.train]=t;
-      }
-      else if (data.Status === 'SwitchConfig:'){
-        this.switches = data.Message;
+        this.hubs[t.train].speed=t.speed;
       }
     },
     sendAction(s) {
@@ -152,7 +149,8 @@ export default {
       this.connection.send(JSON.stringify({ "action":"getHubs" }));
     },
     setPower(h) {
-      const payload =this.hubs[h];
+      const payload = {};
+      payload["message"] = this.hubs[h];
 //      payload.color=this.Colors[payload.color];
       payload["action"]="setPower";
       // console.log(payload);

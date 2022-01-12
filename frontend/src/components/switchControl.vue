@@ -24,15 +24,16 @@
       <b-button @click="sendAction('getConfig')" variant="outline-primary">GetConfig</b-button> 
       <b-button @click="sendAction('getDefaultConfig')" variant="outline-primary">GetDefaultConfig</b-button>
       <b-button @click="rotatetable" variant="outline-primary">RotateTable</b-button>
-      <!-- <b-button @click="getSwitchPairs" variant="outline-primary">getSwitchPairs</b-button> -->
+      <b-button @click="consoleLog" variant="outline-primary">TEST</b-button>
+      <b-button @click="pairCardsSwitches" variant="outline-primary">pairCardsSwitches</b-button>
       <b-button @click="goto('Train')" variant="outline-primary">TrainControl</b-button>
     </div>
     <div class="shadow p-3 mb-5 rounded" @drop="dontDrop" @dragover="dontDrop" >
       <table>
         <tr>
-        <td rowspan=2 :style="'border: 1px solid black;width:200px; height=200px; background-color:'+color"><img draggable="true" @dragstart="drag" width="200" height="200" @click="rotateImage('leftSwitchStraight')" id="leftSwitchStraight" src="leftSwitchStraight.png"   ></td>
-        <td rowspan=2 :style="'border: 1px solid black;width:200px; height=200px; background-color:'+color"><img draggable="true" @dragstart="drag" width="200" height="200" @click="rotateImage('rightSwitchStraight')" id="rightSwitchStraight" src="rightSwitchStraight.png"></td>
-        <td colspan=3>
+        <td rowspan=2 :style="'border: 1px solid black;width:200px; height=200px; background-color:'+color"><img draggable="true" @dragstart="drag" width="200" height="200"  @click="rotateImage('leftSwitchStraight')" id="leftSwitchStraight" src="leftSwitchStraight.png"   ></td>
+        <td rowspan=2 :style="'border: 1px solid black;width:200px; height=200px; background-color:'+color"><img draggable="true" @dragstart="drag" width="200" height="200"  @click="rotateImage('rightSwitchStraight')" id="rightSwitchStraight" src="rightSwitchStraight.png"></td>
+        <td colspan=4>
           <b-form-select v-model="printed">
             <option v-for="(item, key, index) in printed_list" :key="index">
               {{ key }}
@@ -41,9 +42,10 @@
           <b-form-input type="color"  v-model="color"></b-form-input>
         </td>
         </tr><tr>
-        <td :style="'border: 1px solid black; width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100" @click="rotateImage('curve')" id="curve" src="curve.png"></td>
-        <td :style="'border: 1px solid black; width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100" @click="rotateImage('Straight')" id="Straight" src="Straight.png"></td>
-        <td :style="'border: 1px solid black; width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100" @click="rotateImage('cross')" id="cross" src="cross.png"></td>
+        <td :style="'border: 1px solid black; width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100"  @click="rotateImage('curve')" id="curve" src="curve.png"></td>
+        <td :style="'border: 1px solid black; width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100"  @click="rotateImage('Straight')" id="Straight" src="Straight.png"></td>
+        <td :style="'border: 1px solid black; width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100"  @click="rotateImage('cross')" id="cross" src="cross.png"></td>
+        <td :style="'border: 1px solid black; width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100"  id="card" src="card.png"></td>
         </tr>
       </table>
     </div>
@@ -84,9 +86,11 @@ export default {
       rows:14,
       columns:6,
       switchPairs:{},
+      cardPairs:[],
       conf:{},
       conf_str:"",
       motor_witch:[],
+      card_witch:[],
       idmap:{},
       color:"#d6ffec",
       printed_list: {
@@ -138,38 +142,49 @@ export default {
       for(let key in this.conf){
         let item = this.conf[key];
         let td = document.getElementById(key);
-        td.style.backgroundColor = item.bgcolor;
-        let img;
-        if (td.childElementCount){
-          img = td.firstElementChild
-        }
-        else{
-          img = document.createElement("img")
-          td.appendChild(img)
-        }
-        img.id = item.img.id
-        img.src = item.img.src
-        img.style.transform = item.img.transform
-        img.width = item.img.width
-        img.height = item.img.height
         this.idmap[key]=key
-        if (item.img.data.includes("Switch")){
-          this.motor_witch[item.switch.index]=key;
-          const index=key.split(",");
-          const r = parseInt(index[0]);
-          const c = parseInt(index[1]);
-          td.rowSpan=2;
-          td.colSpan=2;
-          document.getElementById(r+","+(c+1)).remove();
-          document.getElementById((r+1)+","+c).remove();
-          document.getElementById((r+1)+","+(c+1)).remove();
-          this.idmap[r+","+(c+1)]=key
-          this.idmap[(r+1)+","+c]=key
-          this.idmap[(r+1)+","+(c+1)]=key
-          td.addEventListener("click",this.switchImg);
+        for (let i of item.img){
+          let img = document.createElement("img")
+          td.appendChild(img)
+          img.style.backgroundColor = i.bgcolor;
+          img.id = i.id
+          img.src = i.src
+          img.width = i.width
+          img.height = i.height
+          if (i.id.includes("card")){
+            img.style.position= i.position;
+            img.style.top= i.top;
+            img.style.right= i.right;
+            this.card_witch[i.index]=key;
+            let p = document.createElement("p");
+            p.innerHTML = i.index;
+            p.style.right= "27px";
+            p.style.top = "2px";
+            p.style.position= "absolute";
+            td.appendChild(p);
+          }
+          else{
+            img.style.transform = i.transform
+            if (i.data.includes("Switch")){
+              td.innerHTML+="<p>Switch " + item.switch.index + "</p>";
+              this.motor_witch[item.switch.index]=key;
+              const index=key.split(",");
+              const r = parseInt(index[0]);
+              const c = parseInt(index[1]);
+              td.rowSpan=2;
+              td.colSpan=2;
+              document.getElementById(r+","+(c+1)).remove();
+              document.getElementById((r+1)+","+c).remove();
+              document.getElementById((r+1)+","+(c+1)).remove();
+              this.idmap[r+","+(c+1)]=key
+              this.idmap[(r+1)+","+c]=key
+              this.idmap[(r+1)+","+(c+1)]=key
+              td.addEventListener("click",this.switchImg);
+            }
+          }
         }
-        this.getSwitchPairs()
       }
+      this.getSwitchPairs()
     },
     onMessage(data) {
       if ("Status" in data){
@@ -179,6 +194,7 @@ export default {
           this.createTable();
           this.conf = data.Message.conf;
           this.switchPairs = data.Message.switchPairs;
+          this.cardPairs = data.Message.cardhPairs;
           this.updateConf();
           //this.getSwitchPairs();
         }
@@ -197,7 +213,7 @@ export default {
     sendAction(s) {
       const payload = { "action":s,"config":{} };
       if (s.includes("Config")){
-        payload.config={"conf":this.conf,"rows":this.rows,"columns":this.columns,"switchPairs":this.switchPairs};
+        payload.config={"conf":this.conf,"rows":this.rows,"columns":this.columns,"switchPairs":this.switchPairs,"cardPairs":this.cardPairs};
       }
       this.connectWs();
       this.connection.send(JSON.stringify(payload));
@@ -229,67 +245,100 @@ export default {
       ev.preventDefault();
       let data = ev.dataTransfer.getData("text");
       if (!data.includes("png")){
-        const index=ev.target.id.split(",");
-        const r = parseInt(index[0]);
-        const c = parseInt(index[1]);
         var copyimg = document.createElement("img");
         var original = document.getElementById(data);
         copyimg.src = original.src;
-        copyimg.id = data + " - address:" + ev.target.id;
-        copyimg.style.transform = original.style.transform;
-        copyimg.width = original.width/2;
-        copyimg.hight = original.hight/2;
-        ev.target.style.backgroundColor=this.color;
-        if (ev.target.childElementCount){
-          ev.target.removeChild(ev.target.childNodes[0]);
+        if (data=="card" && ev.target.tagName=="IMG"){
+          copyimg.id = data + " - address:" + ev.target.parentElement.id;
+          copyimg.width = original.width/4;
+          copyimg.height = original.height/4;
+          copyimg.style.backgroundColor=this.color;
+          copyimg.style.position= "absolute";
+          copyimg.style.top= 0;
+          copyimg.style.right= 0;
+          this.card_witch.push(ev.target.parentElement.id);
+          ev.target.parentElement.appendChild(copyimg);
+          let p = document.createElement("p");
+          p.innerHTML = this.card_witch.length-1;
+          p.style.right= "27px";
+          p.style.top = "2px";
+          p.style.position= "absolute";
+          ev.target.parentElement.appendChild(p);
+          this.conf[ev.target.parentElement.id].img.push({"index":this.card_witch.length-1 ,data,"src":original.src,"width":copyimg.width,"height":copyimg.height,"bgcolor":this.color,"id":data + " - address:" + ev.target.id,"position":copyimg.style.position,"top":copyimg.style.top,"right":copyimg.style.right});
         }
-        this.idmap[ev.target.id]=ev.target.id;
-        this.conf[ev.target.id]={"img":{data,"src":original.src,"transform":original.style.transform,"width":copyimg.width,"hight":copyimg.hight,"id":data + " - address:" + ev.target.id},"bgcolor":this.color,"neighbours":this.setNeighbours(ev.target.id,original.id,original.style.transform)};
-        if (data.includes("Switch")){
-          ev.target.rowSpan=2;
-          ev.target.colSpan=2;
-          this.idmap[r+","+(c+1)]=ev.target.id;
-          this.idmap[(r+1)+","+c]=ev.target.id;
-          this.idmap[(r+1)+","+(c+1)]=ev.target.id;
-          this.insertOne(data,ev.target.id);
-          document.getElementById(r+","+(c+1)).remove();
-          document.getElementById((r+1)+","+c).remove();
-          document.getElementById((r+1)+","+(c+1)).remove();
-          copyimg.addEventListener("click",this.switchImg);
-          //document.addEventListener("click",this.switchImg);
-        } 
-        ev.target.appendChild(copyimg);
-        this.getSwitchPairs()
+        else{
+          const index=ev.target.id.split(",");
+          const r = parseInt(index[0]);
+          const c = parseInt(index[1]);
+          copyimg.id = data + " - address:" + ev.target.id;
+          copyimg.style.transform = original.style.transform;
+          copyimg.width = original.width/2;
+          copyimg.height = original.height/2;
+          copyimg.style.backgroundColor=this.color;
+          if (ev.target.childElementCount){
+            ev.target.removeChild(ev.target.childNodes[0]);
+          }
+          this.idmap[ev.target.id]=ev.target.id;
+          this.conf[ev.target.id]={"img":[{data,"src":original.src,"transform":original.style.transform,"width":copyimg.width,"height":copyimg.height,"bgcolor":this.color,"id":data + " - address:" + ev.target.id}],"neighbours":this.setNeighbours(ev.target.id,original.id,original.style.transform)};
+         if (data.includes("Switch")){
+            ev.target.rowSpan=2;
+            ev.target.colSpan=2;
+            this.idmap[r+","+(c+1)]=ev.target.id;
+            this.idmap[(r+1)+","+c]=ev.target.id;
+            this.idmap[(r+1)+","+(c+1)]=ev.target.id;
+            this.insertOne(data,ev.target.id);
+            ev.target.innerHTML+= "<p>Switch "+ this.conf[ev.target.id].switch.index + "</p>";
+            document.getElementById(r+","+(c+1)).remove();
+            document.getElementById((r+1)+","+c).remove();
+            document.getElementById((r+1)+","+(c+1)).remove();
+            copyimg.addEventListener("click",this.switchImg);
+            //document.addEventListener("click",this.switchImg);
+          } 
+          ev.target.appendChild(copyimg);
+          this.getSwitchPairs();
+        }
       }
     },
     allowDrop(ev) {
       ev.preventDefault();
     },
+    assignCardToSwitch(){
+
+    },
     dragAway(ev){
       if(ev.dataTransfer.dropEffect !== 'none'){
         let td = ev.target.parentElement;
-          td.style.backgroundColor="";
+        td.getElementsByTagName("p")[0].remove();
         if (ev.target.id.includes("Switch")){
           this.RemoveOne(ev.target.id.split(":")[1]);
           const index=td.id.split(",");
           const r = parseInt(index[0]);
           const c = parseInt(index[1]);
+          td.innerHTML ="";
           td.rowSpan=1;
           td.colSpan=1;
           this.addCellWithExtra(td.parentElement,c+1,r+","+(c+1))
           this.addCellWithExtra(td.parentElement.parentElement.rows[r+1],c,(r+1)+","+c)
           this.addCellWithExtra(td.parentElement.parentElement.rows[r+1],c+1,(r+1)+","+(c+1))
-          
+        }
+        else if (ev.target.id.includes("card")){
+          const todel = this.card_witch.indexOf(ev.target.id.split(":")[1]);
+          this.card_witch.splice(todel, 1);
+          //this.card_witch.forEach((element, index) => {this.conf[element].switch.index = index})
         }
         ev.target.remove();
         delete this.conf[td.id];
+        let tmp = {...this.conf};
+        this.createTable();
+        this.conf={...tmp};
+        this.updateConf();
       }
     },
     addCellWithExtra(el,col,id){
       let td = el.insertCell(col);
       td.id=id;
       td.classList.add("tdclass");
-      td.style="width: 51px; height: 51px;border: 1px solid black;"
+      td.style+="width: 51px; height: 51px;border: 1px solid black;"
       td.addEventListener('drop',this.drop)
       td.addEventListener('dragover',this.allowDrop)
       td.addEventListener('dragend',this.dragAway)
@@ -358,9 +407,9 @@ export default {
         const index=key.split(",");
         const c = this.rows - parseInt(index[0])-1;
         const r = parseInt(index[1]);
-        let rotation = ((parseInt(this.conf[key].img.transform.replace("rotate(","").replace("deg)","")) || 0) +90) %360
+        let rotation = ((parseInt(this.conf[key].img[0].transform.replace("rotate(","").replace("deg)","")) || 0) +90) %360
         let newID;
-        if (this.conf[key].img.data.includes("Switch")){
+        if (this.conf[key].img[0].data.includes("Switch")){
           newID=r+","+(c-1);
           this.idmap[newID]=newID;
           this.idmap[r+","+(c)]=newID;
@@ -373,9 +422,9 @@ export default {
         this.idmap[newID]=newID;
 
         tmp[newID]=this.conf[key];
-        tmp[newID].img.transform = "rotate(" + rotation + "deg)"
-        tmp[newID].img.id=tmp[newID].img.id.replace(key,newID)
-        tmp[newID].neighbours=this.setNeighbours(newID,tmp[newID].img.id.split(" ")[0],tmp[newID].img.transform)
+        tmp[newID].img[0].transform = "rotate(" + rotation + "deg)"
+        tmp[newID].img[0].id=tmp[newID].img[0].id.replace(key,newID)
+        tmp[newID].neighbours=this.setNeighbours(newID,tmp[newID].img[0].id.split(" ")[0],tmp[newID].img[0].transform)
       }
       let r = this.rows
       this.rows= this.columns
@@ -440,7 +489,25 @@ export default {
           this.getnextSwitch(this.idmap[this.conf[id].neighbours[i]],id,id,i)
         })
       });
+      
     },
+    pairCardsSwitches(){
+      for(const [id,portObj] of Object.entries(this.switchPairs)){
+        this.conf[id]["card_index"]={};
+        for(const [port,switchpair] of Object.entries(portObj)){
+          let SwitchNeighbourID = this.conf[id].neighbours[port];
+          let SwitcPairhNeighbourID = this.conf[switchpair[1]].neighbours[switchpair[0]];
+          let cardIndex = this.card_witch.indexOf(SwitchNeighbourID);
+          let pairCardIndex = this.card_witch.indexOf(SwitcPairhNeighbourID);
+          this.conf[id]["card_index"][port]=cardIndex;
+          this.cardPairs[cardIndex]=[[port,id],pairCardIndex,switchpair];
+        }
+      }
+    },
+    consoleLog(){
+      let toLog= {"conf":this.conf,"rows":this.rows,"columns":this.columns,"switchPairs":this.switchPairs,"cardPairs":this.cardPairs}
+      console.log(JSON.stringify(toLog,null,2))
+    }
   }
 }
 
@@ -448,5 +515,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+td {
+  position: relative;
+}
+p {
+  position:absolute; 
+  top:2px;
+  right:2px;
+  font-size:12px;
+}
 
 </style>
