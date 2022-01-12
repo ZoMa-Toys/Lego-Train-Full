@@ -204,7 +204,7 @@ export default {
             this.conf[swid].switch.switched = getKeyByValue(this.conf[swid].switch.pulse,data.Message.pulse);
             let img = document.getElementById(swid).firstElementChild 
             img.src=this.changeDirection(img.src)
-            this.conf[swid].img.src=this.changeDirection(this.conf[swid].img.src)
+            this.conf[swid].img[0].src=this.changeDirection(this.conf[swid].img[0].src)
 
           }
         }
