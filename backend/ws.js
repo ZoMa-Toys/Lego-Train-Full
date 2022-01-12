@@ -86,6 +86,19 @@ function mainTrain(data){
             };
             broadcastMessage(JSON.stringify({"Status":"TrackConfig:","Message": conf4ESP()}));
         }
+        else if (data.action == "CardMap"){
+            cardMap=data.message;
+            message = {
+                "Status":"CardMap:",
+                "Message": data.message
+            };
+        }
+        else if (data.action == "getCardMap"){
+            message = {
+                "Status":"CardMap:",
+                "Message": cardMap
+            };
+        }
         else if (data.action == "cardChecked"){
             let thishub = hubs[data.message.train];
             let cardIndex = data.message.cardIndex;
@@ -261,6 +274,7 @@ function modifySectionInUse(cardIndex,add){
 let hubs = {};
 let trains = {};
 let sectionInUse = [];
+let cardMap = {};
 var trackConfigDefault = 
 {
     "conf": {
