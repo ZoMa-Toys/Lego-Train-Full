@@ -24,7 +24,8 @@
       <b-button @click="sendAction('getConfig')" variant="outline-primary">GetConfig</b-button> 
       <b-button @click="sendAction('getDefaultConfig')" variant="outline-primary">GetDefaultConfig</b-button>
       <b-button @click="rotatetable" variant="outline-primary">RotateTable</b-button>
-      <!-- <b-button @click="getSwitchPairs" variant="outline-primary">getSwitchPairs</b-button> -->
+      <b-button @click="consoleLog" variant="outline-primary">TEST</b-button>
+      <b-button @click="pairCardsSwitches" variant="outline-primary">pairCardsSwitches</b-button>
       <b-button @click="goto('Train')" variant="outline-primary">TrainControl</b-button>
     </div>
     <div class="shadow p-3 mb-5 rounded" @drop="dontDrop" @dragover="dontDrop" >
@@ -85,6 +86,7 @@ export default {
       rows:14,
       columns:6,
       switchPairs:{},
+      cardPairs:[],
       conf:{},
       conf_str:"",
       motor_witch:[],
@@ -153,7 +155,7 @@ export default {
             img.style.position= i.position;
             img.style.top= i.top;
             img.style.right= i.right;
-            this.card_witch[i.index]=i;
+            this.card_witch[i.index]=key;
             let p = document.createElement("p");
             p.innerHTML = i.index;
             p.style.right= "27px";
@@ -192,6 +194,7 @@ export default {
           this.createTable();
           this.conf = data.Message.conf;
           this.switchPairs = data.Message.switchPairs;
+          this.cardPairs = data.Message.cardhPairs;
           this.updateConf();
           //this.getSwitchPairs();
         }
@@ -210,7 +213,7 @@ export default {
     sendAction(s) {
       const payload = { "action":s,"config":{} };
       if (s.includes("Config")){
-        payload.config={"conf":this.conf,"rows":this.rows,"columns":this.columns,"switchPairs":this.switchPairs};
+        payload.config={"conf":this.conf,"rows":this.rows,"columns":this.columns,"switchPairs":this.switchPairs,"cardPairs":this.cardPairs};
       }
       this.connectWs();
       this.connection.send(JSON.stringify(payload));
@@ -262,7 +265,6 @@ export default {
           p.style.position= "absolute";
           ev.target.parentElement.appendChild(p);
           this.conf[ev.target.parentElement.id].img.push({"index":this.card_witch.length-1 ,data,"src":original.src,"width":copyimg.width,"height":copyimg.height,"bgcolor":this.color,"id":data + " - address:" + ev.target.id,"position":copyimg.style.position,"top":copyimg.style.top,"right":copyimg.style.right});
-          console.log(this.conf)
         }
         else{
           const index=ev.target.id.split(",");
@@ -278,7 +280,6 @@ export default {
           }
           this.idmap[ev.target.id]=ev.target.id;
           this.conf[ev.target.id]={"img":[{data,"src":original.src,"transform":original.style.transform,"width":copyimg.width,"height":copyimg.height,"bgcolor":this.color,"id":data + " - address:" + ev.target.id}],"neighbours":this.setNeighbours(ev.target.id,original.id,original.style.transform)};
-          console.log(this.conf)
          if (data.includes("Switch")){
             ev.target.rowSpan=2;
             ev.target.colSpan=2;
@@ -294,7 +295,7 @@ export default {
             //document.addEventListener("click",this.switchImg);
           } 
           ev.target.appendChild(copyimg);
-          this.getSwitchPairs()
+          this.getSwitchPairs();
         }
       }
     },
@@ -330,7 +331,6 @@ export default {
         let tmp = {...this.conf};
         this.createTable();
         this.conf={...tmp};
-        console.log(this.conf)
         this.updateConf();
       }
     },
@@ -344,7 +344,6 @@ export default {
       td.addEventListener('dragend',this.dragAway)
     },
     createTable(){
-      console.log(JSON.stringify(this.conf,null,2));
       this.idmap={};
       this.conf={};
       this.motor_witch=[];
@@ -490,7 +489,25 @@ export default {
           this.getnextSwitch(this.idmap[this.conf[id].neighbours[i]],id,id,i)
         })
       });
+      
     },
+    pairCardsSwitches(){
+      for(const [id,portObj] of Object.entries(this.switchPairs)){
+        this.conf[id]["card_index"]={};
+        for(const [port,switchpair] of Object.entries(portObj)){
+          let SwitchNeighbourID = this.conf[id].neighbours[port];
+          let SwitcPairhNeighbourID = this.conf[switchpair[1]].neighbours[switchpair[0]];
+          let cardIndex = this.card_witch.indexOf(SwitchNeighbourID);
+          let pairCardIndex = this.card_witch.indexOf(SwitcPairhNeighbourID);
+          this.conf[id]["card_index"][port]=cardIndex;
+          this.cardPairs[cardIndex]=[[port,id],pairCardIndex,switchpair];
+        }
+      }
+    },
+    consoleLog(){
+      let toLog= {"conf":this.conf,"rows":this.rows,"columns":this.columns,"switchPairs":this.switchPairs,"cardPairs":this.cardPairs}
+      console.log(JSON.stringify(toLog,null,2))
+    }
   }
 }
 
