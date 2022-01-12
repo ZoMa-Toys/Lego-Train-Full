@@ -188,7 +188,7 @@ function updateSwitchState(data){
         if(trackConfig.conf[id].hasOwnProperty("switch")){
             if (trackConfig.conf[id].switch.index==data.motor){
                 trackConfig.conf[id].switch.switched = getKeyByValue(trackConfig.conf[id].switch.pulse,data.pulse);
-                trackConfig.conf[id].img.src=changeDirection(trackConfig.conf[id].img.src);
+                trackConfig.conf[id].img[0].src=changeDirection(trackConfig.conf[id].img[0].src);
             }
         }
     }
