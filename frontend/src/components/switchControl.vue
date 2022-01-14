@@ -203,8 +203,8 @@ export default {
           if(swid !== undefined){
             this.conf[swid].switch.switched = getKeyByValue(this.conf[swid].switch.pulse,data.Message.pulse);
             let img = document.getElementById(swid).firstElementChild 
-            img.src=this.changeDirection(img.src)
-            this.conf[swid].img[0].src=this.changeDirection(this.conf[swid].img[0].src)
+            img.src=this.changeDirection(img.src,this.conf[swid].switch.switched)
+            this.conf[swid].img[0].src=this.changeDirection(this.conf[swid].img[0].src,this.conf[swid].switch.switched)
 
           }
         }
@@ -218,12 +218,12 @@ export default {
       this.connectWs();
       this.connection.send(JSON.stringify(payload));
     },
-    changeDirection(str){
-      if (str.includes("Turn")){
-        return str.replace("Turn","Straight")
+    changeDirection(current,to){
+      if (to.includes("Turn")){
+        return current.replace("Straight","Turn")
       }
       else{
-        return str.replace("Straight","Turn")
+        return current.replace("Turn","Straight")
       }
     },
     jsonstring(){
