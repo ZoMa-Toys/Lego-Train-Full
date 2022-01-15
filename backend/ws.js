@@ -331,7 +331,7 @@ var trackConfigDefault =
             "transform": "rotate(90deg)",
             "width": 100,
             "height": 100,
-            "bgcolor": "#3aba21",
+            "bgcolor": "#245bff",
             "id": "rightSwitchStraight - address:2,0"
             }
         ],
@@ -364,7 +364,7 @@ var trackConfigDefault =
             "transform": "rotate(270deg)",
             "width": 100,
             "height": 100,
-            "bgcolor": "#ff2424",
+            "bgcolor": "#3aba21",
             "id": "leftSwitchStraight - address:2,11"
             }
         ],
@@ -397,7 +397,7 @@ var trackConfigDefault =
             "transform": "rotate(270deg)",
             "width": 100,
             "height": 100,
-            "bgcolor": "#245bff",
+            "bgcolor": "#ff2424",
             "id": "rightSwitchStraight - address:6,11"
             }
         ],
