@@ -29,6 +29,7 @@
                 <b-button @click="sendAction('stop')" variant="danger">stopScan</b-button>
                 <b-button @click="sendAction('getHubs')" variant="primary">getHubs</b-button>
                 <b-button @click="sendAction('disconnectHubs')" variant="danger">disconnectAllHub</b-button>
+                <b-button @click="sendAction('resetCardMap')" variant="danger">resetCardMap</b-button>
                 <b-button @click="goto('swtichControl')" variant="outline-primary">SwitchControl</b-button>
               </div>
             </td>
@@ -130,6 +131,7 @@ export default {
       else if (data.Status === 'Setting Speed...'){
         const t = data.Message;
         this.hubs[t.train].speed=t.speed;
+        console.log(this.hubs)
       }
     },
     sendAction(s) {
@@ -138,8 +140,8 @@ export default {
         payload.config=this.switches;
       }
       else if (s.includes("scan")){
-        payload.NumberOfHubs=this.NumberOfHubs;
-        payload.NumberOfRemotes=this.NumberOfRemotes;
+        payload["NumberOfHubs"]=this.NumberOfHubs;
+        payload["NumberOfRemotes"]=this.NumberOfRemotes;
       }
       //console.log(payload);
       this.connectWs();

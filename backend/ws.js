@@ -99,32 +99,44 @@ function mainTrain(data){
                 "Message": cardMap
             };
         }
+        else if (data.action == "resetCardMap"){
+            cardMap={};
+            message = {
+                "Status":"CardMap:",
+                "Message": cardMap
+            };
+        }
         else if (data.action == "cardChecked"){
-            let thishub = hubs[data.message.train];
-            let cardIndex = data.message.cardIndex;
-            if (sectionInUse.includes(cardIndex)){
-                for(trainame of Object.keys(hubs)){
-                    let hub = hubs[trainame];
-                    if (hub != thishub){
-                        if (hub.lastCard == trackConfig.cardPairs[cardIndex][1]){
-                            thishub.speed=0;
-                            hub.speed=0;
-                            setPower(thishub);
-                            setPower(hub);
+            if (hubs.hasOwnProperty(data.message.train)){
+                let thishub = hubs[data.message.train];
+                let cardIndex = data.message.cardIndex;
+                if (sectionInUse.includes(cardIndex)){
+                    for(trainame of Object.keys(hubs)){
+                        let hub = hubs[trainame];
+                        if (hub != thishub){
+                            if (hub.lastCard == trackConfig.cardPairs[cardIndex][1]){
+                                thishub.speed=0;
+                                hub.speed=0;
+                                setPower(thishub);
+                                setPower(hub);
+                            }
                         }
                     }
                 }
-            }
-            if (trackConfig.cardPairs[cardIndex][1] == thishub.lastCard){
-                thishub.lastCard=-1;
-                modifySectionInUse(cardIndex,false)
+                if (trackConfig.cardPairs[cardIndex][1] == thishub.lastCard){
+                    thishub.lastCard=-1;
+                    modifySectionInUse(cardIndex,false)
+                }
+                else{
+                    switchIfYouCan(cardIndex);
+                    modifySectionInUse(cardIndex,true)
+                    thishub.lastCard=cardIndex;
+                }
+                message={"action":"trainOnCard","message":{"train":data.message.train,"cardIndex":cardIndex}}
             }
             else{
-                switchIfYouCan(cardIndex);
-                modifySectionInUse(cardIndex,true)
-                thishub.lastCard=cardIndex;
+                message={"error":"train not found with name" +data.message.train }
             }
-            message={"action":"trainOnCard","message":{"train":data.message.train,"cardIndex":cardIndex}}
         }
 /*         else if (data.action == "swtichMotor"){
             message = data.message;
@@ -177,14 +189,14 @@ function conf4ESP(){
 function getKeyByValue(object, value) {
     return Object.keys(object).find(key => object[key] === value);
 }
-function changeDirection(str){
-    if (str.includes("Turn")){
-      return str.replace("Turn","Straight")
+function changeDirection(current,to){
+    if (to.includes("Turn")){
+      return current.replace("Straight","Turn")
     }
     else{
-      return str.replace("Straight","Turn")
+      return current.replace("Turn","Straight")
     }
-}
+  }
 
 function setPower(hub) {
     const payload = {};
@@ -201,7 +213,7 @@ function updateSwitchState(data){
         if(trackConfig.conf[id].hasOwnProperty("switch")){
             if (trackConfig.conf[id].switch.index==data.motor){
                 trackConfig.conf[id].switch.switched = getKeyByValue(trackConfig.conf[id].switch.pulse,data.pulse);
-                trackConfig.conf[id].img[0].src=changeDirection(trackConfig.conf[id].img[0].src);
+                trackConfig.conf[id].img[0].src=changeDirection(trackConfig.conf[id].img[0].src,trackConfig.conf[id].switch.switched);
             }
         }
     }
