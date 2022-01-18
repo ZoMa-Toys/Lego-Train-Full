@@ -53,12 +53,9 @@
 <script>
 
 function setWs(apihost,dataModFunction){
-  // console.log("Starting connection to WebSocket Server")
   const connection = new WebSocket(apihost);
-
   connection.onmessage = ({data}) => {
     dataModFunction(JSON.parse(data));
-    //console.log("input: " + data);
   }
 
   
@@ -71,22 +68,27 @@ function getInitialData() {
   return {
     connection: null,
     apihost: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/ws",
-    trains: [{NAME:"a",TRAIN_MOTOR:0,COLOR_DISTANCE_SENSOR:1},
+    trains: [{NAME:"DUMMY",TRAIN_MOTOR:0,COLOR_DISTANCE_SENSOR:1,traincolor:6},
     ],
     hubs: {
-      "a":{
+      "DUMMY":{
             speed: 0,
-            train: "a",
+            train: "DUMMY",
+            traincolor:6,
             MotorPort: 0,
             distanceSlow:0,
             colorSlow: 255,
             distance:0,
-            color: 255
+            color: 255,
+            newdistanceSlow:0,
+            newcolorSlow: 255,
+            newdistance:0,
+            newcolor: 255
         },
     },
     NumberOfHubs: 1,
     NumberOfRemotes: 1,
-    Colors: {
+    ColorsOld: {
       BLACK: 0,
       PINK: 1,
       PURPLE: 2,
@@ -100,6 +102,20 @@ function getInitialData() {
       WHITE: 10,
       NONE: 255
     },
+    Colors:{
+      0:["BLACK",0,0,0],
+      1:["PINK",255,192,203],
+      2:["PURPLE",128,0,128],
+      3:["BLUE",0,0,255],
+      4:["LIGHTBLUE",173,216,230],
+      5:["CYAN",0,255,255],
+      6:["GREEN",0,128,0],
+      7:["YELLOW",255,255,0],
+      8:["ORANGE",255,155,0],
+      9:["RED",255,0,0],
+      10:["WHITE",255,255,255],
+      255:["NONE",255,255,255],   
+    }
   };
 }
 
@@ -130,33 +146,46 @@ export default {
       }
       else if (data.Status === 'Setting Speed...'){
         const t = data.Message;
-        this.hubs[t.train].speed=t.speed;
-        console.log(this.hubs)
+        console.log(t)
+        if ("speed" in t) this.hubs[t.train].speed=t.speed;
+        if ("speed" in t) this.hubs[t.train].newspeed=t.speed;
+        if ("distanceSlow" in t) this.hubs[t.train].distanceSlow=t.distanceSlow;
+        if ("distanceSlow" in t) this.hubs[t.train].newdistanceSlow=t.distanceSlow;
+        if ("colorSlow" in t) this.hubs[t.train].colorSlow=t.colorSlow ;
+        if ("colorSlow" in t) this.hubs[t.train].newcolorSlow=t.colorSlow ;
+        if ("distance" in t) this.hubs[t.train].distance=t.distance;
+        if ("distance" in t) this.hubs[t.train].newdistance=t.distance;
+        if ("color" in t) this.hubs[t.train].color=t.color ;
+        if ("color" in t) this.hubs[t.train].newcolor=t.color ;
+        console.log(this.hubs[t.train])
       }
+
     },
     sendAction(s) {
       const payload = { "action":s };
-      if (s.includes("Config")){
-        payload.config=this.switches;
-      }
-      else if (s.includes("scan")){
+      if (s.includes("scan")){
         payload["NumberOfHubs"]=this.NumberOfHubs;
         payload["NumberOfRemotes"]=this.NumberOfRemotes;
       }
-      //console.log(payload);
       this.connectWs();
       this.connection.send(JSON.stringify(payload));
     },
     getHubs() {
       this.connection.send(JSON.stringify({ "action":"getHubs" }));
     },
-    setPower(h) {
+    setPower(h,key) {
       const payload = {};
-      payload["message"] = this.hubs[h];
-//      payload.color=this.Colors[payload.color];
       payload["action"]="setPower";
-      // console.log(payload);
+      payload['message'] = {};
+      payload.message["train"]=this.hubs[h].train;
+      payload.message[key]=this.hubs[h]["new"+key];
+/*      payload.message.MotorPort=this.hubs[h].MotorPort;
+      payload.message.distanceSlow=this.hubs[h].distanceSlow;
+      payload.message.colorSlow=this.Colors[this.hubs[h].colorSlow];
+      payload.message.distance=this.hubs[h].distance;
+      payload.message.color=this.Colors[this.hubs[h].color]; */
       this.connection.send(JSON.stringify(payload));
+      console.log("TH:",this.hubs[h])
     },
     fillHubs() { 
       this.trains.forEach(train => {
@@ -164,29 +193,32 @@ export default {
           this.hubs[train.NAME]= {
             speed: 0,
             train: train.NAME,
+            traincolor:train.traincolor,
             MotorPort: train.TRAIN_MOTOR,
             distanceSlow:0,
             colorSlow: 255,
             distance:0,
-            color: 255};
+            color: 255,
+            newdistanceSlow:0,
+            newcolorSlow: 255,
+            newdistance:0,
+            newcolor: 255};
         }
       });
-       // eslint-disable-next-line
-      // console.log(JSON.stringify(this.hubs, null, 2));
     },
     goto(page){
       this.$router.replace({ name: page });
     },
     changeSpeed(TrainName,ChangeValue){
       if (ChangeValue===0){
-        this.hubs[TrainName].speed = 0;
+        this.hubs[TrainName].newspeed  =0;
       }
       else{
-        const newValue = Math.max(Math.min(this.hubs[TrainName].speed + ChangeValue,100),-100);
-        this.hubs[TrainName].speed=newValue;
+        this.hubs[TrainName].newspeed = Math.max(Math.min(this.hubs[TrainName].speed + ChangeValue,100),-100);
       }
-      //console.log(this.hubs)
-      this.setPower(TrainName);
+      this.setPower(TrainName,"speed");
+      
+     
     }
   },
   
