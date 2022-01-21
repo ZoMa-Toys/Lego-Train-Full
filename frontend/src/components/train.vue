@@ -34,15 +34,13 @@
               </div>
             </td>
           </tr>
-          <tr  v-for="train in trains" :key="train.NAME" >
-            <controller
-              :train="train"
-              :hubs="hubs"
-              :Colors="Colors"
-              :setPower="setPower"
-              :changeSpeed="changeSpeed">
+            <controller v-for="train in trains" v-bind:key="train.NAME" 
+              v-bind:train="train"
+              v-bind:hubs="hubs"
+              v-bind:Colors="Colors"
+              v-bind:setPower="setPower"
+              v-bind:changeSpeed="changeSpeed">
             </controller>
-          </tr>
         </td>
       </tr>
     </table>
@@ -68,13 +66,13 @@ function getInitialData() {
   return {
     connection: null,
     apihost: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/ws",
-    trains: [{NAME:"DUMMY",TRAIN_MOTOR:0,COLOR_DISTANCE_SENSOR:1,traincolor:6},
+    trains: [{NAME:"DUMMY",TRAIN_MOTOR:0,COLOR_DISTANCE_SENSOR:1,traincolor:1},
     ],
     hubs: {
       "DUMMY":{
             speed: 0,
             train: "DUMMY",
-            traincolor:6,
+            traincolor:1,
             MotorPort: 0,
             distanceSlow:0,
             colorSlow: 255,
@@ -146,7 +144,6 @@ export default {
       }
       else if (data.Status === 'Setting Speed...'){
         const t = data.Message;
-        console.log(t)
         if ("speed" in t) this.hubs[t.train].speed=t.speed;
         if ("speed" in t) this.hubs[t.train].newspeed=t.speed;
         if ("distanceSlow" in t) this.hubs[t.train].distanceSlow=t.distanceSlow;
@@ -157,7 +154,7 @@ export default {
         if ("distance" in t) this.hubs[t.train].newdistance=t.distance;
         if ("color" in t) this.hubs[t.train].color=t.color ;
         if ("color" in t) this.hubs[t.train].newcolor=t.color ;
-        console.log(this.hubs[t.train])
+        this.hubs = {...this.hubs};
       }
 
     },
@@ -179,15 +176,10 @@ export default {
       payload['message'] = {};
       payload.message["train"]=this.hubs[h].train;
       payload.message[key]=this.hubs[h]["new"+key];
-/*      payload.message.MotorPort=this.hubs[h].MotorPort;
-      payload.message.distanceSlow=this.hubs[h].distanceSlow;
-      payload.message.colorSlow=this.Colors[this.hubs[h].colorSlow];
-      payload.message.distance=this.hubs[h].distance;
-      payload.message.color=this.Colors[this.hubs[h].color]; */
       this.connection.send(JSON.stringify(payload));
-      console.log("TH:",this.hubs[h])
     },
     fillHubs() { 
+      this.hubs={};
       this.trains.forEach(train => {
         if ("TRAIN_MOTOR" in train){
           this.hubs[train.NAME]= {
