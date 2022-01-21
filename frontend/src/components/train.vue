@@ -39,7 +39,8 @@
               v-bind:hubs="hubs"
               v-bind:Colors="Colors"
               v-bind:setPower="setPower"
-              v-bind:changeSpeed="changeSpeed">
+              v-bind:changeSpeed="changeSpeed"
+              v-bind:changeLight="changeLight">
             </controller>
         </td>
       </tr>
@@ -66,7 +67,7 @@ function getInitialData() {
   return {
     connection: null,
     apihost: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/ws",
-    trains: [{NAME:"DUMMY",TRAIN_MOTOR:0,COLOR_DISTANCE_SENSOR:1,traincolor:1},
+    trains: [{NAME:"DUMMY",TRAIN_MOTOR:0,COLOR_DISTANCE_SENSOR:1,LIGHT:2,traincolor:1},
     ],
     hubs: {
       "DUMMY":{
@@ -78,10 +79,12 @@ function getInitialData() {
             colorSlow: 255,
             distance:0,
             color: 255,
+            light: 0,
             newdistanceSlow:0,
             newcolorSlow: 255,
             newdistance:0,
-            newcolor: 255
+            newcolor: 255,
+            newlight: 0,
         },
     },
     NumberOfHubs: 1,
@@ -154,6 +157,8 @@ export default {
         if ("distance" in t) this.hubs[t.train].newdistance=t.distance;
         if ("color" in t) this.hubs[t.train].color=t.color ;
         if ("color" in t) this.hubs[t.train].newcolor=t.color ;
+        if ("light" in t) this.hubs[t.train].light=t.light ;
+        if ("light" in t) this.hubs[t.train].newlight=t.light ;
         this.hubs = {...this.hubs};
       }
 
@@ -194,7 +199,9 @@ export default {
             newdistanceSlow:0,
             newcolorSlow: 255,
             newdistance:0,
-            newcolor: 255};
+            newcolor: 255,
+            light:0,
+            newlight:0};
         }
       });
     },
@@ -208,9 +215,16 @@ export default {
       else{
         this.hubs[TrainName].newspeed = Math.max(Math.min(this.hubs[TrainName].speed + ChangeValue,100),-100);
       }
-      this.setPower(TrainName,"speed");
-      
-     
+      this.setPower(TrainName,"speed");     
+    },
+    changeLight(TrainName,ChangeValue){
+      if (ChangeValue===0){
+        this.hubs[TrainName].newlight  =0;
+      }
+      else{
+        this.hubs[TrainName].newlight = Math.max(Math.min(this.hubs[TrainName].light + ChangeValue,100),-100);
+      }
+      this.setPower(TrainName,"light");     
     }
   },
   

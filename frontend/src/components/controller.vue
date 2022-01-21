@@ -4,18 +4,20 @@
             <div :style="'text-align: center;border-style: solid; border-color:gray;position: relative;fontcolor:black; background: rgba('+ Colors[hubs[train.NAME].traincolor][1]+','+ Colors[hubs[train.NAME].traincolor][2]+','+Colors[hubs[train.NAME].traincolor][3]+',0.3)'">
                 <h1> {{ train.NAME }}</h1>
                 <b-row no-gutters v-if="train">
-                    <div style="text-align: center; margin:auto">
+                    <b-row no-gutters style="margin:auto"> 
+                        <div style="text-align: center; margin:auto">
                             <label> Speed: </label>
                             <h1 style="font-size:6em"> {{ hubs[train.NAME].speed }}</h1>
-                    </div>
-                    <div style="margin-left:auto;">
-                        <b-icon icon="plus-circle" style="width: 120px; height: 120px;" @click="changeSpeed(train.NAME,-10)"></b-icon>
-                        <br>
-                        <b-icon icon="stop-circle" variant="danger" style="width: 120px; height: 120px; " @click="changeSpeed(train.NAME,0)"></b-icon>
-                        <br>
-                        <b-icon icon="dash-circle" style="width: 120px; height: 120px;" @click="changeSpeed(train.NAME,10)"></b-icon>
-                    </div>
-                    <div v-if="'COLOR_DISTANCE_SENSOR' in train" style="margin-right:0">
+                        </div>
+                        <div style="margin-left:auto;">
+                            <b-icon icon="plus-circle" style="width: 120px; height: 120px;" @click="changeSpeed(train.NAME,10)"></b-icon>
+                            <br>
+                            <b-icon icon="stop-circle" variant="danger" style="width: 120px; height: 120px; " @click="changeSpeed(train.NAME,0)"></b-icon>
+                            <br>
+                            <b-icon icon="dash-circle" style="width: 120px; height: 120px;" @click="changeSpeed(train.NAME,-10)"></b-icon>
+                        </div>
+                    </b-row>
+                    <div v-if="'COLOR_DISTANCE_SENSOR' in train" style="margin-right:0;margin-left:auto">
                         <div style="border-style: solid; border-color:gray; ">
                             <label>Slow down if distance is less then: {{ hubs[train.NAME].newdistanceSlow }} </label>
                             <b-form-input type="range" @change="setPower(train.NAME,'distanceSlow')"
@@ -50,6 +52,19 @@
                             </b-form-select>
                         </div>
                     </div>
+                    <b-row no-gutters v-if="'LIGHT' in train" style="margin-right:0;margin-left:auto">
+                        <div style="text-align: center; margin:auto">
+                            <label> Light: </label>
+                            <h1 style="font-size:6em"> {{ hubs[train.NAME].light }}</h1>
+                        </div>
+                        <div style="margin-left:auto;">
+                            <b-icon icon="plus-circle" style="width: 120px; height: 120px;" @click="changeLight(train.NAME,10)"></b-icon>
+                            <br>
+                            <b-icon icon="stop-circle" variant="danger" style="width: 120px; height: 120px; " @click="changeLight(train.NAME,0)"></b-icon>
+                            <br>
+                            <b-icon icon="dash-circle" style="width: 120px; height: 120px;" @click="changeLight(train.NAME,-10)"></b-icon>
+                        </div>
+                    </b-row>
                 </b-row>
             </div>
         </td>
@@ -68,6 +83,7 @@ export default {
         'Colors',
         'setPower',
         'changeSpeed',
+        'changeLight',
     ]
 
 };
