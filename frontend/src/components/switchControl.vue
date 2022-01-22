@@ -26,7 +26,8 @@
       <b-button @click="rotatetable" variant="outline-primary">RotateTable</b-button>
       <b-button @click="consoleLog" variant="outline-primary">TEST</b-button>
       <b-button @click="pairCardsSwitches" variant="outline-primary">pairCardsSwitches</b-button>
-      <b-button @click="goto('Train')" variant="outline-primary">TrainControl</b-button>
+<!--       <b-button @click="getSwitchPairs" variant="outline-primary">getSwitchPairs</b-button>
+ -->      <b-button @click="goto('Train')" variant="outline-primary">TrainControl</b-button>
     </div>
     <div class="shadow p-3 mb-5 rounded" @drop="dontDrop" @dragover="dontDrop" >
       <table>
@@ -124,6 +125,7 @@ export default {
    watch: {
     conf_str: function (val) {
       this.conf = JSON.parse(val);
+      this.conf = {...this.conf}
     },
     conf: function (val) {
       this.conf_str = JSON.stringify(val, null, 2);
@@ -348,6 +350,7 @@ export default {
       this.conf={};
       this.motor_witch=[];
       this.card_witch=[];
+      this.cardPairs=[];
       let tbl = document.getElementById('table');
       tbl.innerHTML="";
       for(let i=0;i<this.rows;i++){
@@ -472,13 +475,13 @@ export default {
               this.getnextSwitch(mvalue,id,origin,port)
             }
             else{
-              this.switchPairs[origin][port]=[getKeyByValue(this.conf[mvalue].neighbours,id),mvalue]
+              this.switchPairs[origin][port].push([getKeyByValue(this.conf[mvalue].neighbours,id),mvalue])
             }
           }
         }
       }
       else{
-        this.switchPairs[origin][port]=""
+        this.switchPairs[origin][port]=[]
       }
     },
     getSwitchPairs(){
@@ -486,26 +489,34 @@ export default {
       this.motor_witch.forEach(id => {
         this.switchPairs[id]={};
         ["i","s","t"].forEach(i => {
-          this.switchPairs[id][i]="";
+          this.switchPairs[id][i]=[];
           this.getnextSwitch(this.idmap[this.conf[id].neighbours[i]],id,id,i)
         })
       });
-      
     },
     pairCardsSwitches(){
+      this.cardPairs=[];
       for(const [id,portObj] of Object.entries(this.switchPairs)){
-        this.conf[id]["card_index"]={};
-        for(const [port,switchpair] of Object.entries(portObj)){
-          let SwitchNeighbourID = this.conf[id].neighbours[port];
-          let SwitcPairhNeighbourID = this.conf[switchpair[1]].neighbours[switchpair[0]];
-          let cardIndex = this.card_witch.indexOf(SwitchNeighbourID);
-          let pairCardIndex = this.card_witch.indexOf(SwitcPairhNeighbourID);
-          this.conf[id]["card_index"][port]=cardIndex;
-          this.cardPairs[cardIndex]=[[port,id],pairCardIndex,switchpair];
+        if(portObj!=""){
+          this.conf[id]["card_index"]={};
+          for(const [port,switchpairs] of Object.entries(portObj)){
+            let SwitchNeighbourID = this.conf[id].neighbours[port];
+            let cardIndex = this.card_witch.indexOf(SwitchNeighbourID);
+            this.conf[id]["card_index"][port]=cardIndex;
+            this.cardPairs[cardIndex]=[];
+            switchpairs.forEach(switchpair => {
+              if (switchpair[1] in this.conf){
+                let SwitcPairhNeighbourID = this.conf[switchpair[1]].neighbours[switchpair[0]];
+                let pairCardIndex = this.card_witch.indexOf(SwitcPairhNeighbourID);
+                this.cardPairs[cardIndex].push([[port,id],pairCardIndex,switchpair]);
+              }
+            });
+          }
         }
       }
     },
     consoleLog(){
+      this.conf={...this.conf}
       let toLog= {"conf":this.conf,"rows":this.rows,"columns":this.columns,"switchPairs":this.switchPairs,"cardPairs":this.cardPairs}
       console.log(JSON.stringify(toLog,null,2))
     }
