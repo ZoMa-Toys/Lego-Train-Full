@@ -83,7 +83,7 @@ function mainTrain(data){
                 "Status":"TrackConfig:",
                 "Message": trackConfig
             };
-            broadcastMessage(JSON.stringify({"Status":"TrackConfig:","Message": conf4ESP()}));
+            broadcastMessage(JSON.stringify({"Status":"SwitchConfigESP:","Message": conf4ESP()}));
         }
         else if (data.action == "CardMap"){
             cardMap=data.message;
@@ -109,11 +109,15 @@ function mainTrain(data){
             if (hubs.hasOwnProperty(data.message.train)){
                 let thishub = hubs[data.message.train];
                 let cardIndex = data.message.cardIndex;
+                let carpairIDs = [];
+                trackConfig.cardPairs[cardIndex].forEach(cardpair => {
+                  carpairIDs.push(cardpair[1]);
+                });
                 if (sectionInUse.includes(cardIndex)){
                     for(trainame of Object.keys(hubs)){
                         let hub = hubs[trainame];
                         if (hub != thishub){
-                            if (hub.lastCard == trackConfig.cardPairs[cardIndex][1]){
+                            if (carpairIDs.includes(hub.lastCard)){
                                 thishub.speed=0;
                                 hub.speed=0;
                                 setPower(thishub);
@@ -122,7 +126,7 @@ function mainTrain(data){
                         }
                     }
                 }
-                if (trackConfig.cardPairs[cardIndex][1] == thishub.lastCard){
+                if (carpairIDs.includes(thishub.lastCard)){
                     thishub.lastCard=-1;
                     modifySectionInUse(cardIndex,false)
                 }

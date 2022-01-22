@@ -186,7 +186,8 @@ export default {
           }
         }
       }
-      this.getSwitchPairs()
+      this.getSwitchPairs();
+      this.pairCardsSwitches();
     },
     onMessage(data) {
       if ("Status" in data){
@@ -298,6 +299,7 @@ export default {
           } 
           ev.target.appendChild(copyimg);
           this.getSwitchPairs();
+          this.pairCardsSwitches();
         }
       }
     },
