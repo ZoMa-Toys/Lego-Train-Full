@@ -57,7 +57,6 @@ server.on('upgrade', function upgrade(request, socket, head) {
 });
 
 function mainTrain(data){
-    // console.log(data);
     let message = {};
     if(data.hasOwnProperty("action")){
         if (data.action == "getConfig"){
@@ -135,7 +134,7 @@ function mainTrain(data){
                 message={"action":"trainOnCard","message":{"train":data.message.train,"cardIndex":cardIndex}}
             }
             else{
-                message={"error":"train not found with name" +data.message.train }
+                message={"error":"train not found with name " +data.message.train }
             }
         }
 /*         else if (data.action == "swtichMotor"){
@@ -163,7 +162,6 @@ function mainTrain(data){
             "UnknownMessage":data
         };
     }
-    console.log(message);
     return JSON.stringify(message);
 }
   
@@ -172,7 +170,6 @@ server.listen(process.env.API_PORT);
 function conf4ESP(){
     var ESPswitchConfig = [];
     for (var id in trackConfig.conf){
-        console.log(id,trackConfig.conf[id])
         if ("switch" in trackConfig.conf[id]){
             sw = trackConfig.conf[id].switch;
             var swmin = {
@@ -196,19 +193,16 @@ function changeDirection(current,to){
     else{
       return current.replace("Turn","Straight")
     }
-  }
+}
 
 function setPower(hub) {
     const payload = {};
     payload["message"] = hub;
-    //      payload.color=this.Colors[payload.color];
     payload["action"]="setPower";
-    // console.log(payload);
     broadcastMessage(JSON.stringify(payload));
 }
 
 function updateSwitchState(data){
-    console.log(data)
     for (id in trackConfig.conf){
         if(trackConfig.conf[id].hasOwnProperty("switch")){
             if (trackConfig.conf[id].switch.index==data.motor){
@@ -217,12 +211,10 @@ function updateSwitchState(data){
             }
         }
     }
-
-
-
 }
 
 function getTrains(Message){
+    hubs={};
     trains = Message;
     trains.forEach(train => {
         if ("TRAIN_MOTOR" in train){
@@ -237,14 +229,13 @@ function getTrains(Message){
                 lastCard: -1};
         }
     });
-    console.log(hubs)
 }
 
 
 function switchIfYouCan(cardID){
-    let neighbourSwitchs = trackConfig.cardPairs[cardID][2];
+    let neighbourSwitchs = trackConfig.cardPairs[cardID];
     neighbourSwitchs.forEach(neighbourSwitch => {
-        let sw= trackConfig.conf[neighbourSwitch[1]].switch;
+        let sw= trackConfig.conf[neighbourSwitch[2][1]].switch;
         let pulse=-1;
         if (neighbourSwitch[0]="s"){
             pulse = sw.pulse["Turn"]
@@ -261,28 +252,31 @@ function switchIfYouCan(cardID){
 }
 
 function modifySectionInUse(cardIndex,add){
-    let cardPairIndex = trackConfig.cardPairs[cardIndex][1];
-    if (add){
-        sectionInUse.push(cardIndex);
-        sectionInUse.push(cardPairIndex);
-    }
-    else{
-        let index = sectionInUse.indexOf(cardIndex);
-        if (index > -1) {
-            sectionInUse.splice(index, 1);
+    trackConfig.cardPairs[cardIndex].forEach(pair => {
+        let cardPairIndex = pair[1];
+        if (add){
+            sectionInUse.push(cardIndex);
+            sectionInUse.push(cardPairIndex);
         }
-        index = sectionInUse.indexOf(cardPairIndex);
-        if (index > -1) {
-            sectionInUse.splice(index, 1);
+        else{
+            let index = sectionInUse.indexOf(cardIndex);
+            if (index > -1) {
+                sectionInUse.splice(index, 1);
+            }
+            index = sectionInUse.indexOf(cardPairIndex);
+            if (index > -1) {
+                sectionInUse.splice(index, 1);
+            }
         }
-    }
+    });
 }
+    
 
 let hubs = {};
 let trains = {};
 let sectionInUse = [];
 let cardMap = {};
-var trackConfigDefault = 
+let trackConfigDefault = 
 {
     "conf": {
       "6,0": {
