@@ -347,6 +347,7 @@ export default {
       this.idmap={};
       this.conf={};
       this.motor_witch=[];
+      this.card_witch=[];
       let tbl = document.getElementById('table');
       tbl.innerHTML="";
       for(let i=0;i<this.rows;i++){
