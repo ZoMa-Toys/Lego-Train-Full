@@ -1,3 +1,6 @@
-[submodule "ESP32"]
-	path = ESP32
-	url = https://github.com/GuBee33/LTS_ard.git
+[submodule "SwitchTrainControl"]
+	path = SwitchTrainControl
+	url = https://github.com/GuBee33/ZoMa-LT-Switch-and-Train-Control.git
+[submodule "RFIDCardReader"]
+	path = RFIDCardReader
+	url = https://github.com/GuBee33/ZoMa-LT-RFID-Cardreader.git
