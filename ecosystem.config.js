@@ -21,12 +21,12 @@ module.exports = {
   ],
   deploy: {
     production: {
-      "user": "tguber",
+      "user": process.env.USER,
       "ssh_options": "StrictHostKeyChecking=no",
       "key": "~/.ssh/id_rsa",
-      "host": ["guberkray.myftp.org"],
+      "host": process.env.HOST,
       "ref": "origin/master",
-      "repo": "git@github.com:GuBee33/legoTrain.git",
+      "repo": "git@github.com:GuBee33/ZoMa-Lego-Train.git",
       "path": "/var/www/prod",
       "pre-deploy": "rm -rf /var/www/prod/source/*",
       "post-deploy": "cd /var/www/prod/source/frontend && npm install && npm run build && cd ../backend && npm install && cd /var/www/prod/source && sudo pm2 resurrect"
