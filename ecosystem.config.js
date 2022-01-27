@@ -28,7 +28,6 @@ module.exports = {
       "ref": "origin/master",
       "repo": "git@github.com:GuBee33/ZoMa-Lego-Train.git",
       "path": "/var/www/prod",
-      "pre-deploy": "rm -rf /var/www/prod/source",
       "post-deploy": "cd /var/www/prod/source/frontend && npm install && npm run build && cd ../backend && npm install && cd /var/www/prod/source && sudo pm2 resurrect"
     }
   }
