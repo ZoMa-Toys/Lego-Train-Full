@@ -18,11 +18,13 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
           SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
+          HOST: ${{secrets.HOST}}
+          USER: ${{secrets.USER}}
 
       - name: Install PM2
         run: npm install -g pm2
-
+      - name: Deploy Setup
+        run: pm2 deploy production setup
       - name: Deploy
-        run: pm2 deploy production --env production
-        # Or alternately, put this deploy script in your package.json's scripts and run it using yarn/npm:
-        # run: yarn deploy
+        run: pm2 deploy production
+
