@@ -177,7 +177,7 @@ function conf4ESP(){
         if ("switch" in trackConfig.conf[id]){
             sw = trackConfig.conf[id].switch;
             var swmin = {
-                pulse: sw.pulse,
+                pulse: sw.pulse[sw.switched],
                 switched: sw.switched,
                 printed: sw.printed,
             };
