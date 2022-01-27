@@ -25,6 +25,12 @@ jobs:
         run: npm install -g pm2
       - name: Deploy Setup
         run: pm2 deploy production setup
+        env:
+          HOST: ${{secrets.HOST}}
+          USER: ${{secrets.USER}}
       - name: Deploy
         run: pm2 deploy production
+        env:
+          HOST: ${{secrets.HOST}}
+          USER: ${{secrets.USER}}
 
