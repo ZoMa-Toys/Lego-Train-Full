@@ -1,4 +1,4 @@
-# ZoMa Lego Train projcet
+# ZoMa Lego Train project
 
 This is a home project for the kids, playing with lego train.
 
