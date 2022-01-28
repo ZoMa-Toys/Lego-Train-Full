@@ -10,7 +10,7 @@ I deployed the main project on a RaspberryPi4 but it's not a must have. The subm
 First install [Node](https://nodejs.org/en/download/) on the target system.
 Then clone the project:
 ```
-git clone --recursive https://github.com/GuBee33/ZoMa-Lego-Train.git
+git clone --recursive https://github.com/ZoMa-Toys/Lego-Train-Full.git
 ```
 
 For productive deployment you can use [pm2](https://www.npmjs.com/package/pm2) and then deploy the Webservice.
