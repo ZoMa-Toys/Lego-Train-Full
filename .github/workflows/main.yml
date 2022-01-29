@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up SSH
-        uses: ./.github/actions/ssh_with_cmd
+        uses: ZoMa-Toys/ZoMa-Actions/tree/main/.github/actions/ssh_with_cmd/action.yml@main
         id: ssh_connection
         with:
           host: ${{secrets.HOST}}
