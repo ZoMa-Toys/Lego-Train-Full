@@ -1,6 +1,6 @@
 [submodule "SwitchTrainControl"]
 	path = SwitchTrainControl
-	url = https://github.com/GuBee33/ZoMa-LT-Switch-and-Train-Control.git
+	url = https://github.com/ZoMa-Toys/LT-Switch-and-Train-Control.git
 [submodule "RFIDCardReader"]
 	path = RFIDCardReader
-	url = https://github.com/GuBee33/ZoMa-LT-RFID-Cardreader.git
+	url =  https://github.com/ZoMa-Toys/LT-RFID-Cardreader.git
