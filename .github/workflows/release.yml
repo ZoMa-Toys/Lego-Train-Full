@@ -1,21 +1,21 @@
-# This is a basic workflow to help you get started with Actions
 name: Create Release
 
 # Controls when the workflow will run
 on:
+  workflow_dispatch:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     tags: 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
-  build:
+  test:
+    uses: ZoMa-Toys/Lego-Train-Full/.github/workflows/test.yml@main
+  release:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Test
-        uses: ZoMa-Toys/Lego-Train-Full/.github/workflows/test.yml@main
       - name: "Build Changelog"
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@v2.8.0
