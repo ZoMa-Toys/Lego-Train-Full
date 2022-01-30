@@ -5,7 +5,7 @@
     </div>
     <router-view @authenticated="setAuthenticated"/>
   <div>
-    <a style="background-color: white">{{ currentVersion }}</a>
+    <a style="background-color: white">Version: {{ currentVersion }}</a>
   </div>
   </div>
 </template>
