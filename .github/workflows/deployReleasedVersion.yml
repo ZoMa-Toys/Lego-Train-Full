@@ -29,11 +29,11 @@ jobs:
         env:
           HOST: ${{secrets.HOST}}
           USER: ${{secrets.USER}}
-      - name: Deploy ${{ steps.get_version.outputs.VERSION }}
+      - name: Deploy ${{ steps.get_version.outputs.VERSION }} (${{ github.event.repository.clone_url }})
         run: pm2 deploy production
         env:
           HOST: ${{secrets.HOST}}
           USER: ${{secrets.USER}}
           VUE_APP_VERSION: ${{ steps.get_version.outputs.VERSION }}
-          GITREPO: ${{github.event.repository.clone_url}}
+          GITREPO: ${{ github.event.repository.clone_url }}
 
