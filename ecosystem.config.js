@@ -26,7 +26,7 @@ module.exports = {
       "key": "~/.ssh/id_rsa",
       "host": process.env.HOST,
       "ref": "origin/master",
-      "repo": "git@github.com:GuBee33/ZoMa-Lego-Train.git",
+      "repo": process.env.GITREPO,
       "path": "/var/www/prod",
       "post-deploy": "cd /var/www/prod/source/frontend && npm install && export VUE_APP_VERSION=" + process.env.VUE_APP_VERSION + " && npm run build && cd ../backend && npm install && cd /var/www/prod/source && sudo pm2 resurrect"
     }

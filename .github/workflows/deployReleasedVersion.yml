@@ -35,4 +35,5 @@ jobs:
           HOST: ${{secrets.HOST}}
           USER: ${{secrets.USER}}
           VUE_APP_VERSION: ${{ steps.get_version.outputs.VERSION }}
+          GITREPO: ${{github.event.repository.clone_url}}
 
