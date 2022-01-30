@@ -1,4 +1,4 @@
-name: CI - Master
+name: Buid Test
 on:
   push:
     branches: [ main ]
