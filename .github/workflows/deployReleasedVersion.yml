@@ -1,13 +1,19 @@
-name: CI - Master
+name: Deploy Released
+
+# Controls when the workflow will run
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
+  release:
+    type: [created]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - name: Set up SSH
         uses: ZoMa-Toys/zoma-ssh@1.0
         id: ssh_connection
@@ -23,9 +29,10 @@ jobs:
         env:
           HOST: ${{secrets.HOST}}
           USER: ${{secrets.USER}}
-      - name: Deploy
+      - name: Deploy ${{ steps.get_version.outputs.VERSION }}
         run: pm2 deploy production
         env:
           HOST: ${{secrets.HOST}}
           USER: ${{secrets.USER}}
+          VUE_APP_VERSION: ${{ steps.get_version.outputs.VERSION }}
 

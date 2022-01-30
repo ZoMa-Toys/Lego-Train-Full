@@ -1,0 +1,19 @@
+name: CI - Master
+on:
+  push:
+    branches: [ main ]
+  workflow_call:
+
+jobs:
+  buildTest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: install frontend
+        run: cd frontend && npm install
+      - name: build frontend
+        run: npm run build
+      - name: install backend
+        run: cd ../backend && npm install
+
+

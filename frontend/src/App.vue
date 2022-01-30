@@ -4,6 +4,9 @@
       <router-link v-if="authenticated" to="/" v-on:click="logout()" replace>Logout</router-link>
     </div>
     <router-view @authenticated="setAuthenticated"/>
+  <div>
+    <a style="background-color: white">{{ currentVersion }}</a>
+  </div>
   </div>
 </template>
 
@@ -21,12 +24,16 @@
     name: 'App',
     data() {
       return {
+        currentVersion: process.env.VUE_APP_VERSION,
         authenticated: false,
       }
     },
     mounted() {
       if(!this.authenticated) {
         this.$router.replace({ name: "login" }).catch(err => {console.log(err)});
+      }
+      if(!this.currentVersion){
+        this.currentVersion = "devVersion"
       }
     },
     methods: {
