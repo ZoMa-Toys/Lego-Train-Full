@@ -172,15 +172,13 @@ export default {
       this.connectWs();
       this.connection.send(JSON.stringify(payload));
     },
-    getHubs() {
-      this.connection.send(JSON.stringify({ "action":"getHubs" }));
-    },
     setPower(h,key) {
       const payload = {};
       payload["action"]="setPower";
       payload['message'] = {};
       payload.message["train"]=this.hubs[h].train;
       payload.message[key]=this.hubs[h]["new"+key];
+      this.connectWs();
       this.connection.send(JSON.stringify(payload));
     },
     fillHubs() { 

@@ -109,10 +109,11 @@ function mainTrain(data){
             if (hubs.hasOwnProperty(data.message.train)){
                 let thishub = hubs[data.message.train];
                 let cardIndex = data.message.cardIndex;
-                let carpairIDs = [];
+                let carpairIDs = [cardIndex];
                 trackConfig.cardPairs[cardIndex].forEach(cardpair => {
                   carpairIDs.push(cardpair[1]);
                 });
+                console.log("cardIndex:",cardIndex,"carpairIDs:",carpairIDs,"sectionInUse:",sectionInUse)
                 if (sectionInUse.includes(cardIndex)){
                     for(trainame of Object.keys(hubs)){
                         let hub = hubs[trainame];
@@ -128,11 +129,27 @@ function mainTrain(data){
                 }
                 if (carpairIDs.includes(thishub.lastCard)){
                     thishub.lastCard=-1;
-                    modifySectionInUse(cardIndex,false)
+                    try{
+                      modifySectionInUse(carpairIDs,false)
+                    }
+                    catch{
+                      console.log("wrong cardpairs data",error)
+                    }
                 }
                 else{
                     switchIfYouCan(cardIndex);
-                    modifySectionInUse(cardIndex,true)
+                    try{
+                      modifySectionInUse(thishub.lastCard,false)
+                    }
+                    catch{
+                      console.log("wrong cardpairs data",error)
+                    }
+                    try{
+                      modifySectionInUse(cardIndex,true)
+                    }
+                    catch{
+                      console.log("wrong cardpairs data",error)
+                    }
                     thishub.lastCard=cardIndex;
                 }
                 message={"action":"trainOnCard","message":{"train":data.message.train,"cardIndex":cardIndex}}
@@ -149,8 +166,13 @@ function mainTrain(data){
         };
     }
     else if(data.hasOwnProperty("motor")){
+      try{
         updateSwitchState(data);
-        message = {
+      }
+      catch{
+        console.log("WRONG SWITH DATA",error)
+      }
+      message = {
             "Status":"swtiched",
             "Message": data
         };
@@ -237,14 +259,14 @@ function getTrains(Message){
 
 
 function switchIfYouCan(cardID){
-    let neighbourSwitchs = trackConfig.cardPairs[cardID];
-    neighbourSwitchs.forEach(neighbourSwitch => {
+    let neighbourSwitches = trackConfig.cardPairs[cardID];
+    neighbourSwitches.forEach(neighbourSwitch => {
         let sw= trackConfig.conf[neighbourSwitch[2][1]].switch;
         let pulse=-1;
-        if (neighbourSwitch[0]="s"){
+        if (neighbourSwitch[2][0]="s"){
             pulse = sw.pulse["Turn"]
         }
-        else if (neighbourSwitch[0]="t"){
+        else if (neighbourSwitch[2][0]="t"){
             pulse = sw.pulse["Straight"]
         }
         if(pulse!=-1){
@@ -255,24 +277,17 @@ function switchIfYouCan(cardID){
     });
 }
 
-function modifySectionInUse(cardIndex,add){
-    trackConfig.cardPairs[cardIndex].forEach(pair => {
-        let cardPairIndex = pair[1];
-        if (add){
-            sectionInUse.push(cardIndex);
-            sectionInUse.push(cardPairIndex);
-        }
-        else{
-            let index = sectionInUse.indexOf(cardIndex);
-            if (index > -1) {
-                sectionInUse.splice(index, 1);
-            }
-            index = sectionInUse.indexOf(cardPairIndex);
-            if (index > -1) {
-                sectionInUse.splice(index, 1);
-            }
-        }
-    });
+function modifySectionInUse(card,add){
+  let carpairIDs=[card]
+  trackConfig.cardPairs[card].forEach(cardpair => {
+    carpairIDs.push(cardpair[1]);
+  });
+  if (add){
+    sectionInUse=sectionInUse.concat(carpairIDs)
+  }
+  else{
+    sectionInUse = sectionInUse.filter(a => !carpairIDs.includes(a))
+  }
 }
     
 
