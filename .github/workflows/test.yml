@@ -1,4 +1,4 @@
-name: Buid Test
+name: Build and Test
 on:
   push:
     branches: [ main ]
@@ -16,5 +16,7 @@ jobs:
         run: cd frontend && npm run build
       - name: install backend
         run: cd backend && npm install
+      - name: run tests
+        run: cd backend && npm test
 
 
