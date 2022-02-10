@@ -11,22 +11,24 @@ const util = require('util');
 const fs = require('fs')
 
 const path2conf = '../.././trackConfigs.json'
-let alltrackConfig ={};
-try {
-  if (fs.existsSync(path2conf)) {
-    alltrackConfig = require(path2conf)
-  }
-  else{
+let alltrackConfig = {};
+let trackConfigDefault = {};
+let trackConfig = {};
+
+/* try {
+  if (!fs.existsSync(path2conf)) {
     fs.copyFile('./trackConfigs.json', path2conf, (err) => {
       if (err) throw err;
       console.log('trackConfigs.json was copied to destination.txt');
-      alltrackConfig = require(path2conf)
     });
   }
+  alltrackConfig = require(path2conf)
+  trackConfigDefault = alltrackConfig.Basic;
+  trackConfig = trackConfigDefault;
 } catch(err) {
   console.error(err)
 }
-
+ */
 
 function createWebsocketServer(){
   const WSserver = new WebSocket.Server({ noServer: true });
@@ -43,6 +45,22 @@ function createWebsocketServer(){
 }
 
 function startServer(port){
+  if (!fs.existsSync(path2conf)) {
+    fs.copyFile('./trackConfigs.json', path2conf, (err) => {
+        if (err) throw err;
+        console.log('trackConfigs.json was copied to destination.txt');    
+        alltrackConfig = require(path2conf)
+        trackConfigDefault = alltrackConfig.Basic;
+        trackConfig = trackConfigDefault;
+        }
+        
+    );
+  }
+  else {
+      alltrackConfig = require(path2conf)
+      trackConfigDefault = alltrackConfig.Basic;
+      trackConfig = trackConfigDefault;
+  }
   var file = new(Nodestatic.Server)("./static");
 
   const server = http.createServer(function (req, res) {
@@ -384,7 +402,6 @@ function modifySectionInUse(card,add){
 }    
 
 function updateAllTrackConfig(){
-  var fs = require('fs');
   fs.writeFile(path2conf, JSON.stringify(alltrackConfig), (err) => {
     if (err)
       console.log(err);
@@ -398,8 +415,5 @@ let hubs = {};
 let trains = {};
 let sectionInUse = [];
 let cardMap = {};
-let trackConfigDefault = alltrackConfig.Basic;
-
-var trackConfig = trackConfigDefault;
  
 module.exports = {createWebsocketServer, startServer, createSocketClient, waitForSocketState, trackConfig}
