@@ -19,21 +19,27 @@
           v-model="columns"
         ></number-input>
       <b-button @click="createTable" variant="primary">SetTable</b-button>
-      <b-button @click="sendAction('SetThresHolds')" variant="outline-primary">ReconfigureSensors</b-button>   
-      <b-button @click="sendAction('setConfig')" variant="outline-primary">SendConfig</b-button>      
-      <b-button @click="sendAction('getConfig')" variant="outline-primary">GetConfig</b-button> 
-      <b-button @click="sendAction('getDefaultConfig')" variant="outline-primary">GetDefaultConfig</b-button>
       <b-button @click="rotatetable" variant="outline-primary">RotateTable</b-button>
-      <b-button @click="consoleLog" variant="outline-primary">TEST</b-button>
+      <b-button @click="sendAction('SetThresHolds')" variant="outline-primary">ReconfigureSensors</b-button>
       <b-button @click="pairCardsSwitches" variant="outline-primary">pairCardsSwitches</b-button>
-<!--       <b-button @click="getSwitchPairs" variant="outline-primary">getSwitchPairs</b-button>
- -->      <b-button @click="goto('Train')" variant="outline-primary">TrainControl</b-button>
+      <b-button @click="sendAction('setConfig')" variant="outline-primary">SaveThisConfig</b-button> 
+      <b-form-select v-model="currentConfName" style="width:200px">
+        <option v-for="item in allConfNames" :key="item">
+          {{ item }}
+        </option>
+      </b-form-select>     
+      <b-button @click="sendAction('getConfByName')" variant="outline-primary">GetThisConfig</b-button> 
+      <b-button @click="sendAction('delConfByName')" variant="danger">DelThisConfig</b-button> 
+      <!-- <b-button @click="sendAction('getDefaultConfig')" variant="outline-primary">GetDefaultConfig</b-button> -->
+      <!-- <b-button @click="consoleLog" variant="outline-primary">TEST</b-button> -->
+<!--       <b-button @click="getSwitchPairs" variant="outline-primary">getSwitchPairs</b-button-->
+      <b-button @click="goto('Train')" variant="outline-primary">TrainControl</b-button>
     </div>
     <div class="shadow p-3 mb-5 rounded" @drop="dontDrop" @dragover="dontDrop" >
       <table>
         <tr>
-        <td rowspan=2 :style="'border: 1px solid black;width:200px; height=200px; background-color:'+color"><img draggable="true" @dragstart="drag" width="200" height="200"  @click="rotateImage('leftSwitchStraight')" id="leftSwitchStraight" src="leftSwitchStraight.png"   ></td>
-        <td rowspan=2 :style="'border: 1px solid black;width:200px; height=200px; background-color:'+color"><img draggable="true" @dragstart="drag" width="200" height="200"  @click="rotateImage('rightSwitchStraight')" id="rightSwitchStraight" src="rightSwitchStraight.png"></td>
+        <td rowspan=2 :style="'border: 1px solid black;width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="104" height="104"  @click="rotateImage('leftSwitchStraight')" id="leftSwitchStraight" src="leftSwitchStraight.png"   ></td>
+        <td rowspan=2 :style="'border: 1px solid black;width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="104" height="104"  @click="rotateImage('rightSwitchStraight')" id="rightSwitchStraight" src="rightSwitchStraight.png"></td>
         <td colspan=4>
           <b-form-select v-model="printed">
             <option v-for="(item, key, index) in printed_list" :key="index">
@@ -43,19 +49,19 @@
           <b-form-input type="color"  v-model="color"></b-form-input>
         </td>
         </tr><tr>
-        <td :style="'border: 1px solid black; width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100"  @click="rotateImage('curve')" id="curve" src="curve.png"></td>
-        <td :style="'border: 1px solid black; width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100"  @click="rotateImage('Straight')" id="Straight" src="Straight.png"></td>
-        <td :style="'border: 1px solid black; width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100"  @click="rotateImage('cross')" id="cross" src="cross.png"></td>
-        <td :style="'border: 1px solid black; width:100px; height=100px; background-color:'+color"><img draggable="true" @dragstart="drag" width="100" height="100"  id="card" src="card.png"></td>
+        <td :style="'border: 1px solid black; width:50px; height=50px; background-color:'+color"><img draggable="true" @dragstart="drag" width="50" height="50"  @click="rotateImage('curve')" id="curve" src="curve.png"></td>
+        <td :style="'border: 1px solid black; width:50px; height=50px; background-color:'+color"><img draggable="true" @dragstart="drag" width="50" height="50"  @click="rotateImage('Straight')" id="Straight" src="Straight.png"></td>
+        <td :style="'border: 1px solid black; width:50px; height=50px; background-color:'+color"><img draggable="true" @dragstart="drag" width="50" height="50"  @click="rotateImage('cross')" id="cross" src="cross.png"></td>
+        <td :style="'border: 1px solid black; width:50px; height=50px; background-color:'+color"><img draggable="true" @dragstart="drag" width="50" height="50"  id="card" src="card.png"></td>
         </tr>
       </table>
     </div>
       <div class="shadow p-3 mb-5 rounded">
         <table style="margin-left: auto; margin-right: auto;" id="table"></table>
       </div>
-      <div class="shadow p-3 mb-5 rounded">
+<!--       <div class="shadow p-3 mb-5 rounded">
         <b-form-textarea id="tackConf" v-model="conf_str"></b-form-textarea>
-      </div>
+      </div> -->
   </div>
 </template>
 
@@ -74,7 +80,8 @@ function setWs(apihost,dataModFunction,sendAction){
   connection.onopen = function() {
     console.log("Successfully connected to the echo websocket server...");
     if(sendAction){
-      sendAction('getConfig');
+      sendAction('getConfByName');
+      sendAction('getConfsList');
     }
   }
   return connection
@@ -88,6 +95,8 @@ export default {
       columns:6,
       switchPairs:{},
       cardPairs:[],
+      currentConfName:"Basic",
+      allConfNames:[],
       conf:{},
       conf_str:"",
       motor_witch:[],
@@ -160,7 +169,7 @@ export default {
             this.card_witch[i.index]=key;
             let p = document.createElement("p");
             p.innerHTML = i.index;
-            p.style.right= "27px";
+            p.style.right= "20px";
             p.style.top = "2px";
             p.style.position= "absolute";
             td.appendChild(p);
@@ -208,15 +217,28 @@ export default {
             let img = document.getElementById(swid).firstElementChild 
             img.src=this.changeDirection(img.src,this.conf[swid].switch.switched)
             this.conf[swid].img[0].src=this.changeDirection(this.conf[swid].img[0].src,this.conf[swid].switch.switched)
-
           }
+        }
+        else if (data.Status === 'ConfList:'){
+          this.allConfNames = data.Message;
+          //this.getSwitchPairs();
         }
       }
     },
+    getNow() {
+        const today = new Date();
+        const date = today.getFullYear()+'_'+(today.getMonth()+1)+'_'+today.getDate();
+        const time = today.getHours() + "_" + today.getMinutes() + "_" + today.getSeconds();
+        const dateTime = date +'_'+ time;
+        return dateTime;
+    },
     sendAction(s) {
-      const payload = { "action":s,"config":{} };
-      if (s.includes("Config")){
+      const payload = { "action":s,"config":{}, "name": this.getNow()};
+      if (s === "setConfig"){
         payload.config={"conf":this.conf,"rows":this.rows,"columns":this.columns,"switchPairs":this.switchPairs,"cardPairs":this.cardPairs};
+      }
+      else if (s === "getConfByName" || s === "delConfByName"){
+        payload.name = this.currentConfName;
       }
       this.connectWs();
       this.connection.send(JSON.stringify(payload));
@@ -253,8 +275,8 @@ export default {
         copyimg.src = original.src;
         if (data=="card" && ev.target.tagName=="IMG"){
           copyimg.id = data + " - address:" + ev.target.parentElement.id;
-          copyimg.width = original.width/4;
-          copyimg.height = original.height/4;
+          copyimg.width = original.width*3/8;
+          copyimg.height = original.height*3/8;
           copyimg.style.backgroundColor=this.color;
           copyimg.style.position= "absolute";
           copyimg.style.top= 0;
@@ -263,7 +285,7 @@ export default {
           ev.target.parentElement.appendChild(copyimg);
           let p = document.createElement("p");
           p.innerHTML = this.card_witch.length-1;
-          p.style.right= "27px";
+          p.style.right= "20px";
           p.style.top = "2px";
           p.style.position= "absolute";
           ev.target.parentElement.appendChild(p);
@@ -275,8 +297,8 @@ export default {
           const c = parseInt(index[1]);
           copyimg.id = data + " - address:" + ev.target.id;
           copyimg.style.transform = original.style.transform;
-          copyimg.width = original.width/2;
-          copyimg.height = original.height/2;
+          copyimg.width = original.width*3/4;
+          copyimg.height = original.height*3/4;
           copyimg.style.backgroundColor=this.color;
           if (ev.target.childElementCount){
             ev.target.removeChild(ev.target.childNodes[0]);
@@ -312,7 +334,7 @@ export default {
     dragAway(ev){
       if(ev.dataTransfer.dropEffect !== 'none'){
         let td = ev.target.parentElement;
-        td.getElementsByTagName("p")[0].remove();
+        if(td.getElementsByTagName("p").length>0) {td.getElementsByTagName("p")[0].remove();}
         if (ev.target.id.includes("Switch")){
           this.RemoveOne(ev.target.id.split(":")[1]);
           const index=td.id.split(",");
@@ -342,7 +364,7 @@ export default {
       let td = el.insertCell(col);
       td.id=id;
       td.classList.add("tdclass");
-      td.style+="width: 51px; height: 51px;border: 1px solid black;"
+      td.style+="width: 37px; height: 37px;border: 1px solid black;"
       td.addEventListener('drop',this.drop)
       td.addEventListener('dragover',this.allowDrop)
       td.addEventListener('dragend',this.dragAway)
@@ -362,7 +384,7 @@ export default {
           let id = i+","+j;
           td.id =id;
           td.classList.add("tdclass");
-          td.style="width: 51px; height: 51px;border: 1px solid black;"
+          td.style="width: 37px; height: 37px;border: 1px solid black;"
           td.addEventListener('drop',this.drop)
           td.addEventListener('dragover',this.allowDrop)
           td.addEventListener('dragend',this.dragAway)
