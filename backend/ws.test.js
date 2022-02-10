@@ -5,10 +5,28 @@ const functions = require("./wsFunctions");
 const startServer = functions.startServer;
 const createSocketClient = functions.createSocketClient;
 const waitForSocketState = functions.waitForSocketState;
-const trackConfig =functions.trackConfig;
+const fs = require('fs')
+const path2conf = '../.././trackConfigs.json'
+let alltrackConfig = {};
+let trackConfigDefault = {};
+let trackConfig = {};
 
-  
-
+if (!fs.existsSync(path2conf)) {
+    fs.copyFile('./trackConfigs.json', path2conf, (err) => {
+        if (err) throw err;
+        console.log('trackConfigs.json was copied to destination.txt');    
+        alltrackConfig = require(path2conf)
+        trackConfigDefault = alltrackConfig.Basic;
+        trackConfig = trackConfigDefault;
+        }
+        
+    );
+}
+else {
+    alltrackConfig = require(path2conf)
+    trackConfigDefault = alltrackConfig.Basic;
+    trackConfig = trackConfigDefault;
+}
 describe("WebSocket Server", () => {
     let server;
     beforeAll(async () => {
@@ -40,6 +58,7 @@ describe("WebSocket Server", () => {
         client.send(JSON.stringify(actionGetConfigtext));
         await waitForSocketState(client, client.CLOSED);
         const [responseMessage] = messages;
+        console.log(trackConfig)
         expect(JSON.parse(responseMessage)).toEqual({
             "Status":"TrackConfig:",
             "Message": trackConfig
