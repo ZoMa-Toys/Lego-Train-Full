@@ -1,0 +1,23 @@
+name: Deploy Released
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: Set up SSH
+        uses: ZoMa-Toys/zoma-ssh@1.0
+        id: ssh_connection
+        with:
+          host: ${{secrets.HOST}}
+          user: ${{secrets.USER}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          cmd: 'mkdir data && rm -rf buildRepo && git clone --branch-mongo ${{github.event.repository.ssh_url}} buildRepo && cd buildRepo && sudo docker-compose up --build'
+

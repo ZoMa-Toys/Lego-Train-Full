@@ -3,6 +3,7 @@ on:
   push:
     branches:
      - '*'
+     - '!docker-mongo'
   workflow_call:
   workflow_dispatch:
 

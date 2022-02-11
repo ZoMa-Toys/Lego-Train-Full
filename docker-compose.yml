@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  web:
+    container_name: "ZoMa-LegoTrain"
+    build: .
+    image: gubee33/zomalegotrain:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ../trackConfigs.json:/var/www/prod/trackConfigs.json
+    links:
+      - mongo
+    restart_policy:
+        condition: always
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    command: mongod --port 27018
+    volumes:
+      - ../data:/data/db
+    ports:
+      - '27018:27018'
+    restart_policy:
+        condition: any
