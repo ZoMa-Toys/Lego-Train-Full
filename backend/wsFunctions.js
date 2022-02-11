@@ -8,12 +8,91 @@ const url = require('url');
 const util = require('util');
 /* const { create } = require('combined-stream'); */
 
-const fs = require('fs')
+const mongoose = require('mongoose');
 
-const path2conf = '../.././trackConfigs.json'
+
+const fs = require('fs');
+
 let alltrackConfig = {};
+
+function DefultConfig(){
+  const path2conf = './trackConfigs.json'
+  alltrackConfig = require(path2conf)
+  setupDB();
+}
 let trackConfigDefault = {};
-let trackConfig = {};
+let trackConfig = trackConfigDefault;
+let trackConfigs = mongoose.Model;
+
+function mongoModel(){
+  mongoose.connect('mongodb://mongo:27018/trackconfigs');
+  const TrackConfigSchema = new mongoose.Schema({
+    name: String,
+    config: Object
+  });
+  return mongoose.model('trackConfigs', TrackConfigSchema);
+}
+
+function setupDB() {
+  trackConfigs = mongoModel();
+  let defConf = trackConfigs.find({ name: "Basic" });
+  if (defConf.length == 0){
+    defConf = new trackConfigs({ name: "Basic", config: alltrackConfig.Basic });
+    defConf.save(function (err) {
+      if (err) return handleError(err);
+      // saved!
+    });
+  }
+}
+
+function getdelConfigFromDB(name,WSserver,remove=false) {
+  if (remove){
+    trackConfigs.deleteOne({ name: name },function(err,res){
+      getConfNameList(WSserver)
+    });
+  }
+  else{
+    trackConfigs.find({ name: name },function(err,res){
+      if (res.length>0){
+        let message = {
+          "Status":"TrackConfig:",
+          "Message": res[0].config
+        };
+        broadcastMessage(JSON.stringify(message),WSserver);
+      }
+    });
+  }
+}
+
+function saveConfigToDB(name,config,WSserver) {
+  if (Object.keys(config.conf).length != 0){
+    trackConfigs.find({config: config},function(err,result){
+      if (err){
+        console.log(err);
+      }
+      else if(result.length==0){
+        let newConf = new trackConfigs({ name: name ,config: config});
+        newConf.save(function (err) {
+          if (err) return handleError(err);
+          getConfNameList(WSserver)
+          broadcastMessage(JSON.stringify({"Status":"SwitchConfigESP:","Message": conf4ESP()}),WSserver);
+          broadcastMessage(JSON.stringify({"Status":"TrackConfig:","Message": trackConfig}),WSserver);
+        });
+      }
+    });
+  }
+}
+
+function getConfNameList(WSserver) {
+  let confNames = [];
+  trackConfigs.find(function(err,res){
+    res.forEach(conf => {
+      confNames.push(conf.name)
+    });
+    let message = {"Status":"ConfList:","Message": confNames }
+    broadcastMessage(JSON.stringify(message),WSserver);
+  });
+}
 
 /* try {
   if (!fs.existsSync(path2conf)) {
@@ -45,22 +124,6 @@ function createWebsocketServer(){
 }
 
 function startServer(port){
-  if (!fs.existsSync(path2conf)) {
-    fs.copyFile('./trackConfigs.json', path2conf, (err) => {
-        if (err) throw err;
-        console.log('trackConfigs.json was copied to destination.txt');    
-        alltrackConfig = require(path2conf)
-        trackConfigDefault = alltrackConfig.Basic;
-        trackConfig = trackConfigDefault;
-        }
-        
-    );
-  }
-  else {
-      alltrackConfig = require(path2conf)
-      trackConfigDefault = alltrackConfig.Basic;
-      trackConfig = trackConfigDefault;
-  }
   var file = new(Nodestatic.Server)("./static");
 
   const server = http.createServer(function (req, res) {
@@ -160,43 +223,18 @@ function onMessageRecieved(data,WSserver){
             };
         }
         else if (data.action == "getConfsList"){
-            message = {
-                "Status":"ConfList:",
-                "Message": Object.keys(alltrackConfig)
-            };
+          getConfNameList(WSserver);
         }
         else if (data.action == "getConfByName"){
-            let name = data.name;
-            message = {
-                "Status":"TrackConfig:",
-                "Message": alltrackConfig[name]
-            };
+            getdelConfigFromDB(data.name,WSserver);
         }
         else if (data.action == "setConfig"){
             trackConfig = data.config;
             fixConf();
-            let needUpdate = true;
-            for (id in alltrackConfig){
-              if (util.isDeepStrictEqual(alltrackConfig[id], trackConfig)){
-                needUpdate = false;
-              }
-            }
-            if (needUpdate){
-              alltrackConfig[data.name]=trackConfig;
-              updateAllTrackConfig();
-            }
-            message = {
-                "Status":"TrackConfig:",
-                "Message": trackConfig
-            };
-            broadcastMessage(JSON.stringify({"Status":"SwitchConfigESP:","Message": conf4ESP()}),WSserver);
-            broadcastMessage(JSON.stringify({"Status":"ConfList:","Message": Object.keys(alltrackConfig)}),WSserver);
+            saveConfigToDB(data.name,trackConfig,WSserver)
         }
         else if (data.action == "delConfByName"){
-          let name = data.name;
-          delete alltrackConfig[name];
-          updateAllTrackConfig();
-          broadcastMessage(JSON.stringify({"Status":"ConfList:","Message": Object.keys(alltrackConfig)}),WSserver);
+          getdelConfigFromDB(data.name,WSserver,true);
         }
         else if (data.action == "CardMap"){
             cardMap=data.message;
@@ -416,4 +454,4 @@ let trains = {};
 let sectionInUse = [];
 let cardMap = {};
  
-module.exports = {createWebsocketServer, startServer, createSocketClient, waitForSocketState, trackConfig}
+module.exports = {DefultConfig,createWebsocketServer, startServer, createSocketClient, waitForSocketState, trackConfig}
