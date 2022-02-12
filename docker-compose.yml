@@ -10,15 +10,26 @@ services:
       - ../trackConfigs.json:/var/www/prod/trackConfigs.json
     links:
       - mongo
-    restart_policy:
-        condition: always
+    deploy:
+      restart_policy:
+        condition: any
   mongo:
     container_name: mongo
-    image: mongo:latest
+    image: arm64v8/mongo:4.4.12
     command: mongod --port 27018
-    volumes:
-      - ../data:/data/db
     ports:
       - '27018:27018'
-    restart_policy:
+    deploy:
+      restart_policy:
         condition: any
+  mongo-express:
+    image: mongo-express
+    deploy:
+      restart_policy:
+        condition: any
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: 'WE4RTsdf!'
+      ME_CONFIG_MONGODB_URL: mongodb://mongo:27018/

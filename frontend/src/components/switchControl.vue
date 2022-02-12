@@ -119,7 +119,7 @@ export default {
         },
       },
       //apihost: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/switch",
-      apihost: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/ws",
+      apihost: "ws://" + location.hostname +":" + (process.env.VUE_APP_PORT?process.env.VUE_APP_PORT:location.port) +"/ws",
 /*       apihost: "ws://89.132.204.38/switch",
       apihost: "ws://89.132.204.38/train", */
     };

@@ -66,7 +66,7 @@ function setWs(apihost,dataModFunction){
 function getInitialData() {
   return {
     connection: null,
-    apihost: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/ws",
+    apihost: "ws://" + location.hostname +":" + (process.env.VUE_APP_PORT?process.env.VUE_APP_PORT:location.port) +"/ws",
     trains: [{NAME:"DUMMY",TRAIN_MOTOR:0,COLOR_DISTANCE_SENSOR:1,LIGHT:2,traincolor:1},
     ],
     hubs: {
