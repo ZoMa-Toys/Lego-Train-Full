@@ -1,0 +1,20 @@
+name: Deploy Docker
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up SSH
+        uses: ZoMa-Toys/zoma-ssh@1.0
+        id: ssh_connection
+        with:
+          host: ${{secrets.HOST}}
+          user: ${{secrets.USER}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          cmd: 'rm -rf buildRepo && git clone --branch docker-mongo ${{github.event.repository.ssh_url}} buildRepo && cd buildRepo && docker-compose build --no-cache web && docker-compose up'
