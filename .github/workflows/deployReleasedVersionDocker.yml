@@ -19,5 +19,5 @@ jobs:
           host: ${{secrets.HOST}}
           user: ${{secrets.USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          cmd: 'mkdir data && rm -rf buildRepo && git clone --branch-mongo ${{github.event.repository.ssh_url}} buildRepo && cd buildRepo && sudo docker-compose up --build'
+          cmd: 'rm -rf buildRepo && git clone --branch-mongo ${{github.event.repository.ssh_url}} buildRepo && cd buildRepo && sudo docker-compose up --build'
 

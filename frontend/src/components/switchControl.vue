@@ -80,7 +80,7 @@ function setWs(apihost,dataModFunction,sendAction){
   connection.onopen = function() {
     console.log("Successfully connected to the echo websocket server...");
     if(sendAction){
-      sendAction('getConfByName');
+      sendAction('getConfig');
       sendAction('getConfsList');
     }
   }

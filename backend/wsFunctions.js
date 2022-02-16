@@ -5,23 +5,27 @@ const Nodestatic = require('node-static');
 const http = require('http');
 const WebSocket = require('ws');
 const url = require('url');
-const util = require('util');
-/* const { create } = require('combined-stream'); */
-
 const mongoose = require('mongoose');
-
-
 const fs = require('fs');
 
 let alltrackConfig = {};
+let trackConfigDefault = {};
+let trackConfig = {};
 
-function DefultConfig(){
+function DefultConfig(isTest){
   const path2conf = './trackConfigs.json'
   alltrackConfig = require(path2conf)
-  setupDB();
+  if(!isTest){
+    setupDB();
+  }
+  else{
+    trackConfigDefault = alltrackConfig.Basic;
+    trackConfig = trackConfigDefault;
+    return trackConfig;
+  }
+
 }
-let trackConfigDefault = {};
-let trackConfig = trackConfigDefault;
+
 let trackConfigs = mongoose.Model;
 
 function mongoModel(){
@@ -43,6 +47,7 @@ function setupDB() {
       // saved!
     });
   }
+  trackConfig=alltrackConfig.Basic
 }
 
 function getdelConfigFromDB(name,WSserver,remove=false) {
@@ -54,9 +59,15 @@ function getdelConfigFromDB(name,WSserver,remove=false) {
   else{
     trackConfigs.find({ name: name },function(err,res){
       if (res.length>0){
+        trackConfig=res[0].config;
         let message = {
           "Status":"TrackConfig:",
-          "Message": res[0].config
+          "Message": trackConfig
+        };
+        broadcastMessage(JSON.stringify(message),WSserver);
+        message = {
+          "Status":"SwitchConfigESP:",
+          "Message": conf4ESP()
         };
         broadcastMessage(JSON.stringify(message),WSserver);
       }

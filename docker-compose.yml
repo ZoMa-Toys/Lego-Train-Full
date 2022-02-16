@@ -2,7 +2,10 @@ version: "3.9"
 services:
   web:
     container_name: "ZoMa-LegoTrain"
-    build: .
+    build: 
+      context: .
+      args:
+        - BUILDENV=${BUILDENV}
     image: gubee33/zomalegotrain:latest
     ports:
       - "80:80"
@@ -10,23 +13,14 @@ services:
       - ../trackConfigs.json:/var/www/prod/trackConfigs.json
     links:
       - mongo
-    deploy:
-      restart_policy:
-        condition: any
   mongo:
     container_name: mongo
-    image: arm64v8/mongo:4.4.12
+    image: mongo:4.4.12
     command: mongod --port 27018
     ports:
       - '27018:27018'
-    deploy:
-      restart_policy:
-        condition: any
   mongo-express:
     image: mongo-express
-    deploy:
-      restart_policy:
-        condition: any
     ports:
       - 8081:8081
     environment:
