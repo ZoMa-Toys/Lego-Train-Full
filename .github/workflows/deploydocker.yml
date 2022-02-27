@@ -17,4 +17,4 @@ jobs:
           host: ${{secrets.HOST}}
           user: ${{secrets.USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          cmd: 'rm -rf buildRepo && git clone --branch docker-mongo ${{github.event.repository.ssh_url}} buildRepo && cd buildRepo && docker-compose build --no-cache web && docker-compose up'
+          cmd: 'rm -rf buildRepo && git clone --branch docker-mongo ${{github.event.repository.clone_url}} buildRepo && export BUILDENV=production && cd buildRepo && docker-compose build --no-cache web && docker-compose up'
