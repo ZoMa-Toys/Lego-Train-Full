@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  web:
+    container_name: "ZoMa-LegoTrain"
+    build: 
+      context: .
+      args:
+        - BUILDENV=${BUILDENV}
+    image: gubee33/zomalegotrain:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ../trackConfigs.json:/var/www/prod/trackConfigs.json
+    links:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo:4.4.12
+    command: mongod --port 27018
+    ports:
+      - '27018:27018'
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: 'WE4RTsdf!'
+      ME_CONFIG_MONGODB_URL: mongodb://mongo:27018/

@@ -6,12 +6,10 @@ const startServer = functions.startServer;
 const createSocketClient = functions.createSocketClient;
 const waitForSocketState = functions.waitForSocketState;
 const fs = require('fs')
-const path2conf = '../.././trackConfigs.json'
-let alltrackConfig = {};
-let trackConfigDefault = {};
-let trackConfig = {};
+/* const path2conf = '../.././trackConfigs.json'
+let trackConfigDefault = {}; */
 
-if (!fs.existsSync(path2conf)) {
+/* if (!fs.existsSync(path2conf)) {
     fs.copyFile('./trackConfigs.json', path2conf, (err) => {
         if (err) throw err;
         console.log('trackConfigs.json was copied to destination.txt');    
@@ -26,11 +24,13 @@ else {
     alltrackConfig = require(path2conf)
     trackConfigDefault = alltrackConfig.Basic;
     trackConfig = trackConfigDefault;
-}
+} */
 describe("WebSocket Server", () => {
     let server;
+    let trackConfig ={}
     beforeAll(async () => {
-      server = await startServer(WSport);
+        trackConfig= functions.DefultConfig(true); 
+        server = await startServer(WSport);
     });
     afterAll(() => server.close());
 
@@ -58,13 +58,11 @@ describe("WebSocket Server", () => {
         client.send(JSON.stringify(actionGetConfigtext));
         await waitForSocketState(client, client.CLOSED);
         const [responseMessage] = messages;
-        console.log(trackConfig)
         expect(JSON.parse(responseMessage)).toEqual({
             "Status":"TrackConfig:",
             "Message": trackConfig
         });
-    });
-
+    }); 
     test("Test switch track", async () => {
         const [client, messages] = await createSocketClient(WSport, 2);
         const actionSwitchMotor = {"action":"swtichMotor","message":{"motor":1,"pulse":240,"printed":false}};
@@ -76,6 +74,7 @@ describe("WebSocket Server", () => {
         expect(JSON.parse(ASW)).toEqual(actionSwitchMotor);
         expect(JSON.parse(SMS)).toEqual({"Status":"swtiched","Message":motorSwitched});
     });
+
 
     test("Card test, switch track, stop train", async () => {
         const [client, messages] = await createSocketClient(WSport, 9);

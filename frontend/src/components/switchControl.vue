@@ -80,7 +80,7 @@ function setWs(apihost,dataModFunction,sendAction){
   connection.onopen = function() {
     console.log("Successfully connected to the echo websocket server...");
     if(sendAction){
-      sendAction('getConfByName');
+      sendAction('getConfig');
       sendAction('getConfsList');
     }
   }
@@ -119,7 +119,7 @@ export default {
         },
       },
       //apihost: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/switch",
-      apihost: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/ws",
+      apihost: "ws://" + location.hostname +":" + (process.env.VUE_APP_PORT==8080?process.env.VUE_APP_PORT:location.port) +"/ws",
 /*       apihost: "ws://89.132.204.38/switch",
       apihost: "ws://89.132.204.38/train", */
     };
