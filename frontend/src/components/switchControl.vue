@@ -3,8 +3,8 @@
   <div
     id="switchControl"
     class="shadow-lg p-3 mb-5 rounded"
-    style="background-color: #f1f1f1"
-  >
+    style="background-color: #f1f1f1">
+    <h6> {{ username }} </h6>
     <div class="row shadow p-3 mb-5 rounded">
       <number-input
                   :min="2"
@@ -118,14 +118,10 @@ export default {
           Printed: { Straight: 380, Turn: 280 },
         },
       },
-      //apihost: "ws://" + location.hostname +":" + process.env.VUE_APP_PORT +"/switch",
       apihost: "ws://" + location.hostname +":" + (process.env.VUE_APP_PORT==8080?process.env.VUE_APP_PORT:location.port) +"/ws",
-/*       apihost: "ws://89.132.204.38/switch",
-      apihost: "ws://89.132.204.38/train", */
     };
   },
   created: function() {
-   //this.connection=setWs(this.apihost,this.updateSwitch,null);
     this.connection=setWs(this.apihost,this.onMessage,this.sendAction);
   },
   mounted() {
@@ -140,11 +136,9 @@ export default {
       this.conf_str = JSON.stringify(val, null, 2);
     },
    },
+  props: ['username'],
   methods:{
     connectWs(){ 
-/*       if (this.connection.readyState != this.connection.OPEN ){
-        this.connection=setWs(this.apihost,this.updateSwitch,null);
-      } */
       if (this.connection.readyState != this.connection.OPEN ){
         this.connection=setWs(this.apihost,this.onMessage,null);
       }
@@ -233,7 +227,7 @@ export default {
         return dateTime;
     },
     sendAction(s) {
-      const payload = { "action":s,"config":{}, "name": this.getNow()};
+      const payload = { "action":s,"config":{}, "name": this.getNow(),"user": this.username};
       if (s === "setConfig"){
         payload.config={"conf":this.conf,"rows":this.rows,"columns":this.columns,"switchPairs":this.switchPairs,"cardPairs":this.cardPairs};
       }

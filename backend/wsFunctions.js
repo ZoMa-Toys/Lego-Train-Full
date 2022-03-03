@@ -27,18 +27,30 @@ function DefultConfig(isTest){
 }
 
 let trackConfigs = mongoose.Model;
+let userLists = mongoose.Model;
 
-function mongoModel(){
-  mongoose.connect('mongodb://mongo:27018/trackconfigs');
-  const TrackConfigSchema = new mongoose.Schema({
-    name: String,
-    config: Object
-  });
-  return mongoose.model('trackConfigs', TrackConfigSchema);
+function connectMongoose(){
+  if (process.env.API_PORT == 8080){
+    mongoose.connect('mongodb://localhost:27018/trackconfigs');
+  }
+  else{
+    mongoose.connect('mongodb://mongo:27018/trackconfigs');
+  }
+  return mongoose
 }
 
 function setupDB() {
-  trackConfigs = mongoModel();
+  const TrackConfigSchema = new mongoose.Schema({
+    name: String,
+    user: String,
+    config: Object
+  });
+  const UserSchema = new mongoose.Schema({
+    user: String,
+    pw: String
+  });
+  trackConfigs = connectMongoose().model('trackConfigs', TrackConfigSchema);
+  userLists = connectMongoose().model('users', UserSchema);
   let defConf = trackConfigs.find({ name: "Basic" });
   if (defConf.length == 0){
     defConf = new trackConfigs({ name: "Basic", config: alltrackConfig.Basic });
@@ -75,14 +87,14 @@ function getdelConfigFromDB(name,WSserver,remove=false) {
   }
 }
 
-function saveConfigToDB(name,config,WSserver) {
+function saveConfigToDB(name,config,user,WSserver) {
   if (Object.keys(config.conf).length != 0){
     trackConfigs.find({config: config},function(err,result){
       if (err){
         console.log(err);
       }
       else if(result.length==0){
-        let newConf = new trackConfigs({ name: name ,config: config});
+        let newConf = new trackConfigs({ name: name ,config: config, user: user});
         newConf.save(function (err) {
           if (err) return handleError(err);
           getConfNameList(WSserver)
@@ -105,31 +117,15 @@ function getConfNameList(WSserver) {
   });
 }
 
-/* try {
-  if (!fs.existsSync(path2conf)) {
-    fs.copyFile('./trackConfigs.json', path2conf, (err) => {
-      if (err) throw err;
-      console.log('trackConfigs.json was copied to destination.txt');
-    });
-  }
-  alltrackConfig = require(path2conf)
-  trackConfigDefault = alltrackConfig.Basic;
-  trackConfig = trackConfigDefault;
-} catch(err) {
-  console.error(err)
-}
- */
-
 function createWebsocketServer(){
   const WSserver = new WebSocket.Server({ noServer: true });
-  WSserver.on('connection', function connection(ws) {
-      ws.on('message', function incoming(data) {
-          console.log('Received Message: ' + data);
-          if (CheckInput(data,ws)){
-              let payload = onMessageRecieved(JSON.parse(data),WSserver)
-              broadcastMessage(payload,WSserver);
-          }
-      });
+  WSserver.on('connection', function connection(thisClient) {
+    thisClient.on('message', function incoming(data) {
+        console.log('Received Message: ' + data);
+        if (CheckInput(data,thisClient)){
+            onMessageRecieved(JSON.parse(data),WSserver,thisClient)
+        }
+    });
   });
   return WSserver;
 }
@@ -190,12 +186,12 @@ function broadcastMessage(data,WSserver){
     });
 }
 
-function CheckInput(data,ws){
+function CheckInput(data,thisClient){
     try {
         JSON.parse(data);
     } catch (e) {
-        ws.send(JSON.stringify({"notJSON": data.toString()}));
-        return 0;
+      thisClient.send(JSON.stringify({"notJSON": data.toString()}));
+      return 0;
     };
     return 1;
 }
@@ -212,7 +208,7 @@ function fixConf(){
   }
 }
 
-function onMessageRecieved(data,WSserver){
+function onMessageRecieved(data,WSserver,thisClient){
     let message = {};
     if(data.hasOwnProperty("action")){
         if (data.action == "getConfig"){
@@ -242,7 +238,7 @@ function onMessageRecieved(data,WSserver){
         else if (data.action == "setConfig"){
             trackConfig = data.config;
             fixConf();
-            saveConfigToDB(data.name,trackConfig,WSserver)
+            saveConfigToDB(data.name,trackConfig,data.user,WSserver)
         }
         else if (data.action == "delConfByName"){
           getdelConfigFromDB(data.name,WSserver,true);
@@ -320,9 +316,6 @@ function onMessageRecieved(data,WSserver){
                 message={"error":"train not found with name " +data.message.train }
             }
         }
-/*         else if (data.action == "swtichMotor"){
-            message = data.message;
-        } */
         else {
             message = data;
         };
@@ -345,12 +338,28 @@ function onMessageRecieved(data,WSserver){
             getTrains(data.Message);
         }
     }
+    else if(data.hasOwnProperty("login")){
+      userLists.find({ user: data.login.user },function(err,res){
+        if (res.length>0){
+          if (data.login.password == res[0].pw){
+            thisClient.send(JSON.stringify({"authentication":"succeeded",user: data.login.user}))
+          }
+          else{
+            thisClient.send(JSON.stringify({"authentication":"failed"}))
+          }
+        }
+        else{
+          thisClient.send(JSON.stringify({"authentication":"userNotFound"}))
+        }
+      });
+
+    }
     else{
         message = {
             "UnknownMessage":data
         };
     }
-    return JSON.stringify(message);
+    broadcastMessage(JSON.stringify(message),WSserver);
 }
 
 function conf4ESP(){

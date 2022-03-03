@@ -3,7 +3,7 @@ ARG BUILDENV=production
 
 FROM node:16 as production
 ONBUILD WORKDIR /var/www/prod
-ONBUILD RUN git clone --branch docker-mongo --recursive https://github.com/ZoMa-Toys/Lego-Train-Full.git source
+ONBUILD RUN git clone --recursive https://github.com/ZoMa-Toys/Lego-Train-Full.git source
 
 FROM node:16 as development
 ONBUILD WORKDIR /var/www/prod

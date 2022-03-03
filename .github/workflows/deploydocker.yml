@@ -3,6 +3,8 @@ name: Deploy Docker
 # Controls when the workflow will run
 on:
   workflow_dispatch:
+  release:
+    types: [created]
 
 jobs:
   deploy:
@@ -17,4 +19,4 @@ jobs:
           host: ${{secrets.HOST}}
           user: ${{secrets.USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          cmd: 'rm -rf buildRepo && git clone --branch docker-mongo ${{github.event.repository.clone_url}} buildRepo && export BUILDENV=production && cd buildRepo && docker-compose build --no-cache web && docker-compose up -d'
+          cmd: 'rm -rf buildRepo && git clone --branch docker-mongo ${{github.event.repository.clone_url}} buildRepo && export BUILDENV=production && export ME_CONFIG_BASICAUTH_USERNAME=${{ME_CONFIG_BASICAUTH_USERNAME}} && export ME_CONFIG_BASICAUTH_PASSWORD=${{ME_CONFIG_BASICAUTH_PASSWORD}} && cd buildRepo && docker-compose build --no-cache web && docker-compose up -d'

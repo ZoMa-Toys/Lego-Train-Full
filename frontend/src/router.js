@@ -18,6 +18,7 @@ export default new Router({
       path: '/swtichControl',
       name: 'swtichControl',
       component: swtich,
+      props: true
     },
     {
       path: '/train',
