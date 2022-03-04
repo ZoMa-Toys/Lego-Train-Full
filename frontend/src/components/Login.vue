@@ -11,6 +11,19 @@
 </template>
 
 <script>
+function setWs(apihost,dataModFunction){
+  const connection = new WebSocket(apihost);
+
+  connection.onmessage = ({data}) => {
+    dataModFunction(JSON.parse(data));
+  }
+
+  connection.onopen = function() {
+    console.log("Successfully connected to the echo websocket server...");
+  }
+  return connection
+}
+
     // import axios from 'axios';
     export default {
         name: 'Login',
@@ -21,28 +34,41 @@
                     password: ""
                 },
                 message: "",
-                 apihost: process.env.VUE_APP_APIHOST,
+                apihost: "ws://" + location.hostname +":" + (process.env.VUE_APP_PORT==8080?process.env.VUE_APP_PORT:location.port) +"/ws",
             }
         },
+        created: function() {
+        //this.connection=setWs(this.apihost,this.updateSwitch,null);
+            this.connection=setWs(this.apihost,this.getResult);
+        },
         methods: {
-            login() {
-                if (process.env.VUE_APP_AUTO_LOGIN === 'True'){
-                    this.$emit("authenticated", true);
-                    this.$router.replace({ name: "swtichControl" });
-                }
-                else if((this.input.username != "" && this.input.password != "")) {
-                    if (this.input.username === "Familymember" & this.input.password === "WE4RTsdf!"){
+            getResult(data){
+                if ("authentication" in data){
+                    if(data.authentication == "succeeded"){
                         this.$emit("authenticated", true);
-                        this.$router.replace({ name: "swtichControl" });
+                        this.$router.replace({ name: "swtichControl", params: {username: data.user} });
+                        /* this.$router.replace({ name: "swtichControl" }); */
+                    } else if(data.authentication == "userNotFound"){
+                        this.message = "The username not found";
                     } else {
-                        this.message = "The username and / or password is incorrect";
-                        console.log("The username and / or password is incorrect");
+                        this.message = "The username or password is incorrect";
                     }
+                }
+            },
+            login() {
+                this.connectWs()
+                if(this.input.username != "" && this.input.password != "") {
+                    let payload = JSON.stringify({login:{user: this.input.username,password: this.input.password}})
+                    this.connection.send(payload)
                 } else {
                     this.message = "A username and password must be present";
-                    console.log("A username and password must be present");
                 }
-            }
+            },
+            connectWs(){ 
+                if (this.connection.readyState != this.connection.OPEN ){
+                    this.connection=setWs(this.apihost,this.getResult);
+                }
+            },
         }
     }
 </script>
