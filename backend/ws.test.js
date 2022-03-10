@@ -6,30 +6,11 @@ const startServer = functions.startServer;
 const createSocketClient = functions.createSocketClient;
 const waitForSocketState = functions.waitForSocketState;
 const fs = require('fs')
-/* const path2conf = '../.././trackConfigs.json'
-let trackConfigDefault = {}; */
-
-/* if (!fs.existsSync(path2conf)) {
-    fs.copyFile('./trackConfigs.json', path2conf, (err) => {
-        if (err) throw err;
-        console.log('trackConfigs.json was copied to destination.txt');    
-        alltrackConfig = require(path2conf)
-        trackConfigDefault = alltrackConfig.Basic;
-        trackConfig = trackConfigDefault;
-        }
-        
-    );
-}
-else {
-    alltrackConfig = require(path2conf)
-    trackConfigDefault = alltrackConfig.Basic;
-    trackConfig = trackConfigDefault;
-} */
 describe("WebSocket Server", () => {
     let server;
     let trackConfig ={}
     beforeAll(async () => {
-        trackConfig= functions.DefultConfig(true); 
+        trackConfig= await functions.DefultConfig(true); 
         server = await startServer(WSport);
     });
     afterAll(() => server.close());
@@ -93,26 +74,33 @@ describe("WebSocket Server", () => {
         const cardcheck3 = {"action":"cardChecked","message":{"train":"Yellow","cardIndex":17}};
         client.send(JSON.stringify(cardcheck3));
         await waitForSocketState(client, client.CLOSED);
-        const [CH,CM,SM1,TOC1,ST1,ST2,SM2,TOC2,TOC3,TOC4,SM3,SM4,SM5,TOC5] = messages;
+        const [CH,CM,SM1,RG1,TOC1,ST1,ST2,SM2,RG2,TOC2,RG3,TOC3,RG4,TOC4,SM3,SM4,SM5,RG5,RG6,RG7,TOC5] = messages;
         // set up hubs and cardmap
         expect(JSON.parse(CH)).toEqual(connectedHubs);
         expect(JSON.parse(CM)).toEqual({"Status":"CardMap:","Message":{"A1":0,"A2":1,"A3":2,"A4":3,"A5":4,"A6":5,"A7":6,"A8":7,"A9":8,"A10":9,"A11":10,"A12":11,"A13":12,"A14":13,"A15":14,"A16":15,"A17":16,"A18":17,"A19":18,"A20":19,"A21":20,"A22":21,"A23":22,"A24":23}});
         // train yellow on card and switch track
         expect(JSON.parse(SM1)).toEqual({"action":"swtichMotor","message":{"motor":1,"pulse":240,"printed":false}});
+        expect(JSON.parse(RG1)).toEqual({"action":"red_green","message":{"switchIndex":1,"switchPort":"s","green":false}});
         expect(JSON.parse(TOC1)).toEqual({"action":"trainOnCard","message":{"train":"Yellow","cardIndex":0}});
         // train green on card and switch track and stop trains
         expect(JSON.parse(ST1)).toEqual({"message":{"speed":0,"train":"Green","MotorPort":0,"distanceSlow":0,"colorSlow":255,"distance":0,"color":255,"lastCard":-1},"action":"setPower"});
         expect(JSON.parse(ST2)).toEqual({"message":{"speed":0,"train":"Yellow","MotorPort":0,"distanceSlow":0,"colorSlow":255,"distance":0,"color":255,"lastCard":0},"action":"setPower"});
         expect(JSON.parse(SM2)).toEqual({"action":"swtichMotor","message":{"motor":2,"pulse":420,"printed":false}});
+        expect(JSON.parse(RG2)).toEqual({"action":"red_green","message":{"switchIndex":2,"switchPort":"s","green":false}});
         expect(JSON.parse(TOC2)).toEqual({"action":"trainOnCard","message":{"train":"Green","cardIndex":11}});
         // train yellow go back and do nothing
+        expect(JSON.parse(RG3)).toEqual({"action":"red_green","message":{"switchIndex":1,"switchPort":"s","green":true}});
         expect(JSON.parse(TOC3)).toEqual({"action":"trainOnCard","message":{"train":"Yellow","cardIndex":0}});
         // train green on card do nothing
+        expect(JSON.parse(RG4)).toEqual({"action":"red_green","message":{"switchIndex":2,"switchPort":"s","green":true}});
         expect(JSON.parse(TOC4)).toEqual({"action":"trainOnCard","message":{"train":"Green","cardIndex":11}});
         // train yelllow on card and switch 3 tracks
-        expect(JSON.parse(SM3)).toEqual({"action":"swtichMotor","message":{"motor":5,"pulse":380,"printed":true}});
-        expect(JSON.parse(SM4)).toEqual({"action":"swtichMotor","message":{"motor":7,"pulse":280,"printed":true}});
-        expect(JSON.parse(SM5)).toEqual({"action":"swtichMotor","message":{"motor":4,"pulse":280,"printed":true}});
+        expect(JSON.parse(SM3)).toEqual({"action":"swtichMotor","message":{"motor":5,"pulse":280,"printed":true}});
+        expect(JSON.parse(SM4)).toEqual({"action":"swtichMotor","message":{"motor":7,"pulse":380,"printed":true}});
+        expect(JSON.parse(SM5)).toEqual({"action":"swtichMotor","message":{"motor":4,"pulse":380,"printed":true}});
+        expect(JSON.parse(RG5)).toEqual({"action":"red_green","message":{"switchIndex":5,"switchPort":"t","green":false}});
+        expect(JSON.parse(RG6)).toEqual({"action":"red_green","message":{"switchIndex":7,"switchPort":"t","green":false}});
+        expect(JSON.parse(RG7)).toEqual({"action":"red_green","message":{"switchIndex":4,"switchPort":"t","green":false}});
         expect(JSON.parse(TOC5)).toEqual({"action":"trainOnCard","message":{"train":"Yellow","cardIndex":17}});
     });
   });

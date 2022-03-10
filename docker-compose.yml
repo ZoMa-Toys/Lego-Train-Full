@@ -9,8 +9,6 @@ services:
     image: gubee33/zomalegotrain:latest
     ports:
       - "80:80"
-    volumes:
-      - ../trackConfigs.json:/var/www/prod/trackConfigs.json
     links:
       - mongo
   mongo:
