@@ -12,18 +12,18 @@ let alltrackConfig = {};
 let trackConfigDefault = {};
 let trackConfig = {};
 
-function DefultConfig(isTest){
+async function DefultConfig(isTest){
   const path2conf = './trackConfigs.json'
   alltrackConfig = require(path2conf)
   if(!isTest){
-    setupDB();
+    await setupDB();
+    startServer(process.env.API_PORT);
   }
   else{
     trackConfigDefault = alltrackConfig.Basic;
     trackConfig = trackConfigDefault;
-    return trackConfig;
+    return trackConfig ;
   }
-
 }
 
 let trackConfigs = mongoose.Model;
@@ -39,7 +39,7 @@ function connectMongoose(){
   return mongoose
 }
 
-function setupDB() {
+async function setupDB() {
   const TrackConfigSchema = new mongoose.Schema({
     name: String,
     user: String,
@@ -51,16 +51,20 @@ function setupDB() {
   });
   trackConfigs = connectMongoose().model('trackConfigs', TrackConfigSchema);
   userLists = connectMongoose().model('users', UserSchema);
-  let defConf = trackConfigs.find({ name: "Basic" });
-  if (defConf.length == 0){
+  let defConf = await trackConfigs.find({ name: "Basic" });
+  if (defConf.length >0){
+    trackConfig=defConf[0].config;
+  }
+  else{
     defConf = new trackConfigs({ name: "Basic", config: alltrackConfig.Basic });
     defConf.save(function (err) {
       if (err) return handleError(err);
       // saved!
     });
+    trackConfig=alltrackConfig.Basic
   }
-  trackConfig=alltrackConfig.Basic
 }
+
 
 function getdelConfigFromDB(name,WSserver,remove=false) {
   if (remove){
@@ -121,7 +125,7 @@ function createWebsocketServer(){
   const WSserver = new WebSocket.Server({ noServer: true });
   WSserver.on('connection', function connection(thisClient) {
     thisClient.on('message', function incoming(data) {
-        console.log('Received Message: ' + data);
+        //console.log('Received Message: ' + data);
         if (CheckInput(data,thisClient)){
             onMessageRecieved(JSON.parse(data),WSserver,thisClient)
         }
@@ -267,16 +271,16 @@ function onMessageRecieved(data,WSserver,thisClient){
             if (hubs.hasOwnProperty(data.message.train)){
                 let thishub = hubs[data.message.train];
                 let cardIndex = data.message.cardIndex;
-                let carpairIDs = [cardIndex];
+                let cardpairIDs = [cardIndex];
                 trackConfig.cardPairs[cardIndex].forEach(cardpair => {
-                  carpairIDs.push(cardpair[1]);
+                  cardpairIDs.push(cardpair[1]);
                 });
                 if (sectionInUse.includes(cardIndex)){
                     for(trainame of Object.keys(hubs)){
                         let hub = hubs[trainame];
                         if (hub != thishub){
                 let cardIndex = data.message.cardIndex;
-                            if (carpairIDs.includes(hub.lastCard) && cardIndex!=thishub.lastCard){
+                            if (cardpairIDs.includes(hub.lastCard) && cardIndex!=thishub.lastCard){
                                 thishub.speed=0;
                                 hub.speed=0;
                                 setPower(thishub,WSserver);
@@ -285,28 +289,28 @@ function onMessageRecieved(data,WSserver,thisClient){
                         }
                     }
                 }
-                if (carpairIDs.includes(thishub.lastCard)){
-                    thishub.lastCard=-1;
+                if (cardpairIDs.includes(thishub.lastCard)){
                     try{
-                      modifySectionInUse(carpairIDs,false)
+                      modifySectionInUse(thishub.lastCard,false,WSserver)
                     }
-                    catch{
-                      console.log("wrong cardpairs data")
+                    catch(e){
+                      console.log("wrong cardpairs data "+e)
                     }
+                    thishub.lastCard=-1;
                 }
                 else{
                     switchIfYouCan(cardIndex,WSserver);
                     try{
                       modifySectionInUse(thishub.lastCard,false)
                     }
-                    catch{
-                      console.log("wrong cardpairs data")
+                    catch(e){
+                      console.log("wrong cardpairs data "+e)
                     }
                     try{
-                      modifySectionInUse(cardIndex,true)
+                      modifySectionInUse(cardIndex,true,WSserver)
                     }
-                    catch{
-                      console.log("wrong cardpairs data")
+                    catch(e){
+                      console.log("wrong cardpairs data "+e)
                     }
                     thishub.lastCard=cardIndex;
                 }
@@ -432,10 +436,10 @@ function switchIfYouCan(cardID,WSserver){
     neighbourSwitches.forEach(neighbourSwitch => {
         let sw= trackConfig.conf[neighbourSwitch[2][1]].switch;
         let pulse=-1;
-        if (neighbourSwitch[2][0]="s"){
+        if (neighbourSwitch[2][0]=="s"){
             pulse = sw.pulse["Turn"]
         }
-        else if (neighbourSwitch[2][0]="t"){
+        else if (neighbourSwitch[2][0]=="t"){
             pulse = sw.pulse["Straight"]
         }
         if(pulse!=-1){
@@ -446,28 +450,30 @@ function switchIfYouCan(cardID,WSserver){
     });
 }
 
-function modifySectionInUse(card,add){
-  let carpairIDs=[card]
-  trackConfig.cardPairs[card].forEach(cardpair => {
-    carpairIDs.push(cardpair[1]);
-  });
-  if (add){
-    sectionInUse=sectionInUse.concat(carpairIDs)
-  }
-  else{
-    sectionInUse = sectionInUse.filter(a => !carpairIDs.includes(a))
+
+
+function modifySectionInUse(card,add,WSserver){
+  if( card >-1){
+    let cardpairIDs=[card]
+    let payload = {"action":"red_green","message":{"switchIndex":0,"switchPort":"i","green":true}};
+    trackConfig.cardPairs[card].forEach(cardpair => {
+      cardpairIDs.push(cardpair[1]);
+      let switchIndex = trackConfig.conf[cardpair[2][1]].switch.index;
+      let switchPort = cardpair[2][0];
+      payload.message.switchIndex=switchIndex;
+      payload.message.switchPort=switchPort;
+      payload.message.green=!add;
+      broadcastMessage(JSON.stringify(payload),WSserver)
+    });
+    if (add){
+      sectionInUse=sectionInUse.concat(cardpairIDs)
+    }
+    else{
+      sectionInUse = sectionInUse.filter(a => !cardpairIDs.includes(a))
+    }
   }
 }    
 
-function updateAllTrackConfig(){
-  fs.writeFile(path2conf, JSON.stringify(alltrackConfig), (err) => {
-    if (err)
-      console.log(err);
-    else {
-      console.log("ConfJSON updated\n");
-    }
-  });
-}
 
 let hubs = {};
 let trains = {};
