@@ -19,21 +19,13 @@ A big thank you goes for @NilremAlia for sponsoring and supporting the project w
 
 ## Prerequisit
 
-First install [Node](https://nodejs.org/en/download/) on the target system.
-Then clone the project:
-```
-git clone --recursive https://github.com/ZoMa-Toys/Lego-Train-Full.git
-```
+You should have a linux based docker environment.
 
-For productive deployment you can use [pm2](https://www.npmjs.com/package/pm2) and then deploy the Webservice.
-Please update the **ecosystem.config.js** file before deploying it. (if you reaname the WebSocket int he config you need to replace it in the command below)
+## Deployment
 ```
-npm install pm2 -g
-cd frontend
-npm install
-npm run build
-cd ../backend
-npm install
-cd ..
-pm2 start WebSocket
+export BUILDENV=production
+export ME_CONFIG_BASICAUTH_USERNAME=<USERNAME FOR MONGO EXPRESS>
+export ME_CONFIG_BASICAUTH_PASSWORD=<PASSWORD FOR MONGO EXPRESS>
+docker-compose build --no-cache web
+docker-compose up -d
 ```
